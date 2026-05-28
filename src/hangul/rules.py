@@ -40,6 +40,20 @@ RULE_6_JUNGSEONG_DOT = {
     "ㅣ": "135",
 }
 
+RULE_7_JUNGSEONG_DOTS = {
+    "ㅐ": ["1235"],
+    "ㅒ": [RULE_6_JUNGSEONG_DOT["ㅑ"], "1235"],
+    "ㅔ": ["1345"],
+    "ㅖ": ["34"],
+    "ㅘ": ["1236"],
+    "ㅙ": ["1236", "1235"],
+    "ㅚ": ["13456"],
+    "ㅝ": ["1234"],
+    "ㅞ": ["1234", "1235"],
+    "ㅟ": [RULE_6_JUNGSEONG_DOT["ㅜ"], "1235"],
+    "ㅢ": ["2456"],
+}
+
 RULE_3_JONGSEONG_DOT = {
     "ㄱ": "1",
     "ㄴ": "25",
@@ -109,6 +123,10 @@ def rule_6_jungseong_dot(jungseong: str) -> str:
     return lookup(RULE_6_JUNGSEONG_DOT, jungseong, "jungseong")
 
 
+def apply_rule_7_jungseong(jungseong: str) -> Optional[list[str]]:
+    return RULE_7_JUNGSEONG_DOTS.get(jungseong)
+
+
 def apply_abbreviated_a_syllable_rule(
     choseong: str,
     jungseong: str,
@@ -135,7 +153,14 @@ def encode_choseong(choseong: str) -> list[str]:
 
 
 def encode_jungseong(jungseong: str) -> list[str]:
-    return [rule_6_jungseong_dot(jungseong)]
+    if jungseong in RULE_6_JUNGSEONG_DOT:
+        return [rule_6_jungseong_dot(jungseong)]
+
+    rule_7_dots = apply_rule_7_jungseong(jungseong)
+    if rule_7_dots is not None:
+        return rule_7_dots
+
+    raise NotImplementedError(f"unsupported jungseong: {jungseong}")
 
 
 def encode_jongseong(jongseong: str) -> list[str]:
@@ -186,5 +211,9 @@ def encode_standalone_jamo(ch: str, role: str) -> list[str]:
 
     if ch in RULE_6_JUNGSEONG_DOT:
         return [rule_6_jungseong_dot(ch)]
+
+    rule_7_dots = apply_rule_7_jungseong(ch)
+    if rule_7_dots is not None:
+        return rule_7_dots
 
     raise NotImplementedError(f"unsupported standalone jamo: {ch}")
