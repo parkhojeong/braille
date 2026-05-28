@@ -1,7 +1,7 @@
 from braille.ascii import ascii_to_dots, dots_to_ascii
 
-from .decomposition import decompose_precomposed_hangul_syllable, normalize_print
 from .rules import encode_standalone_jamo, encode_syllable
+from .tokens import Token, tokenize_print
 
 TEXT_PUNCTUATION_DOTS = {
     " ": [""],
@@ -10,6 +10,23 @@ TEXT_PUNCTUATION_DOTS = {
     "!": ["2346"],
     "[": ["236", "23"],
     "]": ["56", "356"],
+}
+
+STANDALONE_CONSONANTS = {
+    "ㄱ",
+    "ㄴ",
+    "ㄷ",
+    "ㄹ",
+    "ㅁ",
+    "ㅂ",
+    "ㅅ",
+    "ㅇ",
+    "ㅈ",
+    "ㅊ",
+    "ㅋ",
+    "ㅌ",
+    "ㅍ",
+    "ㅎ",
 }
 
 
@@ -34,71 +51,63 @@ def encode_latin_run(text: str) -> list[str]:
     return cells
 
 
+def should_skip_space(tokens: list[Token], index: int) -> bool:
+    if index == 0 or index + 1 >= len(tokens):
+        return False
+
+    previous_token = tokens[index - 1]
+    next_token = tokens[index + 1]
+    return (
+        tokens[index].text == " "
+        and previous_token.kind == "JAMO"
+        and previous_token.text in STANDALONE_CONSONANTS
+        and next_token.kind == "HANGUL_SYLLABLE"
+        and next_token.text == "자"
+    )
+
+
+def next_syllable_starts_with_ieung(tokens: list[Token], index: int) -> bool:
+    if index + 1 >= len(tokens):
+        return False
+
+    next_token = tokens[index + 1]
+    return next_token.kind == "HANGUL_SYLLABLE" and next_token.choseong == "ㅇ"
+
+
 def print_to_braille_dots(text: str, *, standalone_jamo: str = "choseong") -> list[str]:
     result: list[str] = []
-    text = normalize_print(text)
-    index = 0
+    tokens = tokenize_print(text)
 
-    while index < len(text):
-        ch = text[index]
-
-        if (
-            ch == " "
-            and index > 0
-            and index + 1 < len(text)
-            and text[index + 1] == "자"
-            and text[index - 1] in {
-                "ㄱ",
-                "ㄴ",
-                "ㄷ",
-                "ㄹ",
-                "ㅁ",
-                "ㅂ",
-                "ㅅ",
-                "ㅇ",
-                "ㅈ",
-                "ㅊ",
-                "ㅋ",
-                "ㅌ",
-                "ㅍ",
-                "ㅎ",
-            }
-        ):
-            index += 1
+    for index, token in enumerate(tokens):
+        if token.kind == "SPACE" and should_skip_space(tokens, index):
             continue
 
-        if ch.isascii() and ch.isalpha():
-            start = index
-            while index < len(text) and text[index].isascii() and text[index].isalpha():
-                index += 1
-            result.extend(encode_latin_run(text[start:index]))
+        if token.kind == "LATIN_RUN":
+            result.extend(encode_latin_run(token.text))
             continue
 
-        if ch in TEXT_PUNCTUATION_DOTS:
-            result.extend(TEXT_PUNCTUATION_DOTS[ch])
-            index += 1
+        if token.kind == "SPACE":
+            result.extend([""] * len(token.text))
             continue
 
-        syllable = decompose_precomposed_hangul_syllable(ch)
-        if syllable is not None:
-            next_syllable = (
-                decompose_precomposed_hangul_syllable(text[index + 1])
-                if index + 1 < len(text)
-                else None
-            )
+        if token.kind == "PUNCTUATION":
+            result.extend(TEXT_PUNCTUATION_DOTS[token.text])
+            continue
+
+        if token.kind == "HANGUL_SYLLABLE":
             result.extend(
                 encode_syllable(
-                    *syllable,
-                    next_syllable_starts_with_ieung=(
-                        next_syllable is not None and next_syllable[0] == "ㅇ"
+                    token.choseong or "",
+                    token.jungseong or "",
+                    token.jongseong or "",
+                    next_syllable_starts_with_ieung=next_syllable_starts_with_ieung(
+                        tokens, index
                     ),
                 )
             )
-            index += 1
             continue
 
-        result.extend(encode_standalone_jamo(ch, standalone_jamo))
-        index += 1
+        result.extend(encode_standalone_jamo(token.text, standalone_jamo))
 
     return result
 
