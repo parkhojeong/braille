@@ -1,4 +1,7 @@
-CHOSEONG_DOT = {
+from typing import Callable, Optional
+
+
+RULE_1_CHOSEONG_DOT = {
     "ㄱ": "4",
     "ㄴ": "14",
     "ㄷ": "24",
@@ -15,15 +18,15 @@ CHOSEONG_DOT = {
     "ㅎ": "245",
 }
 
-TENSE_CHOSEONG_DOTS = {
-    "ㄲ": ["6", CHOSEONG_DOT["ㄱ"]],
-    "ㄸ": ["6", CHOSEONG_DOT["ㄷ"]],
-    "ㅃ": ["6", CHOSEONG_DOT["ㅂ"]],
-    "ㅆ": ["6", CHOSEONG_DOT["ㅅ"]],
-    "ㅉ": ["6", CHOSEONG_DOT["ㅈ"]],
+RULE_2_TENSE_CHOSEONG_DOTS = {
+    "ㄲ": ["6", RULE_1_CHOSEONG_DOT["ㄱ"]],
+    "ㄸ": ["6", RULE_1_CHOSEONG_DOT["ㄷ"]],
+    "ㅃ": ["6", RULE_1_CHOSEONG_DOT["ㅂ"]],
+    "ㅆ": ["6", RULE_1_CHOSEONG_DOT["ㅅ"]],
+    "ㅉ": ["6", RULE_1_CHOSEONG_DOT["ㅈ"]],
 }
 
-JUNGSEONG_DOT = {
+RULE_6_JUNGSEONG_DOT = {
     "ㅏ": "126",
     "ㅑ": "345",
     "ㅓ": "234",
@@ -37,7 +40,7 @@ JUNGSEONG_DOT = {
     "ㅣ": "135",
 }
 
-JONGSEONG_DOT = {
+RULE_3_JONGSEONG_DOT = {
     "ㄱ": "1",
     "ㄴ": "25",
     "ㄷ": "35",
@@ -55,48 +58,118 @@ JONGSEONG_DOT = {
     "ㅆ": "34",
 }
 
-COMPOSITE_JONGSEONG_DOTS = {
-    "ㄲ": [JONGSEONG_DOT["ㄱ"], JONGSEONG_DOT["ㄱ"]],
-    "ㄳ": [JONGSEONG_DOT["ㄱ"], JONGSEONG_DOT["ㅅ"]],
-    "ㄵ": [JONGSEONG_DOT["ㄴ"], JONGSEONG_DOT["ㅈ"]],
-    "ㄶ": [JONGSEONG_DOT["ㄴ"], JONGSEONG_DOT["ㅎ"]],
-    "ㄺ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㄱ"]],
-    "ㄻ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅁ"]],
-    "ㄼ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅂ"]],
-    "ㄽ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅅ"]],
-    "ㄾ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅌ"]],
-    "ㄿ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅍ"]],
-    "ㅀ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅎ"]],
-    "ㅄ": [JONGSEONG_DOT["ㅂ"], JONGSEONG_DOT["ㅅ"]],
+RULE_4_DOUBLE_JONGSEONG_DOTS = {
+    "ㄲ": [RULE_3_JONGSEONG_DOT["ㄱ"], RULE_3_JONGSEONG_DOT["ㄱ"]],
+    "ㅆ": [RULE_3_JONGSEONG_DOT["ㅆ"]],
 }
+
+RULE_5_COMPOSITE_JONGSEONG_DOTS = {
+    "ㄳ": [RULE_3_JONGSEONG_DOT["ㄱ"], RULE_3_JONGSEONG_DOT["ㅅ"]],
+    "ㄵ": [RULE_3_JONGSEONG_DOT["ㄴ"], RULE_3_JONGSEONG_DOT["ㅈ"]],
+    "ㄶ": [RULE_3_JONGSEONG_DOT["ㄴ"], RULE_3_JONGSEONG_DOT["ㅎ"]],
+    "ㄺ": [RULE_3_JONGSEONG_DOT["ㄹ"], RULE_3_JONGSEONG_DOT["ㄱ"]],
+    "ㄻ": [RULE_3_JONGSEONG_DOT["ㄹ"], RULE_3_JONGSEONG_DOT["ㅁ"]],
+    "ㄼ": [RULE_3_JONGSEONG_DOT["ㄹ"], RULE_3_JONGSEONG_DOT["ㅂ"]],
+    "ㄽ": [RULE_3_JONGSEONG_DOT["ㄹ"], RULE_3_JONGSEONG_DOT["ㅅ"]],
+    "ㄾ": [RULE_3_JONGSEONG_DOT["ㄹ"], RULE_3_JONGSEONG_DOT["ㅌ"]],
+    "ㄿ": [RULE_3_JONGSEONG_DOT["ㄹ"], RULE_3_JONGSEONG_DOT["ㅍ"]],
+    "ㅀ": [RULE_3_JONGSEONG_DOT["ㄹ"], RULE_3_JONGSEONG_DOT["ㅎ"]],
+    "ㅄ": [RULE_3_JONGSEONG_DOT["ㅂ"], RULE_3_JONGSEONG_DOT["ㅅ"]],
+}
+
+
+def rule_1_choseong_dot(choseong: str) -> Optional[str]:
+    return RULE_1_CHOSEONG_DOT.get(choseong)
+
+
+def rule_2_tense_choseong_dots(choseong: str) -> Optional[list[str]]:
+    return RULE_2_TENSE_CHOSEONG_DOTS.get(choseong)
+
+
+def rule_3_jongseong_dot(jongseong: str) -> Optional[str]:
+    return RULE_3_JONGSEONG_DOT.get(jongseong)
+
+
+def rule_4_double_jongseong_dots(jongseong: str) -> Optional[list[str]]:
+    return RULE_4_DOUBLE_JONGSEONG_DOTS.get(jongseong)
+
+
+def rule_5_composite_jongseong_dots(jongseong: str) -> Optional[list[str]]:
+    return RULE_5_COMPOSITE_JONGSEONG_DOTS.get(jongseong)
+
+
+def rule_6_jungseong_dot(jungseong: str) -> Optional[str]:
+    return RULE_6_JUNGSEONG_DOT.get(jungseong)
+
+
+def apply_abbreviated_a_syllable_rule(
+    choseong: str,
+    jungseong: str,
+    jongseong: str,
+) -> Optional[list[str]]:
+    if jungseong == "ㅏ":
+        if choseong == "ㅅ":
+            return ["123", *encode_jongseong(jongseong)]
+        if choseong in {"ㄷ", "ㅌ", "ㅎ"}:
+            return [RULE_1_CHOSEONG_DOT[choseong], *encode_jongseong(jongseong)]
+
+    return None
 
 
 def encode_choseong(choseong: str) -> list[str]:
     if choseong == "ㅇ":
         return []
-    if choseong in TENSE_CHOSEONG_DOTS:
-        return TENSE_CHOSEONG_DOTS[choseong]
-    return [CHOSEONG_DOT[choseong]]
+
+    tense_dots = rule_2_tense_choseong_dots(choseong)
+    if tense_dots is not None:
+        return tense_dots
+
+    dot = rule_1_choseong_dot(choseong)
+    if dot is not None:
+        return [dot]
+
+    raise NotImplementedError(f"unsupported choseong: {choseong}")
 
 
 def encode_jungseong(jungseong: str) -> list[str]:
-    return [JUNGSEONG_DOT[jungseong]]
+    dot = rule_6_jungseong_dot(jungseong)
+    if dot is not None:
+        return [dot]
+
+    raise NotImplementedError(f"unsupported jungseong: {jungseong}")
 
 
 def encode_jongseong(jongseong: str) -> list[str]:
     if not jongseong:
         return []
-    if jongseong in COMPOSITE_JONGSEONG_DOTS:
-        return COMPOSITE_JONGSEONG_DOTS[jongseong]
-    return [JONGSEONG_DOT[jongseong]]
+
+    double_dots = rule_4_double_jongseong_dots(jongseong)
+    if double_dots is not None:
+        return double_dots
+
+    composite_dots = rule_5_composite_jongseong_dots(jongseong)
+    if composite_dots is not None:
+        return composite_dots
+
+    dot = rule_3_jongseong_dot(jongseong)
+    if dot is not None:
+        return [dot]
+
+    raise NotImplementedError(f"unsupported jongseong: {jongseong}")
+
+
+SyllableRule = Callable[[str, str, str], Optional[list[str]]]
+
+SYLLABLE_RULES: list[SyllableRule] = [
+    apply_abbreviated_a_syllable_rule,
+]
 
 
 def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
-    if jungseong == "ㅏ":
-        if choseong == "ㅅ":
-            return ["123", *encode_jongseong(jongseong)]
-        if choseong in {"ㄷ", "ㅌ", "ㅎ"}:
-            return [CHOSEONG_DOT[choseong], *encode_jongseong(jongseong)]
+    for rule in SYLLABLE_RULES:
+        result = rule(choseong, jungseong, jongseong)
+        if result is not None:
+            return result
 
     return [
         *encode_choseong(choseong),
@@ -106,16 +179,19 @@ def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
 
 
 def encode_standalone_jamo(ch: str, role: str) -> list[str]:
-    if ch in TENSE_CHOSEONG_DOTS:
-        return TENSE_CHOSEONG_DOTS[ch]
+    tense_dots = rule_2_tense_choseong_dots(ch)
+    if tense_dots is not None:
+        return tense_dots
 
     if role == "jongseong":
         return encode_jongseong(ch)
 
-    if ch in CHOSEONG_DOT:
-        return [CHOSEONG_DOT[ch]]
+    choseong_dot = rule_1_choseong_dot(ch)
+    if choseong_dot is not None:
+        return [choseong_dot]
 
-    if ch in JUNGSEONG_DOT:
-        return [JUNGSEONG_DOT[ch]]
+    jungseong_dot = rule_6_jungseong_dot(ch)
+    if jungseong_dot is not None:
+        return [jungseong_dot]
 
     raise NotImplementedError(f"unsupported character: {ch}")
