@@ -5,6 +5,7 @@ import pytest
 
 from braille import ascii_to_dots, dots_to_unicode
 from hangul import print_to_braille_dots
+from hangul.test_support import SUPPORTED_RULES, standalone_jamo_for_case
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -17,23 +18,15 @@ def iter_rule_cases(rule: int):
             yield path, group["description"], print_text, expected
 
 
-def standalone_jamo_for_case(path: Path, group_description: str) -> str:
-    if path.name in {"rule-3.json", "rule-5.json"} and (
-        "받침으로 쓰일 때" in group_description or "겹받침" == group_description
-    ):
-        return "jongseong"
-    return "choseong"
-
-
 @pytest.mark.parametrize(
     ("path", "group_description", "print_text", "expected"),
     [
         case
-        for rule in [1, 2, 3, 4, 5, 6, 7]
+        for rule in SUPPORTED_RULES
         for case in iter_rule_cases(rule)
     ],
 )
-def test_ko_rules_1_to_4(path, group_description, print_text, expected):
+def test_supported_ko_rules(path, group_description, print_text, expected):
     actual_dots = print_to_braille_dots(
         print_text,
         standalone_jamo=standalone_jamo_for_case(path, group_description),

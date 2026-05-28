@@ -9,6 +9,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from braille import ascii_to_dots, dots_to_ascii, dots_to_unicode
 from hangul import print_to_braille_dots
+from hangul.test_support import standalone_jamo_for_case
 
 
 def iter_cases(path: Path):
@@ -16,14 +17,6 @@ def iter_cases(path: Path):
     for group in data["groups"]:
         for print_text, expected in group["tests"].items():
             yield group["description"], print_text, expected
-
-
-def standalone_jamo_for_case(path: Path, group_description: str) -> str:
-    if path.name in {"rule-3.json", "rule-5.json"} and (
-        "받침으로 쓰일 때" in group_description or "겹받침" == group_description
-    ):
-        return "jongseong"
-    return "choseong"
 
 
 def run(path: Path) -> int:
