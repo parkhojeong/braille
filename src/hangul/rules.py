@@ -115,4 +115,7 @@ def encode_standalone_jamo(ch: str, role: str) -> list[str]:
     if ch in CHOSEONG_DOT:
         return [CHOSEONG_DOT[ch]]
 
+    if ch in JUNGSEONG_DOT:
+        return [JUNGSEONG_DOT[ch]]
+
     raise NotImplementedError(f"unsupported character: {ch}")

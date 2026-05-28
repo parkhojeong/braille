@@ -29,7 +29,7 @@ def standalone_jamo_for_case(path: Path, group_description: str) -> str:
     ("path", "group_description", "print_text", "expected"),
     [
         case
-        for rule in [1, 2, 3, 4, 5]
+        for rule in [1, 2, 3, 4, 5, 6]
         for case in iter_rule_cases(rule)
     ],
 )
