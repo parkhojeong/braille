@@ -1,0 +1,105 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제3절 모음자",
+  "description": "제7항 그 밖의 모음자 11개는 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "그 밖의 모음자 11개",
+      "tests": {
+        "ㅐ": {
+          "ascii": "r",
+          "unicode": "⠗"
+        },
+        "ㅒ": {
+          "ascii": ">r",
+          "unicode": "⠜⠗"
+        },
+        "ㅔ": {
+          "ascii": "n",
+          "unicode": "⠝"
+        },
+        "ㅖ": {
+          "ascii": "/",
+          "unicode": "⠌"
+        },
+        "ㅘ": {
+          "ascii": "v",
+          "unicode": "⠧"
+        },
+        "ㅙ": {
+          "ascii": "vr",
+          "unicode": "⠧⠗"
+        },
+        "ㅚ": {
+          "ascii": "y",
+          "unicode": "⠽"
+        },
+        "ㅝ": {
+          "ascii": "p",
+          "unicode": "⠏"
+        },
+        "ㅞ": {
+          "ascii": "pr",
+          "unicode": "⠏⠗"
+        },
+        "ㅟ": {
+          "ascii": "mr",
+          "unicode": "⠍⠗"
+        },
+        "ㅢ": {
+          "ascii": "w",
+          "unicode": "⠺"
+        }
+      }
+    },
+    {
+      "description": "그 밖의 모음자가 쓰인 예",
+      "tests": {
+        "매미": {
+          "ascii": "ereo",
+          "unicode": "⠑⠗⠑⠕"
+        },
+        "얘기": {
+          "ascii": ">r@o",
+          "unicode": "⠜⠗⠈⠕"
+        },
+        "헤엄": {
+          "ascii": "jns5",
+          "unicode": "⠚⠝⠎⠢"
+        },
+        "지혜": {
+          "ascii": ".oj/",
+          "unicode": "⠨⠕⠚⠌"
+        },
+        "광주리": {
+          "ascii": "@v7.m\"o",
+          "unicode": "⠈⠧⠶⠨⠍⠐⠕"
+        },
+        "쾌활": {
+          "ascii": "fvrjv1",
+          "unicode": "⠋⠧⠗⠚⠧⠂"
+        },
+        "피뢰침": {
+          "ascii": "do\"y;o5",
+          "unicode": "⠙⠕⠐⠽⠰⠕⠢"
+        },
+        "권리": {
+          "ascii": "@p3\"o",
+          "unicode": "⠈⠏⠒⠐⠕"
+        },
+        "우렁쉥이": {
+          "ascii": "m\"s7,pr7o",
+          "unicode": "⠍⠐⠎⠶⠠⠏⠗⠶⠕"
+        },
+        "쉼터": {
+          "ascii": ",mr5hs",
+          "unicode": "⠠⠍⠗⠢⠓⠎"
+        },
+        "무늬": {
+          "ascii": "emcw",
+          "unicode": "⠑⠍⠉⠺"
+        }
+      }
+    }
+  ]
+}

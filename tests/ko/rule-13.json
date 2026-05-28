@@ -1,0 +1,205 @@
+{
+  "chapter": "제2장 약자와 약어",
+  "section": "제6절 약자",
+  "description": "제13항 다음 글자들은 약자를 사용하여 적는다.",
+  "groups": [
+    {
+      "description": "약자를 사용하는 글자",
+      "tests": {
+        "가": {
+          "ascii": "$",
+          "unicode": "⠫"
+        },
+        "나": {
+          "ascii": "c",
+          "unicode": "⠉"
+        },
+        "다": {
+          "ascii": "I",
+          "unicode": "⠊"
+        },
+        "마": {
+          "ascii": "e",
+          "unicode": "⠑"
+        },
+        "바": {
+          "ascii": "^",
+          "unicode": "⠘"
+        },
+        "사": {
+          "ascii": "l",
+          "unicode": "⠇"
+        },
+        "자": {
+          "ascii": ".",
+          "unicode": "⠨"
+        },
+        "카": {
+          "ascii": "f",
+          "unicode": "⠋"
+        },
+        "타": {
+          "ascii": "h",
+          "unicode": "⠓"
+        },
+        "파": {
+          "ascii": "d",
+          "unicode": "⠙"
+        },
+        "하": {
+          "ascii": "j",
+          "unicode": "⠚"
+        }
+      }
+    },
+    {
+      "description": "약자를 사용하는 예",
+      "tests": {
+        "가지": {
+          "ascii": "$.o",
+          "unicode": "⠫⠨⠕"
+        },
+        "나비": {
+          "ascii": "c^o",
+          "original_ascii": "c~o",
+          "unicode": "⠉⠘⠕"
+        },
+        "다리미": {
+          "ascii": "i\"oeo",
+          "unicode": "⠊⠐⠕⠑⠕"
+        },
+        "라디오": {
+          "ascii": "\"<iou",
+          "unicode": "⠐⠣⠊⠕⠥"
+        },
+        "고구마": {
+          "ascii": "@u@me",
+          "unicode": "⠈⠥⠈⠍⠑"
+        },
+        "바느질": {
+          "ascii": "^c[.o1",
+          "original_ascii": "~c{.o1",
+          "unicode": "⠘⠉⠪⠨⠕⠂"
+        },
+        "사위": {
+          "ascii": "lmr",
+          "unicode": "⠇⠍⠗"
+        },
+        "아궁이": {
+          "ascii": "<@m7o",
+          "unicode": "⠣⠈⠍⠶⠕"
+        },
+        "도자기": {
+          "ascii": "iu.@o",
+          "unicode": "⠊⠥⠨⠈⠕"
+        },
+        "기차": {
+          "ascii": "@o;<",
+          "unicode": "⠈⠕⠰⠣"
+        },
+        "카메라": {
+          "ascii": "fen\"<",
+          "unicode": "⠋⠑⠝⠐⠣"
+        },
+        "실타래": {
+          "ascii": ",o1h\"r",
+          "unicode": "⠠⠕⠂⠓⠐⠗"
+        },
+        "파도": {
+          "ascii": "diu",
+          "unicode": "⠙⠊⠥"
+        },
+        "하루": {
+          "ascii": "j\"m",
+          "unicode": "⠚⠐⠍"
+        }
+      }
+    },
+    {
+      "description": "[붙임] 위의 글자들에 받침이 있거나 첫소리가 된소리일 때에도 약자를 사용하여 적는다.",
+      "tests": {
+        "강산": {
+          "ascii": "$7l3",
+          "unicode": "⠫⠶⠇⠒"
+        },
+        "낮잠": {
+          "ascii": "ck.5",
+          "unicode": "⠉⠅⠨⠢"
+        },
+        "단란": {
+          "ascii": "i3\"<3",
+          "unicode": "⠊⠒⠐⠣⠒"
+        },
+        "만찬": {
+          "ascii": "e3;<3",
+          "unicode": "⠑⠒⠰⠣⠒"
+        },
+        "안방": {
+          "ascii": "<3^7",
+          "original_ascii": "<3~7",
+          "unicode": "⠣⠒⠘⠶"
+        },
+        "바캉스": {
+          "ascii": "^f7,[",
+          "original_ascii": "~f7,{",
+          "unicode": "⠘⠋⠶⠠⠪"
+        },
+        "갈비탕": {
+          "ascii": "$1^oh7",
+          "original_ascii": "$1~oh7",
+          "unicode": "⠫⠂⠘⠕⠓⠶"
+        },
+        "판소리": {
+          "ascii": "d3,u\"o",
+          "unicode": "⠙⠒⠠⠥⠐⠕"
+        },
+        "합창": {
+          "ascii": "jb;<7",
+          "unicode": "⠚⠃⠰⠣⠶"
+        },
+        "까마귀": {
+          "ascii": ",$e@mr",
+          "unicode": "⠠⠫⠑⠈⠍⠗"
+        },
+        "깜깜하다": {
+          "ascii": ",$5,$5ji",
+          "unicode": "⠠⠫⠢⠠⠫⠢⠚⠊"
+        },
+        "따님": {
+          "ascii": ",ico5",
+          "unicode": "⠠⠊⠉⠕⠢"
+        },
+        "딱따구리": {
+          "ascii": ",ia,i@m\"o",
+          "unicode": "⠠⠊⠁⠠⠊⠈⠍⠐⠕"
+        },
+        "오빠": {
+          "ascii": "u,^",
+          "original_ascii": "u,~",
+          "unicode": "⠥⠠⠘"
+        },
+        "빵집": {
+          "ascii": ",^7.ob",
+          "original_ascii": ",~7.ob",
+          "unicode": "⠠⠘⠶⠨⠕⠃"
+        },
+        "싸구려": {
+          "ascii": ",l@m\":",
+          "unicode": "⠠⠇⠈⠍⠐⠱"
+        },
+        "찹쌀": {
+          "ascii": ";<b,l1",
+          "unicode": "⠰⠣⠃⠠⠇⠂"
+        },
+        "짜장": {
+          "ascii": ",..7",
+          "unicode": "⠠⠨⠨⠶"
+        },
+        "짱구": {
+          "ascii": ",.7@m",
+          "unicode": "⠠⠨⠶⠈⠍"
+        }
+      }
+    }
+  ]
+}

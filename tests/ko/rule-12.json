@@ -1,0 +1,33 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제5절 모음 연쇄",
+  "description": "제12항 ‘ㅑ, ㅘ, ㅜ, ㅝ’에 ‘애’가 붙어 나올 때에는 두 모음자 사이에 구분표 -을 적어 나타낸다.",
+  "groups": [
+    {
+      "description": "ㅑ, ㅘ, ㅜ, ㅝ에 ‘애’가 붙어 나오는 예",
+      "tests": {
+        "야애": {
+          "ascii": ">-r",
+          "unicode": "⠜⠤⠗"
+        },
+        "소화액": {
+          "ascii": ",ujv-ra",
+          "unicode": "⠠⠥⠚⠧⠤⠗⠁"
+        },
+        "수액": {
+          "ascii": ",m-ra",
+          "unicode": "⠠⠍⠤⠗⠁"
+        },
+        "파워앰프": {
+          "ascii": "d<p-r5d[",
+          "original_ascii": "d<p-r5d{",
+          "unicode": "⠙⠣⠏⠤⠗⠢⠙⠪"
+        }
+      }
+    },
+    {
+      "description": "[다만] 그 사이에서 줄이 바뀔 때에는 구분표를 적지 않는다.",
+      "tests": {}
+    }
+  ]
+}

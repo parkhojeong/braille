@@ -1,0 +1,230 @@
+{
+  "chapter": "제4장 로마자와 그리스 문자",
+  "section": "제10절 국어 문장 안의 로마자와 그리스 문자",
+  "description": "제30항 그리스 문자는 ｢통일영어점자규정｣에 따라 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "그리스 문자 소문자",
+      "tests": {
+        "α": {
+          "ascii": ".a",
+          "unicode": "⠨⠁"
+        },
+        "β": {
+          "ascii": ".b",
+          "unicode": "⠨⠃"
+        },
+        "γ": {
+          "ascii": ".g",
+          "unicode": "⠨⠛"
+        },
+        "δ": {
+          "ascii": ".d",
+          "unicode": "⠨⠙"
+        },
+        "ε": {
+          "ascii": ".e",
+          "unicode": "⠨⠑"
+        },
+        "ζ": {
+          "ascii": ".z",
+          "unicode": "⠨⠵"
+        },
+        "η": {
+          "ascii": ".:",
+          "unicode": "⠨⠱"
+        },
+        "θ": {
+          "ascii": ".?",
+          "unicode": "⠨⠹"
+        },
+        "ι": {
+          "ascii": ".i",
+          "unicode": "⠨⠊"
+        },
+        "κ": {
+          "ascii": ".k",
+          "unicode": "⠨⠅"
+        },
+        "λ": {
+          "ascii": ".l",
+          "unicode": "⠨⠇"
+        },
+        "μ": {
+          "ascii": ".m",
+          "unicode": "⠨⠍"
+        },
+        "ν": {
+          "ascii": ".n",
+          "unicode": "⠨⠝"
+        },
+        "ξ": {
+          "ascii": ".x",
+          "unicode": "⠨⠭"
+        },
+        "ο": {
+          "ascii": ".o",
+          "unicode": "⠨⠕"
+        },
+        "π": {
+          "ascii": ".p",
+          "unicode": "⠨⠏"
+        },
+        "ρ": {
+          "ascii": ".r",
+          "unicode": "⠨⠗"
+        },
+        "ς": {
+          "ascii": ".s",
+          "unicode": "⠨⠎"
+        },
+        "σ": {
+          "ascii": ".s",
+          "unicode": "⠨⠎"
+        },
+        "τ": {
+          "ascii": ".t",
+          "unicode": "⠨⠞"
+        },
+        "υ": {
+          "ascii": ".u",
+          "unicode": "⠨⠥"
+        },
+        "φ": {
+          "ascii": ".f",
+          "unicode": "⠨⠋"
+        },
+        "χ": {
+          "ascii": ".&",
+          "unicode": "⠨⠯"
+        },
+        "ψ": {
+          "ascii": ".y",
+          "unicode": "⠨⠽"
+        },
+        "ω": {
+          "ascii": ".w",
+          "unicode": "⠨⠺"
+        }
+      }
+    },
+    {
+      "description": "그리스 문자 대문자",
+      "tests": {
+        "Α": {
+          "ascii": ",.a",
+          "unicode": "⠠⠨⠁"
+        },
+        "Β": {
+          "ascii": ",.b",
+          "unicode": "⠠⠨⠃"
+        },
+        "Γ": {
+          "ascii": ",.g",
+          "unicode": "⠠⠨⠛"
+        },
+        "Δ": {
+          "ascii": ",.d",
+          "unicode": "⠠⠨⠙"
+        },
+        "Ε": {
+          "ascii": ",.e",
+          "unicode": "⠠⠨⠑"
+        },
+        "Ζ": {
+          "ascii": ",.z",
+          "unicode": "⠠⠨⠵"
+        },
+        "Η": {
+          "ascii": ",.:",
+          "unicode": "⠠⠨⠱"
+        },
+        "Θ": {
+          "ascii": ",.?",
+          "unicode": "⠠⠨⠹"
+        },
+        "Ι": {
+          "ascii": ",.i",
+          "unicode": "⠠⠨⠊"
+        },
+        "Κ": {
+          "ascii": ",.k",
+          "unicode": "⠠⠨⠅"
+        },
+        "Λ": {
+          "ascii": ",.l",
+          "unicode": "⠠⠨⠇"
+        },
+        "Μ": {
+          "ascii": ",.m",
+          "unicode": "⠠⠨⠍"
+        },
+        "Ν": {
+          "ascii": ",.n",
+          "unicode": "⠠⠨⠝"
+        },
+        "Ξ": {
+          "ascii": ",.x",
+          "unicode": "⠠⠨⠭"
+        },
+        "Ο": {
+          "ascii": ",.o",
+          "unicode": "⠠⠨⠕"
+        },
+        "Π": {
+          "ascii": ",.p",
+          "unicode": "⠠⠨⠏"
+        },
+        "Ρ": {
+          "ascii": ",.r",
+          "unicode": "⠠⠨⠗"
+        },
+        "Σ": {
+          "ascii": ",.s",
+          "unicode": "⠠⠨⠎"
+        },
+        "Τ": {
+          "ascii": ",.t",
+          "unicode": "⠠⠨⠞"
+        },
+        "Υ": {
+          "ascii": ",.u",
+          "unicode": "⠠⠨⠥"
+        },
+        "Φ": {
+          "ascii": ",.f",
+          "unicode": "⠠⠨⠋"
+        },
+        "Χ": {
+          "ascii": ",.&",
+          "unicode": "⠠⠨⠯"
+        },
+        "Ψ": {
+          "ascii": ",.y",
+          "unicode": "⠠⠨⠽"
+        },
+        "Ω": {
+          "ascii": ",.w",
+          "unicode": "⠠⠨⠺"
+        }
+      }
+    },
+    {
+      "description": "그리스 문자 예",
+      "tests": {
+        "α or β": {
+          "ascii": ".a`or`.b",
+          "unicode": "⠨⠁⠀⠕⠗⠀⠨⠃"
+        },
+        "μm": {
+          "ascii": ".mm",
+          "unicode": "⠨⠍⠍"
+        },
+        "ΔΕΛΦΟΙ": {
+          "ascii": ",,.d.e.l.f.o.i",
+          "unicode": "⠠⠠⠨⠙⠨⠑⠨⠇⠨⠋⠨⠕⠨⠊"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "chapter": "제4장 로마자와 그리스 문자",
+  "section": "제10절 국어 문장 안의 로마자와 그리스 문자",
+  "description": "제39항 로마자가 주된 문장 안에 한글이 나올 때에는 한글표 _(과 한글 종료표 _) 사이에 한글을 묶어 나타낸다.",
+  "groups": [
+    {
+      "description": "로마자가 주된 문장 안에 한글이 나오는 예",
+      "tests": {
+        "What is 김치 in English?": {
+          "ascii": "``0,:at`is`_(@o5;o_)`9`,5gli%8``",
+          "unicode": "⠀⠀⠴⠠⠱⠁⠞⠀⠊⠎⠀⠸⠷⠈⠕⠢⠰⠕⠸⠾⠀⠔⠀⠠⠢⠛⠇⠊⠩⠦⠀⠀"
+        },
+        "대통령실의 누리집 주소는 www.대통령.kr이다.": {
+          "ascii": "``irh=\"},o1w`cm\"o.ob`.m,ucz`````\n0www4_(irh=\"}_)4kr4oi4`````````",
+          "unicode": "⠀⠀⠊⠗⠓⠿⠐⠻⠠⠕⠂⠺⠀⠉⠍⠐⠕⠨⠕⠃⠀⠨⠍⠠⠥⠉⠵⠀⠀⠀⠀⠀\n⠴⠺⠺⠺⠲⠸⠷⠊⠗⠓⠿⠐⠻⠸⠾⠲⠅⠗⠲⠕⠊⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+        },
+        "Banchan (Korean: 반찬) are small side dishes served along with cooked rice in Korean cuisine.": {
+          "ascii": "``,ban*an`\"<,kor1n3`_(^3;<3_)\">`\n>e`small`side`di%es`s}v$`al;g`)`\ncook$`rice`9`,kor1n`cuis9e4`````",
+          "unicode": "⠀⠀⠠⠃⠁⠝⠡⠁⠝⠀⠐⠣⠠⠅⠕⠗⠂⠝⠒⠀⠸⠷⠘⠒⠰⠣⠒⠸⠾⠐⠜⠀\n⠜⠑⠀⠎⠍⠁⠇⠇⠀⠎⠊⠙⠑⠀⠙⠊⠩⠑⠎⠀⠎⠻⠧⠫⠀⠁⠇⠰⠛⠀⠾⠀\n⠉⠕⠕⠅⠫⠀⠗⠊⠉⠑⠀⠔⠀⠠⠅⠕⠗⠂⠝⠀⠉⠥⠊⠎⠔⠑⠲⠀⠀⠀⠀⠀"
+        }
+      }
+    }
+  ]
+}

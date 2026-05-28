@@ -1,0 +1,20 @@
+{
+  "chapter": "제6장 문장 부호와 기타 부호",
+  "section": "제14절 기타 부호",
+  "description": "제74항 컴퓨터 점자는 ｢통일영어점자규정｣에 따라 적는다.",
+  "groups": [
+    {
+      "description": "컴퓨터 점자 예",
+      "tests": {
+        "국립국어원의 누리집 주소는 https://www.korean.go.kr이다.": {
+          "ascii": "``@ma\"ob@masp3w`cm\"o.ob`.m,ucz``\n0https3_/_/www4kor1n4go4kr4oi4``",
+          "unicode": "⠀⠀⠈⠍⠁⠐⠕⠃⠈⠍⠁⠎⠏⠒⠺⠀⠉⠍⠐⠕⠨⠕⠃⠀⠨⠍⠠⠥⠉⠵⠀⠀\n⠴⠓⠞⠞⠏⠎⠒⠸⠌⠸⠌⠺⠺⠺⠲⠅⠕⠗⠂⠝⠲⠛⠕⠲⠅⠗⠲⠕⠊⠲⠀⠀"
+        },
+        "그의 이메일 주소는 greenpark7150@korea.kr이다.": {
+          "ascii": "``@[w`oeno1`.m,ucz`0gre5p>k\"````\n#gaej@akorea4kr4oi4`````````````",
+          "unicode": "⠀⠀⠈⠪⠺⠀⠕⠑⠝⠕⠂⠀⠨⠍⠠⠥⠉⠵⠀⠴⠛⠗⠑⠢⠏⠜⠅⠐⠀⠀⠀⠀\n⠼⠛⠁⠑⠚⠈⠁⠅⠕⠗⠑⠁⠲⠅⠗⠲⠕⠊⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+        }
+      }
+    }
+  ]
+}

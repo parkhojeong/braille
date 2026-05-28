@@ -1,0 +1,69 @@
+{
+  "chapter": "제5장 숫자와 기호",
+  "section": "제11절 국어 문장 안의 숫자",
+  "description": "제40항 숫자는 수표 #을 앞세워 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "숫자",
+      "tests": {
+        "1": {
+          "ascii": "#a",
+          "unicode": "⠼⠁"
+        },
+        "2": {
+          "ascii": "#b",
+          "unicode": "⠼⠃"
+        },
+        "3": {
+          "ascii": "#c",
+          "unicode": "⠼⠉"
+        },
+        "4": {
+          "ascii": "#d",
+          "unicode": "⠼⠙"
+        },
+        "5": {
+          "ascii": "#e",
+          "unicode": "⠼⠑"
+        },
+        "6": {
+          "ascii": "#f",
+          "unicode": "⠼⠋"
+        },
+        "7": {
+          "ascii": "#g",
+          "unicode": "⠼⠛"
+        },
+        "8": {
+          "ascii": "#h",
+          "unicode": "⠼⠓"
+        },
+        "9": {
+          "ascii": "#i",
+          "unicode": "⠼⠊"
+        },
+        "0": {
+          "ascii": "#j",
+          "unicode": "⠼⠚"
+        }
+      }
+    },
+    {
+      "description": "숫자 예",
+      "tests": {
+        "10": {
+          "ascii": "#aj",
+          "unicode": "⠼⠁⠚"
+        },
+        "99": {
+          "ascii": "#ii",
+          "unicode": "⠼⠊⠊"
+        },
+        "375": {
+          "ascii": "#cge",
+          "unicode": "⠼⠉⠛⠑"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "chapter": "제4장 로마자와 그리스 문자",
+  "section": "제10절 국어 문장 안의 로마자와 그리스 문자",
+  "description": "제29항 국어 문장 안에 로마자가 나올 때에는 그 앞에 로마자표 0을 적고 그 뒤에 로마자 종료표 4을 적는다.",
+  "groups": [
+    {
+      "description": "국어 문장 안에 로마자가 나오는 예",
+      "tests": {
+        "그는 Canada로 여행을 떠났다.": {
+          "ascii": "``@[cz`0,canada4\"u`:jr7!`,isc/i4",
+          "original_ascii": "``@{cz`0,canada4\"u`:jr7!`,isc/i4",
+          "unicode": "⠀⠀⠈⠪⠉⠵⠀⠴⠠⠉⠁⠝⠁⠙⠁⠲⠐⠥⠀⠱⠚⠗⠶⠮⠀⠠⠊⠎⠉⠌⠊⠲"
+        },
+        "그녀는 Los Angeles의 한인 타운에 살고 있다.": {
+          "ascii": "``@[c:cz`0,los`,angeles4w`j3q`h`\ngn`l1@u`o/i4````````````````````",
+          "original_ascii": "``@{c:cz`0,los`,angeles4w`j3q`h`\ngn`l1@u`o/i4````````````````````",
+          "unicode": "⠀⠀⠈⠪⠉⠱⠉⠵⠀⠴⠠⠇⠕⠎⠀⠠⠁⠝⠛⠑⠇⠑⠎⠲⠺⠀⠚⠒⠟⠀⠓⠀\n⠛⠝⠀⠇⠂⠈⠥⠀⠕⠌⠊⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+        },
+        "Table of Contents": {
+          "ascii": "0,table`(`,3t5ts4",
+          "unicode": "⠴⠠⠞⠁⠃⠇⠑⠀⠷⠀⠠⠒⠞⠢⠞⠎⠲"
+        }
+      }
+    },
+    {
+      "description": "[다만] 문단 전체가 로마자일 때에는 로마자표와 로마자 종료표를 생략할 수 있다.",
+      "tests": {}
+    }
+  ]
+}

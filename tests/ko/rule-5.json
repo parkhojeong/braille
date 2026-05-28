@@ -1,0 +1,101 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제2절 받침으로 쓰인 자음자",
+  "description": "제5항 겹받침은 각 받침 글자를 어울러 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "겹받침",
+      "tests": {
+        "ㄳ": {
+          "ascii": "a'",
+          "unicode": "⠁⠄"
+        },
+        "ㄵ": {
+          "ascii": "3k",
+          "unicode": "⠒⠅"
+        },
+        "ㄶ": {
+          "ascii": "30",
+          "unicode": "⠒⠴"
+        },
+        "ㄺ": {
+          "ascii": "1a",
+          "unicode": "⠂⠁"
+        },
+        "ㄻ": {
+          "ascii": "15",
+          "unicode": "⠂⠢"
+        },
+        "ㄼ": {
+          "ascii": "1b",
+          "unicode": "⠂⠃"
+        },
+        "ㄽ": {
+          "ascii": "1'",
+          "unicode": "⠂⠄"
+        },
+        "ㄾ": {
+          "ascii": "18",
+          "unicode": "⠂⠦"
+        },
+        "ㄿ": {
+          "ascii": "14",
+          "unicode": "⠂⠲"
+        },
+        "ㅀ": {
+          "ascii": "10",
+          "unicode": "⠂⠴"
+        },
+        "ㅄ": {
+          "ascii": "b'",
+          "unicode": "⠃⠄"
+        }
+      }
+    },
+    {
+      "description": "겹받침이 쓰인 예",
+      "tests": {
+        "품삯": {
+          "ascii": "dm5la'",
+          "unicode": "⠙⠍⠢⠇⠁⠄"
+        },
+        "앉다": {
+          "ascii": "<3ki",
+          "unicode": "⠣⠒⠅⠊"
+        },
+        "않다": {
+          "ascii": "<30i",
+          "unicode": "⠣⠒⠴⠊"
+        },
+        "읽다": {
+          "ascii": "o1ai",
+          "unicode": "⠕⠂⠁⠊"
+        },
+        "옮기다": {
+          "ascii": "u15@oi",
+          "unicode": "⠥⠂⠢⠈⠕⠊"
+        },
+        "얇다": {
+          "ascii": ">1bi",
+          "unicode": "⠜⠂⠃⠊"
+        },
+        "외곬": {
+          "ascii": "y@u1'",
+          "unicode": "⠽⠈⠥⠂⠄"
+        },
+        "핥다": {
+          "ascii": "j18i",
+          "unicode": "⠚⠂⠦⠊"
+        },
+        "옳다": {
+          "ascii": "u10i",
+          "unicode": "⠥⠂⠴⠊"
+        },
+        "없다": {
+          "ascii": "sb'i",
+          "unicode": "⠎⠃⠄⠊"
+        }
+      }
+    }
+  ]
+}

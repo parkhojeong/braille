@@ -1,0 +1,387 @@
+{
+  "chapter": "제2장 약자와 약어",
+  "section": "제6절 약자",
+  "description": "제15항 다음 글자들은 약자를 사용하여 적는다.",
+  "groups": [
+    {
+      "description": "약자를 사용하는 글자",
+      "tests": {
+        "억": {
+          "ascii": "?",
+          "unicode": "⠹"
+        },
+        "언": {
+          "ascii": ")",
+          "unicode": "⠾"
+        },
+        "얼": {
+          "ascii": "T",
+          "unicode": "⠞"
+        },
+        "연": {
+          "ascii": "*",
+          "unicode": "⠡"
+        },
+        "열": {
+          "ascii": "|",
+          "unicode": "⠳"
+        },
+        "영": {
+          "ascii": "}",
+          "unicode": "⠻"
+        },
+        "옥": {
+          "ascii": "x",
+          "unicode": "⠭"
+        },
+        "온": {
+          "ascii": "(",
+          "unicode": "⠷"
+        },
+        "옹": {
+          "ascii": "=",
+          "unicode": "⠿"
+        },
+        "운": {
+          "ascii": "G",
+          "unicode": "⠛"
+        },
+        "울": {
+          "ascii": "&",
+          "unicode": "⠯"
+        },
+        "은": {
+          "ascii": "z",
+          "unicode": "⠵"
+        },
+        "을": {
+          "ascii": "!",
+          "unicode": "⠮"
+        },
+        "인": {
+          "ascii": "Q",
+          "unicode": "⠟"
+        },
+        "것": {
+          "ascii": "_s",
+          "unicode": "⠸⠎"
+        }
+      }
+    },
+    {
+      "description": "약자를 사용하는 예",
+      "tests": {
+        "억새": {
+          "ascii": "?,r",
+          "unicode": "⠹⠠⠗"
+        },
+        "추억": {
+          "ascii": ";m?",
+          "unicode": "⠰⠍⠹"
+        },
+        "언어": {
+          "ascii": ")s",
+          "unicode": "⠾⠎"
+        },
+        "격언": {
+          "ascii": "@:a)",
+          "unicode": "⠈⠱⠁⠾"
+        },
+        "얼룩": {
+          "ascii": "t\"ma",
+          "unicode": "⠞⠐⠍⠁"
+        },
+        "하얼빈": {
+          "ascii": "j<t^q",
+          "original_ascii": "j<t~q",
+          "unicode": "⠚⠣⠞⠘⠟"
+        },
+        "연필": {
+          "ascii": "*do1",
+          "unicode": "⠡⠙⠕⠂"
+        },
+        "자연": {
+          "ascii": ".<*",
+          "unicode": "⠨⠣⠡"
+        },
+        "열매": {
+          "ascii": "|er",
+          "unicode": "⠳⠑⠗"
+        },
+        "가열": {
+          "ascii": "$|",
+          "unicode": "⠫⠳"
+        },
+        "영어": {
+          "ascii": "}s",
+          "unicode": "⠻⠎"
+        },
+        "환영": {
+          "ascii": "jv3}",
+          "unicode": "⠚⠧⠒⠻"
+        },
+        "옥수수": {
+          "ascii": "x,m,m",
+          "unicode": "⠭⠠⠍⠠⠍"
+        },
+        "가옥": {
+          "ascii": "$x",
+          "unicode": "⠫⠭"
+        },
+        "온도": {
+          "ascii": "(iu",
+          "unicode": "⠷⠊⠥"
+        },
+        "오리온": {
+          "ascii": "u\"o(",
+          "unicode": "⠥⠐⠕⠷"
+        },
+        "옹고집": {
+          "ascii": "=@u.ob",
+          "unicode": "⠿⠈⠥⠨⠕⠃"
+        },
+        "새옹지마": {
+          "ascii": ",r=.oe",
+          "unicode": "⠠⠗⠿⠨⠕⠑"
+        },
+        "운동장": {
+          "ascii": "gi=.7",
+          "unicode": "⠛⠊⠿⠨⠶"
+        },
+        "행운": {
+          "ascii": "jr7g",
+          "unicode": "⠚⠗⠶⠛"
+        },
+        "울타리": {
+          "ascii": "&h\"o",
+          "unicode": "⠯⠓⠐⠕"
+        },
+        "겨울": {
+          "ascii": "@:&",
+          "unicode": "⠈⠱⠯"
+        },
+        "은하수": {
+          "ascii": "zj,m",
+          "unicode": "⠵⠚⠠⠍"
+        },
+        "양은": {
+          "ascii": ">7z",
+          "unicode": "⠜⠶⠵"
+        },
+        "을지로": {
+          "ascii": "!.o\"u",
+          "unicode": "⠮⠨⠕⠐⠥"
+        },
+        "가을": {
+          "ascii": "$!",
+          "unicode": "⠫⠮"
+        },
+        "인내": {
+          "ascii": "qcr",
+          "unicode": "⠟⠉⠗"
+        },
+        "거인": {
+          "ascii": "@sq",
+          "unicode": "⠈⠎⠟"
+        },
+        "것이다": {
+          "ascii": "_soi",
+          "unicode": "⠸⠎⠕⠊"
+        },
+        "이것": {
+          "ascii": "o_s",
+          "unicode": "⠕⠸⠎"
+        }
+      }
+    },
+    {
+      "description": "[붙임] ‘억, 언, 얼, 연, 열, 영, 옥, 온, 옹, 운, 울, 은, 을, 인, 것’이 포함되어 있는 글자에도 약자를 사용하여 적는다.",
+      "tests": {
+        "덕망": {
+          "ascii": "i?e7",
+          "unicode": "⠊⠹⠑⠶"
+        },
+        "기적": {
+          "ascii": "@o.?",
+          "unicode": "⠈⠕⠨⠹"
+        },
+        "꺾다": {
+          "ascii": ",@?ai",
+          "unicode": "⠠⠈⠹⠁⠊"
+        },
+        "넋": {
+          "ascii": "c?'",
+          "unicode": "⠉⠹⠄"
+        },
+        "건전지": {
+          "ascii": "@).).o",
+          "unicode": "⠈⠾⠨⠾⠨⠕"
+        },
+        "개천절": {
+          "ascii": "@r;).t",
+          "unicode": "⠈⠗⠰⠾⠨⠞"
+        },
+        "얹다": {
+          "ascii": ")ki",
+          "unicode": "⠾⠅⠊"
+        },
+        "벌레": {
+          "ascii": "^t\"n",
+          "original_ascii": "~t\"n",
+          "unicode": "⠘⠞⠐⠝"
+        },
+        "옷걸이": {
+          "ascii": "u'@to",
+          "unicode": "⠥⠄⠈⠞⠕"
+        },
+        "얽다": {
+          "ascii": "tai",
+          "unicode": "⠞⠁⠊"
+        },
+        "젊다": {
+          "ascii": ".t5i",
+          "unicode": "⠨⠞⠢⠊"
+        },
+        "넓다": {
+          "ascii": "ctbi",
+          "unicode": "⠉⠞⠃⠊"
+        },
+        "변화": {
+          "ascii": "^*jv",
+          "original_ascii": "~*jv",
+          "unicode": "⠘⠡⠚⠧"
+        },
+        "수련": {
+          "ascii": ",m\"*",
+          "unicode": "⠠⠍⠐⠡"
+        },
+        "별자리": {
+          "ascii": "^|.\"o",
+          "original_ascii": "~|.\"o",
+          "unicode": "⠘⠳⠨⠐⠕"
+        },
+        "헌혈": {
+          "ascii": "j)j|",
+          "unicode": "⠚⠾⠚⠳"
+        },
+        "엷다": {
+          "ascii": "|bi",
+          "unicode": "⠳⠃⠊"
+        },
+        "평화": {
+          "ascii": "d}jv",
+          "unicode": "⠙⠻⠚⠧"
+        },
+        "안녕": {
+          "ascii": "<3c}",
+          "unicode": "⠣⠒⠉⠻"
+        },
+        "복덕방": {
+          "ascii": "^xi?^7",
+          "original_ascii": "~xi?~7",
+          "unicode": "⠘⠭⠊⠹⠘⠶"
+        },
+        "가곡": {
+          "ascii": "$@x",
+          "unicode": "⠫⠈⠭"
+        },
+        "볶다": {
+          "ascii": "^xai",
+          "original_ascii": "~xai",
+          "unicode": "⠘⠭⠁⠊"
+        },
+        "논두렁": {
+          "ascii": "c(im\"s7",
+          "unicode": "⠉⠷⠊⠍⠐⠎⠶"
+        },
+        "용돈": {
+          "ascii": "+7i(",
+          "unicode": "⠬⠶⠊⠷"
+        },
+        "동그라미": {
+          "ascii": "i=@[\"<eo",
+          "original_ascii": "i=@{\"<eo",
+          "unicode": "⠊⠿⠈⠪⠐⠣⠑⠕"
+        },
+        "탁구공": {
+          "ascii": "ha@m@=",
+          "unicode": "⠓⠁⠈⠍⠈⠿"
+        },
+        "순두부": {
+          "ascii": ",gim^m",
+          "original_ascii": ",gim~m",
+          "unicode": "⠠⠛⠊⠍⠘⠍"
+        },
+        "숭례문": {
+          "ascii": ",m7\"/eg",
+          "unicode": "⠠⠍⠶⠐⠌⠑⠛"
+        },
+        "불고기": {
+          "ascii": "^&@u@o",
+          "original_ascii": "~&@u@o",
+          "unicode": "⠘⠯⠈⠥⠈⠕"
+        },
+        "일출": {
+          "ascii": "o1;&",
+          "unicode": "⠕⠂⠰⠯"
+        },
+        "붉다": {
+          "ascii": "^&ai",
+          "unicode": "⠘⠯⠁⠊"
+        },
+        "굶다": {
+          "ascii": "@&5i",
+          "unicode": "⠈⠯⠢⠊"
+        },
+        "훑다": {
+          "ascii": "j&8i",
+          "unicode": "⠚⠯⠦⠊"
+        },
+        "근로": {
+          "ascii": "@z\"u",
+          "unicode": "⠈⠵⠐⠥"
+        },
+        "마흔": {
+          "ascii": "ejz",
+          "unicode": "⠑⠚⠵"
+        },
+        "끊다": {
+          "ascii": ",@z0i",
+          "unicode": "⠠⠈⠵⠴⠊"
+        },
+        "글씨": {
+          "ascii": "@!,,o",
+          "unicode": "⠈⠮⠠⠠⠕"
+        },
+        "구슬": {
+          "ascii": "@m,!",
+          "unicode": "⠈⠍⠠⠮"
+        },
+        "긁다": {
+          "ascii": "@!ai",
+          "unicode": "⠈⠮⠁⠊"
+        },
+        "읊다": {
+          "ascii": "!4i",
+          "unicode": "⠮⠲⠊"
+        },
+        "끓다": {
+          "ascii": ",@!0i",
+          "unicode": "⠠⠈⠮⠴⠊"
+        },
+        "진실": {
+          "ascii": ".q,o1",
+          "unicode": "⠨⠟⠠⠕⠂"
+        },
+        "어린이": {
+          "ascii": "s\"qo",
+          "unicode": "⠎⠐⠟⠕"
+        },
+        "하겄다": {
+          "ascii": "j@s/i",
+          "unicode": "⠚⠈⠎⠌⠊"
+        }
+      }
+    }
+  ]
+}

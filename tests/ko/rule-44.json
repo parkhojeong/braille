@@ -1,0 +1,89 @@
+{
+  "chapter": "제5장 숫자와 기호",
+  "section": "제11절 국어 문장 안의 숫자",
+  "description": "제44항 숫자 뒤에 이어 나오는 한글의 띄어쓰기는 묵자를 따른다.",
+  "groups": [
+    {
+      "description": "숫자 뒤 한글 예",
+      "tests": {
+        "1가": {
+          "ascii": "#a$",
+          "unicode": "⠼⠁⠫"
+        },
+        "2권": {
+          "ascii": "#b@p3",
+          "unicode": "⠼⠃⠈⠏⠒"
+        },
+        "3반": {
+          "ascii": "#c^3",
+          "unicode": "⠼⠉⠘⠒"
+        },
+        "4선": {
+          "ascii": "#d,)",
+          "unicode": "⠼⠙⠠⠾"
+        },
+        "5월": {
+          "ascii": "#ep1",
+          "unicode": "⠼⠑⠏⠂"
+        },
+        "6일": {
+          "ascii": "#fo1",
+          "unicode": "⠼⠋⠕⠂"
+        },
+        "7자루": {
+          "ascii": "#g.\"m",
+          "unicode": "⠼⠛⠨⠐⠍"
+        },
+        "8꾸러미": {
+          "ascii": "#h,@m\"seo",
+          "unicode": "⠼⠓⠠⠈⠍⠐⠎⠑⠕"
+        },
+        "5 개": {
+          "ascii": "#e`@r",
+          "unicode": "⠼⠑⠀⠈⠗"
+        },
+        "8 상자": {
+          "ascii": "#h`l7.",
+          "unicode": "⠼⠓⠀⠇⠶⠨"
+        }
+      }
+    },
+    {
+      "description": "[다만] 숫자와 혼동되는 글자와 약자는 띄어 쓴다.",
+      "tests": {
+        "1년": {
+          "ascii": "#a`c*",
+          "unicode": "⠼⠁⠀⠉⠡"
+        },
+        "2도": {
+          "ascii": "#b`iu",
+          "unicode": "⠼⠃⠀⠊⠥"
+        },
+        "3명": {
+          "ascii": "#c`e]",
+          "unicode": "⠼⠉⠀⠑⠻"
+        },
+        "4칸": {
+          "ascii": "#d`f3",
+          "unicode": "⠼⠙⠀⠋⠒"
+        },
+        "5톤": {
+          "ascii": "#e`h(",
+          "unicode": "⠼⠑⠀⠓⠷"
+        },
+        "6평": {
+          "ascii": "#f`d]",
+          "unicode": "⠼⠋⠀⠙⠻"
+        },
+        "7항": {
+          "ascii": "#g`j7",
+          "unicode": "⠼⠛⠀⠚⠶"
+        },
+        "5운6기": {
+          "ascii": "#e`g#f@o",
+          "unicode": "⠼⠑⠀⠛⠼⠋⠈⠕"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제2절 받침으로 쓰인 자음자",
+  "description": "제4항 쌍받침 ‘ㄲ’은 aa으로 적고, 쌍받침 ‘ㅆ’은 약자인 /으로 적는다.",
+  "groups": [
+    {
+      "description": "쌍받침 ㄲ과 ㅆ이 쓰인 예",
+      "tests": {
+        "겪다": {
+          "ascii": "@:aai",
+          "unicode": "⠈⠱⠁⠁⠊"
+        },
+        "묶음": {
+          "ascii": "emaa[5",
+          "unicode": "⠑⠍⠁⠁⠪⠢"
+        },
+        "있다": {
+          "ascii": "o/i",
+          "unicode": "⠕⠌⠊"
+        },
+        "보았다": {
+          "ascii": "^u</i",
+          "unicode": "⠘⠥⠣⠌⠊"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+{
+  "chapter": "제4장 로마자와 그리스 문자",
+  "section": "제10절 국어 문장 안의 로마자와 그리스 문자",
+  "description": "제28항 로마자는 ｢통일영어점자규정｣에 따라 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "로마자 소문자",
+      "tests": {
+        "a": {
+          "ascii": "a",
+          "unicode": "⠁"
+        },
+        "b": {
+          "ascii": "b",
+          "unicode": "⠃"
+        },
+        "c": {
+          "ascii": "c",
+          "unicode": "⠉"
+        },
+        "d": {
+          "ascii": "d",
+          "unicode": "⠙"
+        },
+        "e": {
+          "ascii": "e",
+          "unicode": "⠑"
+        },
+        "f": {
+          "ascii": "f",
+          "unicode": "⠋"
+        },
+        "g": {
+          "ascii": "g",
+          "unicode": "⠛"
+        },
+        "h": {
+          "ascii": "h",
+          "unicode": "⠓"
+        },
+        "i": {
+          "ascii": "i",
+          "unicode": "⠊"
+        },
+        "j": {
+          "ascii": "j",
+          "unicode": "⠚"
+        },
+        "k": {
+          "ascii": "k",
+          "unicode": "⠅"
+        },
+        "l": {
+          "ascii": "l",
+          "unicode": "⠇"
+        },
+        "m": {
+          "ascii": "m",
+          "unicode": "⠍"
+        },
+        "n": {
+          "ascii": "n",
+          "unicode": "⠝"
+        },
+        "o": {
+          "ascii": "o",
+          "unicode": "⠕"
+        },
+        "p": {
+          "ascii": "p",
+          "unicode": "⠏"
+        },
+        "q": {
+          "ascii": "q",
+          "unicode": "⠟"
+        },
+        "r": {
+          "ascii": "r",
+          "unicode": "⠗"
+        },
+        "s": {
+          "ascii": "s",
+          "unicode": "⠎"
+        },
+        "t": {
+          "ascii": "t",
+          "unicode": "⠞"
+        },
+        "u": {
+          "ascii": "u",
+          "unicode": "⠥"
+        },
+        "v": {
+          "ascii": "v",
+          "unicode": "⠧"
+        },
+        "w": {
+          "ascii": "w",
+          "unicode": "⠺"
+        },
+        "x": {
+          "ascii": "x",
+          "unicode": "⠭"
+        },
+        "y": {
+          "ascii": "y",
+          "unicode": "⠽"
+        },
+        "z": {
+          "ascii": "z",
+          "unicode": "⠵"
+        }
+      }
+    },
+    {
+      "description": "로마자 대문자",
+      "tests": {
+        "A": {
+          "ascii": ",a",
+          "unicode": "⠠⠁"
+        },
+        "B": {
+          "ascii": ",b",
+          "unicode": "⠠⠃"
+        },
+        "C": {
+          "ascii": ",c",
+          "unicode": "⠠⠉"
+        },
+        "D": {
+          "ascii": ",d",
+          "unicode": "⠠⠙"
+        },
+        "E": {
+          "ascii": ",e",
+          "unicode": "⠠⠑"
+        },
+        "F": {
+          "ascii": ",f",
+          "unicode": "⠠⠋"
+        },
+        "G": {
+          "ascii": ",g",
+          "unicode": "⠠⠛"
+        },
+        "H": {
+          "ascii": ",h",
+          "unicode": "⠠⠓"
+        },
+        "I": {
+          "ascii": ",i",
+          "unicode": "⠠⠊"
+        },
+        "J": {
+          "ascii": ",j",
+          "unicode": "⠠⠚"
+        },
+        "K": {
+          "ascii": ",k",
+          "unicode": "⠠⠅"
+        },
+        "L": {
+          "ascii": ",l",
+          "unicode": "⠠⠇"
+        },
+        "M": {
+          "ascii": ",m",
+          "unicode": "⠠⠍"
+        },
+        "N": {
+          "ascii": ",n",
+          "unicode": "⠠⠝"
+        },
+        "O": {
+          "ascii": ",o",
+          "unicode": "⠠⠕"
+        },
+        "P": {
+          "ascii": ",p",
+          "unicode": "⠠⠏"
+        },
+        "Q": {
+          "ascii": ",q",
+          "unicode": "⠠⠟"
+        },
+        "R": {
+          "ascii": ",r",
+          "unicode": "⠠⠗"
+        },
+        "S": {
+          "ascii": ",s",
+          "unicode": "⠠⠎"
+        },
+        "T": {
+          "ascii": ",t",
+          "unicode": "⠠⠞"
+        },
+        "U": {
+          "ascii": ",u",
+          "unicode": "⠠⠥"
+        },
+        "V": {
+          "ascii": ",v",
+          "unicode": "⠠⠧"
+        },
+        "W": {
+          "ascii": ",w",
+          "unicode": "⠠⠺"
+        },
+        "X": {
+          "ascii": ",x",
+          "unicode": "⠠⠭"
+        },
+        "Y": {
+          "ascii": ",y",
+          "unicode": "⠠⠽"
+        },
+        "Z": {
+          "ascii": ",z",
+          "unicode": "⠠⠵"
+        }
+      }
+    },
+    {
+      "description": "로마자 단어 예",
+      "tests": {
+        "book": {
+          "ascii": "book",
+          "unicode": "⠃⠕⠕⠅"
+        },
+        "happy": {
+          "ascii": "happy",
+          "unicode": "⠓⠁⠏⠏⠽"
+        },
+        "moon": {
+          "ascii": "moon",
+          "unicode": "⠍⠕⠕⠝"
+        },
+        "purple": {
+          "ascii": "purple",
+          "unicode": "⠏⠥⠗⠏⠇⠑"
+        },
+        "tea": {
+          "ascii": "tea",
+          "unicode": "⠞⠑⠁"
+        },
+        "welcome": {
+          "ascii": "welcome",
+          "unicode": "⠺⠑⠇⠉⠕⠍⠑"
+        }
+      }
+    },
+    {
+      "description": "[붙임] 대문자 표기 예",
+      "tests": {
+        "New York": {
+          "ascii": ",new`,york",
+          "unicode": "⠠⠝⠑⠺⠀⠠⠽⠕⠗⠅"
+        },
+        "NEW YORK": {
+          "ascii": ",,new`,,york",
+          "unicode": "⠠⠠⠝⠑⠺⠀⠠⠠⠽⠕⠗⠅"
+        },
+        "McDonald": {
+          "ascii": ",mc,donald",
+          "unicode": "⠠⠍⠉⠠⠙⠕⠝⠁⠇⠙"
+        },
+        "IoT": {
+          "ascii": ",io,t",
+          "unicode": "⠠⠊⠕⠠⠞"
+        },
+        "iOS": {
+          "ascii": "i,,os",
+          "unicode": "⠊⠠⠠⠕⠎"
+        },
+        "WELCOME TO KOREA": {
+          "ascii": ",,,welcome`to`korea,'",
+          "unicode": "⠠⠠⠠⠺⠑⠇⠉⠕⠍⠑⠀⠞⠕⠀⠅⠕⠗⠑⠁⠠⠄"
+        }
+      }
+    }
+  ]
+}

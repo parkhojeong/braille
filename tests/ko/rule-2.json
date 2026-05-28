@@ -1,0 +1,83 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제1절 첫소리로 쓰인 자음자",
+  "description": "제2항 된소리 글자 ‘ㄲ, ㄸ, ㅃ, ㅆ, ㅉ’이 첫소리로 쓰일 때에는 ‘ㄱ, ㄷ, ㅂ, ㅅ, ㅈ’ 앞에 된소리표 ,을 적어 나타낸다.",
+  "groups": [
+    {
+      "description": "된소리 글자",
+      "tests": {
+        "ㄲ": {
+          "ascii": ",@",
+          "unicode": "⠠⠈"
+        },
+        "ㄸ": {
+          "ascii": ",i",
+          "unicode": "⠠⠊"
+        },
+        "ㅃ": {
+          "ascii": ",^",
+          "unicode": "⠠⠘"
+        },
+        "ㅆ": {
+          "ascii": ",,",
+          "unicode": "⠠⠠"
+        },
+        "ㅉ": {
+          "ascii": ",.",
+          "unicode": "⠠⠨"
+        }
+      }
+    },
+    {
+      "description": "된소리 글자가 첫소리로 쓰인 예",
+      "tests": {
+        "꾸러미": {
+          "ascii": ",@m\"seo",
+          "unicode": "⠠⠈⠍⠐⠎⠑⠕"
+        },
+        "두꺼비": {
+          "ascii": "im,@s^o",
+          "original_ascii": "im,@s~o",
+          "unicode": "⠊⠍⠠⠈⠎⠘⠕"
+        },
+        "뚜껑": {
+          "ascii": ",im,@s7",
+          "unicode": "⠠⠊⠍⠠⠈⠎⠶"
+        },
+        "허리띠": {
+          "ascii": "js\"o,io",
+          "unicode": "⠚⠎⠐⠕⠠⠊⠕"
+        },
+        "뻐꾸기": {
+          "ascii": ",^s,@m@o",
+          "original_ascii": ",~s,@m@o",
+          "unicode": "⠠⠘⠎⠠⠈⠍⠈⠕"
+        },
+        "고삐": {
+          "ascii": "@u,^o",
+          "original_ascii": "@u,~o",
+          "unicode": "⠈⠥⠠⠘⠕"
+        },
+        "쓰기": {
+          "ascii": ",,[@o",
+          "original_ascii": ",,{@o",
+          "unicode": "⠠⠠⠪⠈⠕"
+        },
+        "아저씨": {
+          "ascii": "<.s,,o",
+          "unicode": "⠣⠨⠎⠠⠠⠕"
+        },
+        "쭈르르": {
+          "ascii": ",.m\"[\"[",
+          "original_ascii": ",.m\"{\"{",
+          "unicode": "⠠⠨⠍⠐⠪⠐⠪"
+        },
+        "버찌": {
+          "ascii": "^s,.o",
+          "original_ascii": "~s,.o",
+          "unicode": "⠘⠎⠠⠨⠕"
+        }
+      }
+    }
+  ]
+}

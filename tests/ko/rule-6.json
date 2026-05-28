@@ -1,0 +1,99 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제3절 모음자",
+  "description": "제6항 기본 모음자 10개는 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "기본 모음자 10개",
+      "tests": {
+        "ㅏ": {
+          "ascii": "<",
+          "unicode": "⠣"
+        },
+        "ㅑ": {
+          "ascii": ">",
+          "unicode": "⠜"
+        },
+        "ㅓ": {
+          "ascii": "s",
+          "unicode": "⠎"
+        },
+        "ㅕ": {
+          "ascii": ":",
+          "unicode": "⠱"
+        },
+        "ㅗ": {
+          "ascii": "u",
+          "unicode": "⠥"
+        },
+        "ㅛ": {
+          "ascii": "+",
+          "unicode": "⠬"
+        },
+        "ㅜ": {
+          "ascii": "m",
+          "unicode": "⠍"
+        },
+        "ㅠ": {
+          "ascii": "%",
+          "unicode": "⠩"
+        },
+        "ㅡ": {
+          "ascii": "[",
+          "unicode": "⠪"
+        },
+        "ㅣ": {
+          "ascii": "o",
+          "unicode": "⠕"
+        }
+      }
+    },
+    {
+      "description": "기본 모음자가 쓰인 예",
+      "tests": {
+        "아리랑": {
+          "ascii": "<\"o\"<7",
+          "unicode": "⠣⠐⠕⠐⠣⠶"
+        },
+        "고양이": {
+          "ascii": "@u>7o",
+          "unicode": "⠈⠥⠜⠶⠕"
+        },
+        "엄지": {
+          "ascii": "s5.o",
+          "unicode": "⠎⠢⠨⠕"
+        },
+        "무역": {
+          "ascii": "em:a",
+          "unicode": "⠑⠍⠱⠁"
+        },
+        "호랑이": {
+          "ascii": "ju\"<7o",
+          "unicode": "⠚⠥⠐⠣⠶⠕"
+        },
+        "무용": {
+          "ascii": "em+7",
+          "unicode": "⠑⠍⠬⠶"
+        },
+        "국수": {
+          "ascii": "@ma,m",
+          "unicode": "⠈⠍⠁⠠⠍"
+        },
+        "법률": {
+          "ascii": "^sb\"%1",
+          "original_ascii": "~sb\"%1",
+          "unicode": "⠘⠎⠃⠐⠩⠂"
+        },
+        "특기": {
+          "ascii": "h[a@o",
+          "original_ascii": "h{a@o",
+          "unicode": "⠓⠪⠁⠈⠕"
+        },
+        "코끼리": {
+          "ascii": "fu,@o\"o",
+          "unicode": "⠋⠥⠠⠈⠕⠐⠕"
+        }
+      }
+    }
+  ]
+}

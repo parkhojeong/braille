@@ -1,0 +1,134 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제2절 받침으로 쓰인 자음자",
+  "description": "제3항 기본 자음자 14개가 받침으로 쓰일 때에는 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "기본 자음자 14개가 받침으로 쓰일 때",
+      "tests": {
+        "ㄱ": {
+          "ascii": "a",
+          "unicode": "⠁"
+        },
+        "ㄴ": {
+          "ascii": "3",
+          "unicode": "⠒"
+        },
+        "ㄷ": {
+          "ascii": "9",
+          "unicode": "⠔"
+        },
+        "ㄹ": {
+          "ascii": "1",
+          "unicode": "⠂"
+        },
+        "ㅁ": {
+          "ascii": "5",
+          "unicode": "⠢"
+        },
+        "ㅂ": {
+          "ascii": "b",
+          "unicode": "⠃"
+        },
+        "ㅅ": {
+          "ascii": "'",
+          "unicode": "⠄"
+        },
+        "ㅇ": {
+          "ascii": "7",
+          "unicode": "⠶"
+        },
+        "ㅈ": {
+          "ascii": "k",
+          "unicode": "⠅"
+        },
+        "ㅊ": {
+          "ascii": "2",
+          "unicode": "⠆"
+        },
+        "ㅋ": {
+          "ascii": "6",
+          "unicode": "⠖"
+        },
+        "ㅌ": {
+          "ascii": "8",
+          "unicode": "⠦"
+        },
+        "ㅍ": {
+          "ascii": "4",
+          "unicode": "⠲"
+        },
+        "ㅎ": {
+          "ascii": "0",
+          "unicode": "⠴"
+        }
+      }
+    },
+    {
+      "description": "기본 자음자 14개가 받침으로 쓰인 예",
+      "tests": {
+        "국보": {
+          "ascii": "@ma^u",
+          "original_ascii": "@ma~u",
+          "unicode": "⠈⠍⠁⠘⠥"
+        },
+        "윤리": {
+          "ascii": "%3\"o",
+          "unicode": "⠩⠒⠐⠕"
+        },
+        "싣고": {
+          "ascii": ",o9@u",
+          "unicode": "⠠⠕⠔⠈⠥"
+        },
+        "놀이": {
+          "ascii": "cu1o",
+          "unicode": "⠉⠥⠂⠕"
+        },
+        "솜씨": {
+          "ascii": ",u5,,o",
+          "unicode": "⠠⠥⠢⠠⠠⠕"
+        },
+        "넙치": {
+          "ascii": "csb;o",
+          "unicode": "⠉⠎⠃⠰⠕"
+        },
+        "놋그릇": {
+          "ascii": "cu'@[\"['",
+          "original_ascii": "cu'@{\"{'",
+          "unicode": "⠉⠥⠄⠈⠪⠐⠪⠄"
+        },
+        "향기": {
+          "ascii": "j>7@o",
+          "unicode": "⠚⠜⠶⠈⠕"
+        },
+        "엊저녁": {
+          "ascii": "sk.sc:a",
+          "unicode": "⠎⠅⠨⠎⠉⠱⠁"
+        },
+        "윷놀이": {
+          "ascii": "%2cu1o",
+          "unicode": "⠩⠆⠉⠥⠂⠕"
+        },
+        "부엌": {
+          "ascii": "^ms6",
+          "original_ascii": "~ms6",
+          "unicode": "⠘⠍⠎⠖"
+        },
+        "겉보리": {
+          "ascii": "@s8^u\"o",
+          "original_ascii": "@s8~u\"o",
+          "unicode": "⠈⠎⠦⠘⠥⠐⠕"
+        },
+        "앞집": {
+          "ascii": "<4.ob",
+          "unicode": "⠣⠲⠨⠕⠃"
+        },
+        "히읗": {
+          "ascii": "jo[0",
+          "original_ascii": "jo{0",
+          "unicode": "⠚⠕⠪⠴"
+        }
+      }
+    }
+  ]
+}

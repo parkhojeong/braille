@@ -1,0 +1,152 @@
+{
+  "chapter": "제4장 로마자와 그리스 문자",
+  "section": "제10절 국어 문장 안의 로마자와 그리스 문자",
+  "description": "제37항 다음 영어 단어 앞에 로마자표가 올 때에는 단어 약자를 쓰지 않고 알파벳과 여러 글자를 나타내는 묶음약자를 사용하여 풀어 적는다.",
+  "groups": [
+    {
+      "description": "로마자표 뒤에서 풀어 적는 영어 단어",
+      "tests": {
+        "but": {
+          "ascii": "but",
+          "unicode": "⠃⠥⠞"
+        },
+        "can": {
+          "ascii": "can",
+          "unicode": "⠉⠁⠝"
+        },
+        "do": {
+          "ascii": "do",
+          "unicode": "⠙⠕"
+        },
+        "every": {
+          "ascii": "\"ey",
+          "unicode": "⠐⠑⠽"
+        },
+        "from": {
+          "ascii": "from",
+          "unicode": "⠋⠗⠕⠍"
+        },
+        "go": {
+          "ascii": "go",
+          "unicode": "⠛⠕"
+        },
+        "have": {
+          "ascii": "have",
+          "unicode": "⠓⠁⠧⠑"
+        },
+        "just": {
+          "ascii": "ju/",
+          "unicode": "⠚⠥⠌"
+        },
+        "knowledge": {
+          "ascii": "\"kl$ge",
+          "unicode": "⠐⠅⠇⠫⠛⠑"
+        },
+        "like": {
+          "ascii": "like",
+          "unicode": "⠇⠊⠅⠑"
+        },
+        "more": {
+          "ascii": "more",
+          "unicode": "⠍⠕⠗⠑"
+        },
+        "not": {
+          "ascii": "not",
+          "unicode": "⠝⠕⠞"
+        },
+        "people": {
+          "ascii": "people",
+          "unicode": "⠏⠑⠕⠏⠇⠑"
+        },
+        "quite": {
+          "ascii": "quite",
+          "unicode": "⠟⠥⠊⠞⠑"
+        },
+        "rather": {
+          "ascii": "ra!r",
+          "unicode": "⠗⠁⠮⠗"
+        },
+        "so": {
+          "ascii": "so",
+          "unicode": "⠎⠕"
+        },
+        "that": {
+          "ascii": "?at",
+          "unicode": "⠹⠁⠞"
+        },
+        "us": {
+          "ascii": "us",
+          "unicode": "⠥⠎"
+        },
+        "very": {
+          "ascii": "v}y",
+          "unicode": "⠧⠻⠽"
+        },
+        "will": {
+          "ascii": "will",
+          "unicode": "⠺⠊⠇⠇"
+        },
+        "it": {
+          "ascii": "it",
+          "unicode": "⠊⠞"
+        },
+        "you": {
+          "ascii": "y\\",
+          "unicode": "⠽⠳"
+        },
+        "as": {
+          "ascii": "as",
+          "unicode": "⠁⠎"
+        },
+        "be": {
+          "ascii": "be",
+          "unicode": "⠃⠑"
+        },
+        "enough": {
+          "ascii": "5\\<",
+          "unicode": "⠢⠳⠣"
+        },
+        "his": {
+          "ascii": "his",
+          "unicode": "⠓⠊⠎"
+        },
+        "in": {
+          "ascii": "in",
+          "unicode": "⠊⠝"
+        },
+        "was": {
+          "ascii": "was",
+          "unicode": "⠺⠁⠎"
+        },
+        "were": {
+          "ascii": "w}e",
+          "unicode": "⠺⠻⠑"
+        }
+      }
+    },
+    {
+      "description": "로마자표 뒤에서 단어 약자를 쓰지 않는 예",
+      "tests": {
+        "그는 Can you help me?라고 도움을 요청했다.": {
+          "ascii": "``@[cz`0,can`y`help`me8\"<@u`ium5\n!`+;]jr/i4`````````````````````",
+          "original_ascii": "``@{cz`0,can`y`help`me8\"<@u`ium5\n!`+;]jr/i4`````````````````````",
+          "unicode": "⠀⠀⠈⠪⠉⠵⠀⠴⠠⠉⠁⠝⠀⠽⠀⠓⠑⠇⠏⠀⠍⠑⠦⠐⠣⠈⠥⠀⠊⠥⠍⠢\n⠮⠀⠬⠰⠻⠚⠗⠌⠊⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+        },
+        "be는 am, are, is의 원형 동사이다.": {
+          "ascii": "``0be4cz`0am1`>e1`is4w`p3j}`i=lo\ni4```````````````````````````",
+          "unicode": "⠀⠀⠴⠃⠑⠲⠉⠵⠀⠴⠁⠍⠂⠀⠜⠑⠂⠀⠊⠎⠲⠺⠀⠏⠒⠚⠻⠀⠊⠿⠇⠕\n⠊⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+        }
+      }
+    },
+    {
+      "description": "[붙임] be, enough, his, in, was, were는 로마자 종료표 앞에서도 단어 약자를 쓰지 않는다.",
+      "tests": {
+        "be, his, was, were의 약자를 바르게 쓰시오.": {
+          "ascii": "``0be1`his1`was1`w]e4w`>a.\"!`^\"[\n@n`,,[,ou4`````````````````````",
+          "original_ascii": "``0be1`his1`was1`w]e4w`>a.\"!`^\"[\n@n`,,{,ou4`````````````````````",
+          "unicode": "⠀⠀⠴⠃⠑⠂⠀⠓⠊⠎⠂⠀⠺⠁⠎⠂⠀⠺⠻⠑⠲⠺⠀⠜⠁⠨⠐⠮⠀⠘⠐⠪\n⠈⠝⠀⠠⠠⠪⠠⠕⠥⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+        }
+      }
+    }
+  ]
+}

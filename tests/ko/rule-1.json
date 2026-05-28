@@ -1,0 +1,191 @@
+{
+  "chapter": "제1장 자모",
+  "section": "제1절 첫소리로 쓰인 자음자",
+  "description": "제1항 기본 자음자 14개가 첫소리로 쓰일 때에는 다음과 같이 적는다.",
+  "groups": [
+    {
+      "description": "기본 자음자 14개",
+      "tests": {
+        "ㄱ": {
+          "ascii": "@",
+          "unicode": "⠈"
+        },
+        "ㄴ": {
+          "ascii": "c",
+          "unicode": "⠉"
+        },
+        "ㄷ": {
+          "ascii": "i",
+          "unicode": "⠊"
+        },
+        "ㄹ": {
+          "ascii": "\"",
+          "unicode": "⠐"
+        },
+        "ㅁ": {
+          "ascii": "e",
+          "unicode": "⠑"
+        },
+        "ㅂ": {
+          "ascii": "^",
+          "unicode": "⠘"
+        },
+        "ㅅ": {
+          "ascii": ",",
+          "unicode": "⠠"
+        },
+        "ㅇ": {
+          "ascii": "g",
+          "unicode": "⠛"
+        },
+        "ㅈ": {
+          "ascii": ".",
+          "unicode": "⠨"
+        },
+        "ㅊ": {
+          "ascii": ";",
+          "unicode": "⠰"
+        },
+        "ㅋ": {
+          "ascii": "f",
+          "unicode": "⠋"
+        },
+        "ㅌ": {
+          "ascii": "h",
+          "unicode": "⠓"
+        },
+        "ㅍ": {
+          "ascii": "d",
+          "unicode": "⠙"
+        },
+        "ㅎ": {
+          "ascii": "j",
+          "unicode": "⠚"
+        }
+      }
+    },
+    {
+      "description": "기본 자음자 14개가 첫소리로 쓰인 예",
+      "tests": {
+        "거리": {
+          "ascii": "@s\"o",
+          "unicode": "⠈⠎⠐⠕"
+        },
+        "너비": {
+          "ascii": "cs^o",
+          "original_ascii": "cs~o",
+          "unicode": "⠉⠎⠘⠕"
+        },
+        "두더지": {
+          "ascii": "imis.o",
+          "unicode": "⠊⠍⠊⠎⠨⠕"
+        },
+        "리코더": {
+          "ascii": "\"ofuis",
+          "unicode": "⠐⠕⠋⠥⠊⠎"
+        },
+        "미소": {
+          "ascii": "eo,u",
+          "unicode": "⠑⠕⠠⠥"
+        },
+        "보리": {
+          "ascii": "^u\"o",
+          "original_ascii": "~u\"o",
+          "unicode": "⠘⠥⠐⠕"
+        },
+        "셔츠": {
+          "ascii": ",:;[",
+          "original_ascii": ",:;{",
+          "unicode": "⠠⠱⠰⠪"
+        },
+        "저고리": {
+          "ascii": ".s@u\"o",
+          "unicode": "⠨⠎⠈⠥⠐⠕"
+        },
+        "추수": {
+          "ascii": ";m,m",
+          "unicode": "⠰⠍⠠⠍"
+        },
+        "커피": {
+          "ascii": "fsdo",
+          "unicode": "⠋⠎⠙⠕"
+        },
+        "터무니": {
+          "ascii": "hsemco",
+          "unicode": "⠓⠎⠑⠍⠉⠕"
+        },
+        "피리": {
+          "ascii": "do\"o",
+          "unicode": "⠙⠕⠐⠕"
+        },
+        "호수": {
+          "ascii": "ju,m",
+          "unicode": "⠚⠥⠠⠍"
+        }
+      }
+    },
+    {
+      "description": "[다만1] ‘ㅇ’이 첫소리로 쓰일 때에는 점자로 이를 표기하지 않는다.",
+      "tests": {
+        "아버지": {
+          "ascii": "<^s.o",
+          "original_ascii": "<~s.o",
+          "unicode": "⠣⠘⠎⠨⠕"
+        },
+        "야구": {
+          "ascii": ">@m",
+          "unicode": "⠜⠈⠍"
+        },
+        "어머니": {
+          "ascii": "sesco",
+          "unicode": "⠎⠑⠎⠉⠕"
+        },
+        "여우": {
+          "ascii": ":m",
+          "unicode": "⠱⠍"
+        },
+        "오이": {
+          "ascii": "uo",
+          "unicode": "⠥⠕"
+        },
+        "요리": {
+          "ascii": "+\"o",
+          "unicode": "⠬⠐⠕"
+        },
+        "우유": {
+          "ascii": "m%",
+          "unicode": "⠍⠩"
+        },
+        "유리": {
+          "ascii": "%\"o",
+          "unicode": "⠩⠐⠕"
+        },
+        "으스스": {
+          "ascii": "[,[,[",
+          "original_ascii": "{,{,{",
+          "unicode": "⠪⠠⠪⠠⠪"
+        },
+        "이모": {
+          "ascii": "oeu",
+          "unicode": "⠕⠑⠥"
+        },
+        "피아노": {
+          "ascii": "do<cu",
+          "unicode": "⠙⠕⠣⠉⠥"
+        },
+        "도우미": {
+          "ascii": "iumeo",
+          "unicode": "⠊⠥⠍⠑⠕"
+        },
+        "러시아": {
+          "ascii": "\"s,o<",
+          "unicode": "⠐⠎⠠⠕⠣"
+        }
+      }
+    },
+    {
+      "description": "[다만2] 첫소리로 쓰인 ‘ㅇ’을 나타내야 할 때에는 g으로 표기한다.",
+      "tests": {}
+    }
+  ]
+}
