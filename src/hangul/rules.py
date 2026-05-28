@@ -1,4 +1,4 @@
-CHOSEONG_DOTS = {
+CHOSEONG_DOT = {
     "ㄱ": "4",
     "ㄴ": "14",
     "ㄷ": "24",
@@ -16,14 +16,14 @@ CHOSEONG_DOTS = {
 }
 
 TENSE_CHOSEONG_DOTS = {
-    "ㄲ": ["6", CHOSEONG_DOTS["ㄱ"]],
-    "ㄸ": ["6", CHOSEONG_DOTS["ㄷ"]],
-    "ㅃ": ["6", CHOSEONG_DOTS["ㅂ"]],
-    "ㅆ": ["6", CHOSEONG_DOTS["ㅅ"]],
-    "ㅉ": ["6", CHOSEONG_DOTS["ㅈ"]],
+    "ㄲ": ["6", CHOSEONG_DOT["ㄱ"]],
+    "ㄸ": ["6", CHOSEONG_DOT["ㄷ"]],
+    "ㅃ": ["6", CHOSEONG_DOT["ㅂ"]],
+    "ㅆ": ["6", CHOSEONG_DOT["ㅅ"]],
+    "ㅉ": ["6", CHOSEONG_DOT["ㅈ"]],
 }
 
-JUNGSEONG_DOTS = {
+JUNGSEONG_DOT = {
     "ㅏ": "126",
     "ㅑ": "345",
     "ㅓ": "234",
@@ -37,7 +37,7 @@ JUNGSEONG_DOTS = {
     "ㅣ": "135",
 }
 
-JONGSEONG_DOTS = {
+JONGSEONG_DOT = {
     "ㄱ": "1",
     "ㄴ": "25",
     "ㄷ": "35",
@@ -52,19 +52,22 @@ JONGSEONG_DOTS = {
     "ㅌ": "236",
     "ㅍ": "256",
     "ㅎ": "356",
-    "ㄲ": "1-1",
     "ㅆ": "34",
-    "ㄳ": "1-3",
-    "ㄵ": "25-13",
-    "ㄶ": "25-356",
-    "ㄺ": "2-1",
-    "ㄻ": "2-26",
-    "ㄼ": "2-12",
-    "ㄽ": "2-3",
-    "ㄾ": "2-236",
-    "ㄿ": "2-256",
-    "ㅀ": "2-356",
-    "ㅄ": "12-3",
+}
+
+COMPOSITE_JONGSEONG_DOTS = {
+    "ㄲ": [JONGSEONG_DOT["ㄱ"], JONGSEONG_DOT["ㄱ"]],
+    "ㄳ": [JONGSEONG_DOT["ㄱ"], JONGSEONG_DOT["ㅅ"]],
+    "ㄵ": [JONGSEONG_DOT["ㄴ"], JONGSEONG_DOT["ㅈ"]],
+    "ㄶ": [JONGSEONG_DOT["ㄴ"], JONGSEONG_DOT["ㅎ"]],
+    "ㄺ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㄱ"]],
+    "ㄻ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅁ"]],
+    "ㄼ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅂ"]],
+    "ㄽ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅅ"]],
+    "ㄾ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅌ"]],
+    "ㄿ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅍ"]],
+    "ㅀ": [JONGSEONG_DOT["ㄹ"], JONGSEONG_DOT["ㅎ"]],
+    "ㅄ": [JONGSEONG_DOT["ㅂ"], JONGSEONG_DOT["ㅅ"]],
 }
 
 
@@ -73,17 +76,19 @@ def encode_choseong(choseong: str) -> list[str]:
         return []
     if choseong in TENSE_CHOSEONG_DOTS:
         return TENSE_CHOSEONG_DOTS[choseong]
-    return [CHOSEONG_DOTS[choseong]]
+    return [CHOSEONG_DOT[choseong]]
 
 
 def encode_jungseong(jungseong: str) -> list[str]:
-    return [JUNGSEONG_DOTS[jungseong]]
+    return [JUNGSEONG_DOT[jungseong]]
 
 
 def encode_jongseong(jongseong: str) -> list[str]:
     if not jongseong:
         return []
-    return JONGSEONG_DOTS[jongseong].split("-")
+    if jongseong in COMPOSITE_JONGSEONG_DOTS:
+        return COMPOSITE_JONGSEONG_DOTS[jongseong]
+    return [JONGSEONG_DOT[jongseong]]
 
 
 def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
@@ -91,7 +96,7 @@ def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
         if choseong == "ㅅ":
             return ["123", *encode_jongseong(jongseong)]
         if choseong in {"ㄷ", "ㅌ", "ㅎ"}:
-            return [CHOSEONG_DOTS[choseong], *encode_jongseong(jongseong)]
+            return [CHOSEONG_DOT[choseong], *encode_jongseong(jongseong)]
 
     return [
         *encode_choseong(choseong),
@@ -104,10 +109,10 @@ def encode_standalone_jamo(ch: str, role: str) -> list[str]:
     if ch in TENSE_CHOSEONG_DOTS:
         return TENSE_CHOSEONG_DOTS[ch]
 
-    if role == "jongseong" and ch in JONGSEONG_DOTS:
-        return JONGSEONG_DOTS[ch].split("-")
+    if role == "jongseong":
+        return encode_jongseong(ch)
 
-    if ch in CHOSEONG_DOTS:
-        return [CHOSEONG_DOTS[ch]]
+    if ch in CHOSEONG_DOT:
+        return [CHOSEONG_DOT[ch]]
 
     raise NotImplementedError(f"unsupported character: {ch}")
