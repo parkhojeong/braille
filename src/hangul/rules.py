@@ -33,6 +33,7 @@ JUNGSEONG_DOTS = {
     "ㅜ": "134",
     "ㅠ": "146",
     "ㅡ": "246",
+    "ㅚ": "13456",
     "ㅣ": "135",
 }
 
@@ -53,6 +54,17 @@ JONGSEONG_DOTS = {
     "ㅎ": "356",
     "ㄲ": "1-1",
     "ㅆ": "34",
+    "ㄳ": "1-3",
+    "ㄵ": "25-13",
+    "ㄶ": "25-356",
+    "ㄺ": "2-1",
+    "ㄻ": "2-26",
+    "ㄼ": "2-12",
+    "ㄽ": "2-3",
+    "ㄾ": "2-236",
+    "ㄿ": "2-256",
+    "ㅀ": "2-356",
+    "ㅄ": "12-3",
 }
 
 
@@ -75,8 +87,11 @@ def encode_jongseong(jongseong: str) -> list[str]:
 
 
 def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
-    if choseong == "ㄷ" and jungseong == "ㅏ" and not jongseong:
-        return [CHOSEONG_DOTS[choseong]]
+    if jungseong == "ㅏ":
+        if choseong == "ㅅ":
+            return ["123", *encode_jongseong(jongseong)]
+        if choseong in {"ㄷ", "ㅌ", "ㅎ"}:
+            return [CHOSEONG_DOTS[choseong], *encode_jongseong(jongseong)]
 
     return [
         *encode_choseong(choseong),

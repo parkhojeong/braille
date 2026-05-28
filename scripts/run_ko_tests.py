@@ -19,7 +19,9 @@ def iter_cases(path: Path):
 
 
 def standalone_jamo_for_case(path: Path, group_description: str) -> str:
-    if path.name == "rule-3.json" and "받침으로 쓰일 때" in group_description:
+    if path.name in {"rule-3.json", "rule-5.json"} and (
+        "받침으로 쓰일 때" in group_description or "겹받침" == group_description
+    ):
         return "jongseong"
     return "choseong"
 
