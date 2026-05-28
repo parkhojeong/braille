@@ -78,28 +78,35 @@ RULE_5_COMPOSITE_JONGSEONG_DOTS = {
 }
 
 
-def rule_1_choseong_dot(choseong: str) -> Optional[str]:
-    return RULE_1_CHOSEONG_DOT.get(choseong)
+def lookup(mapping: dict[str, str], key: str, label: str) -> str:
+    try:
+        return mapping[key]
+    except KeyError:
+        raise NotImplementedError(f"unsupported {label}: {key}") from None
 
 
-def rule_2_tense_choseong_dots(choseong: str) -> Optional[list[str]]:
+def rule_1_choseong_dot(choseong: str) -> str:
+    return lookup(RULE_1_CHOSEONG_DOT, choseong, "choseong")
+
+
+def apply_rule_2_tense_choseong(choseong: str) -> Optional[list[str]]:
     return RULE_2_TENSE_CHOSEONG_DOTS.get(choseong)
 
 
-def rule_3_jongseong_dot(jongseong: str) -> Optional[str]:
-    return RULE_3_JONGSEONG_DOT.get(jongseong)
+def rule_3_jongseong_dot(jongseong: str) -> str:
+    return lookup(RULE_3_JONGSEONG_DOT, jongseong, "jongseong")
 
 
-def rule_4_double_jongseong_dots(jongseong: str) -> Optional[list[str]]:
+def apply_rule_4_double_jongseong(jongseong: str) -> Optional[list[str]]:
     return RULE_4_DOUBLE_JONGSEONG_DOTS.get(jongseong)
 
 
-def rule_5_composite_jongseong_dots(jongseong: str) -> Optional[list[str]]:
+def apply_rule_5_composite_jongseong(jongseong: str) -> Optional[list[str]]:
     return RULE_5_COMPOSITE_JONGSEONG_DOTS.get(jongseong)
 
 
-def rule_6_jungseong_dot(jungseong: str) -> Optional[str]:
-    return RULE_6_JUNGSEONG_DOT.get(jungseong)
+def rule_6_jungseong_dot(jungseong: str) -> str:
+    return lookup(RULE_6_JUNGSEONG_DOT, jungseong, "jungseong")
 
 
 def apply_abbreviated_a_syllable_rule(
@@ -120,42 +127,30 @@ def encode_choseong(choseong: str) -> list[str]:
     if choseong == "ㅇ":
         return []
 
-    tense_dots = rule_2_tense_choseong_dots(choseong)
+    tense_dots = apply_rule_2_tense_choseong(choseong)
     if tense_dots is not None:
         return tense_dots
 
-    dot = rule_1_choseong_dot(choseong)
-    if dot is not None:
-        return [dot]
-
-    raise NotImplementedError(f"unsupported choseong: {choseong}")
+    return [rule_1_choseong_dot(choseong)]
 
 
 def encode_jungseong(jungseong: str) -> list[str]:
-    dot = rule_6_jungseong_dot(jungseong)
-    if dot is not None:
-        return [dot]
-
-    raise NotImplementedError(f"unsupported jungseong: {jungseong}")
+    return [rule_6_jungseong_dot(jungseong)]
 
 
 def encode_jongseong(jongseong: str) -> list[str]:
     if not jongseong:
         return []
 
-    double_dots = rule_4_double_jongseong_dots(jongseong)
+    double_dots = apply_rule_4_double_jongseong(jongseong)
     if double_dots is not None:
         return double_dots
 
-    composite_dots = rule_5_composite_jongseong_dots(jongseong)
+    composite_dots = apply_rule_5_composite_jongseong(jongseong)
     if composite_dots is not None:
         return composite_dots
 
-    dot = rule_3_jongseong_dot(jongseong)
-    if dot is not None:
-        return [dot]
-
-    raise NotImplementedError(f"unsupported jongseong: {jongseong}")
+    return [rule_3_jongseong_dot(jongseong)]
 
 
 SyllableRule = Callable[[str, str, str], Optional[list[str]]]
@@ -179,19 +174,17 @@ def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
 
 
 def encode_standalone_jamo(ch: str, role: str) -> list[str]:
-    tense_dots = rule_2_tense_choseong_dots(ch)
+    tense_dots = apply_rule_2_tense_choseong(ch)
     if tense_dots is not None:
         return tense_dots
 
     if role == "jongseong":
         return encode_jongseong(ch)
 
-    choseong_dot = rule_1_choseong_dot(ch)
-    if choseong_dot is not None:
-        return [choseong_dot]
+    if ch in RULE_1_CHOSEONG_DOT:
+        return [rule_1_choseong_dot(ch)]
 
-    jungseong_dot = rule_6_jungseong_dot(ch)
-    if jungseong_dot is not None:
-        return [jungseong_dot]
+    if ch in RULE_6_JUNGSEONG_DOT:
+        return [rule_6_jungseong_dot(ch)]
 
-    raise NotImplementedError(f"unsupported character: {ch}")
+    raise NotImplementedError(f"unsupported standalone jamo: {ch}")
