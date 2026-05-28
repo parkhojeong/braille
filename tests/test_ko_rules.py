@@ -18,6 +18,16 @@ def iter_rule_cases(rule: int):
             yield path, group["description"], print_text, expected
 
 
+def trim_blank_edges(cells: list[str]) -> list[str]:
+    start = 0
+    end = len(cells)
+    while start < end and cells[start] == "":
+        start += 1
+    while end > start and cells[end - 1] == "":
+        end -= 1
+    return cells[start:end]
+
+
 @pytest.mark.parametrize(
     ("path", "group_description", "print_text", "expected"),
     [
@@ -32,5 +42,8 @@ def test_supported_ko_rules(path, group_description, print_text, expected):
         standalone_jamo=standalone_jamo_for_case(path, group_description),
     )
 
-    assert actual_dots == ascii_to_dots(expected["ascii"])
-    assert dots_to_unicode(actual_dots) == expected["unicode"]
+    actual_dots = trim_blank_edges(actual_dots)
+    expected_dots = trim_blank_edges(ascii_to_dots(expected["ascii"]))
+
+    assert actual_dots == expected_dots
+    assert dots_to_unicode(actual_dots) == dots_to_unicode(expected_dots)

@@ -54,6 +54,28 @@ RULE_7_JUNGSEONG_DOTS = {
     "ㅢ": ["2456"],
 }
 
+RULE_13_ABBREVIATED_A_DOT = {
+    "ㄱ": "1246",
+    "ㄴ": RULE_1_CHOSEONG_DOT["ㄴ"],
+    "ㄷ": RULE_1_CHOSEONG_DOT["ㄷ"],
+    "ㅁ": RULE_1_CHOSEONG_DOT["ㅁ"],
+    "ㅂ": RULE_1_CHOSEONG_DOT["ㅂ"],
+    "ㅅ": "123",
+    "ㅈ": RULE_1_CHOSEONG_DOT["ㅈ"],
+    "ㅋ": RULE_1_CHOSEONG_DOT["ㅋ"],
+    "ㅌ": RULE_1_CHOSEONG_DOT["ㅌ"],
+    "ㅍ": RULE_1_CHOSEONG_DOT["ㅍ"],
+    "ㅎ": RULE_1_CHOSEONG_DOT["ㅎ"],
+}
+
+RULE_13_TENSE_ABBREVIATED_A_DOTS = {
+    "ㄲ": ["6", RULE_13_ABBREVIATED_A_DOT["ㄱ"]],
+    "ㄸ": ["6", RULE_13_ABBREVIATED_A_DOT["ㄷ"]],
+    "ㅃ": ["6", RULE_13_ABBREVIATED_A_DOT["ㅂ"]],
+    "ㅆ": ["6", RULE_13_ABBREVIATED_A_DOT["ㅅ"]],
+    "ㅉ": ["6", RULE_13_ABBREVIATED_A_DOT["ㅈ"]],
+}
+
 RULE_3_JONGSEONG_DOT = {
     "ㄱ": "1",
     "ㄴ": "25",
@@ -127,18 +149,65 @@ def apply_rule_7_jungseong(jungseong: str) -> Optional[list[str]]:
     return RULE_7_JUNGSEONG_DOTS.get(jungseong)
 
 
-def apply_abbreviated_a_syllable_rule(
+def apply_rule_13_abbreviated_a_syllable(
     choseong: str,
     jungseong: str,
     jongseong: str,
+    next_syllable_starts_with_ieung: bool,
 ) -> Optional[list[str]]:
-    if jungseong == "ㅏ":
-        if choseong == "ㅅ":
-            return ["123", *encode_jongseong(jongseong)]
-        if choseong in {"ㄷ", "ㅌ", "ㅎ"}:
-            return [RULE_1_CHOSEONG_DOT[choseong], *encode_jongseong(jongseong)]
+    if jungseong != "ㅏ":
+        return None
+
+    if next_syllable_starts_with_ieung and choseong in {
+        "ㄴ",
+        "ㄷ",
+        "ㅁ",
+        "ㅂ",
+        "ㅈ",
+        "ㅋ",
+        "ㅌ",
+        "ㅍ",
+        "ㅎ",
+    }:
+        return None
+
+    if choseong in RULE_13_TENSE_ABBREVIATED_A_DOTS:
+        return [
+            *RULE_13_TENSE_ABBREVIATED_A_DOTS[choseong],
+            *encode_jongseong(jongseong),
+        ]
+
+    dot = RULE_13_ABBREVIATED_A_DOT.get(choseong)
+    if dot is not None:
+        return [dot, *encode_jongseong(jongseong)]
 
     return None
+
+
+def apply_vowel_jongseong_abbreviation(
+    choseong: str,
+    jungseong: str,
+    jongseong: str,
+    next_syllable_starts_with_ieung: bool,
+) -> Optional[list[str]]:
+    del next_syllable_starts_with_ieung
+
+    abbreviation_dot = {
+        ("ㅕ", "ㄹ"): "1256",
+        ("ㅕ", "ㅇ"): "12456",
+        ("ㅡ", "ㄴ"): "1356",
+        ("ㅓ", "ㄴ"): "23456",
+        ("ㅕ", "ㄴ"): "16",
+        ("ㅗ", "ㅇ"): "123456",
+    }.get((jungseong, jongseong))
+
+    if jungseong == "ㅓ" and jongseong == "ㅇ" and choseong == "ㅊ":
+        abbreviation_dot = "12456"
+
+    if abbreviation_dot is None:
+        return None
+
+    return [*encode_choseong(choseong), abbreviation_dot]
 
 
 def encode_choseong(choseong: str) -> list[str]:
@@ -178,16 +247,23 @@ def encode_jongseong(jongseong: str) -> list[str]:
     return [rule_3_jongseong_dot(jongseong)]
 
 
-SyllableRule = Callable[[str, str, str], Optional[list[str]]]
+SyllableRule = Callable[[str, str, str, bool], Optional[list[str]]]
 
 SYLLABLE_RULES: list[SyllableRule] = [
-    apply_abbreviated_a_syllable_rule,
+    apply_rule_13_abbreviated_a_syllable,
+    apply_vowel_jongseong_abbreviation,
 ]
 
 
-def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
+def encode_syllable(
+    choseong: str,
+    jungseong: str,
+    jongseong: str,
+    *,
+    next_syllable_starts_with_ieung: bool = False,
+) -> list[str]:
     for rule in SYLLABLE_RULES:
-        result = rule(choseong, jungseong, jongseong)
+        result = rule(choseong, jungseong, jongseong, next_syllable_starts_with_ieung)
         if result is not None:
             return result
 
@@ -199,6 +275,14 @@ def encode_syllable(choseong: str, jungseong: str, jongseong: str) -> list[str]:
 
 
 def encode_standalone_jamo(ch: str, role: str) -> list[str]:
+    if role == "standalone":
+        if ch in RULE_1_CHOSEONG_DOT or ch in RULE_2_TENSE_CHOSEONG_DOTS:
+            return ["123456", *encode_jongseong(ch)]
+        return ["123456", *encode_jungseong(ch)]
+
+    if role == "attached_jongseong":
+        return ["456", *encode_jongseong(ch)]
+
     tense_dots = apply_rule_2_tense_choseong(ch)
     if tense_dots is not None:
         return tense_dots

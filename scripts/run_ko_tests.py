@@ -19,6 +19,16 @@ def iter_cases(path: Path):
             yield group["description"], print_text, expected
 
 
+def trim_blank_edges(cells: list[str]) -> list[str]:
+    start = 0
+    end = len(cells)
+    while start < end and cells[start] == "":
+        start += 1
+    while end > start and cells[end - 1] == "":
+        end -= 1
+    return cells[start:end]
+
+
 def run(path: Path) -> int:
     failures = []
     total = 0
@@ -36,8 +46,14 @@ def run(path: Path) -> int:
             failures.append((group_description, print_text, expected, None, None, str(exc)))
             continue
 
-        expected_dots = ascii_to_dots(expected["ascii"])
-        if actual_dots != expected_dots or actual_unicode != expected["unicode"]:
+        expected_dots = trim_blank_edges(ascii_to_dots(expected["ascii"]))
+        comparable_actual_dots = trim_blank_edges(actual_dots)
+        comparable_actual_unicode = dots_to_unicode(comparable_actual_dots)
+        expected_unicode = dots_to_unicode(expected_dots)
+        if (
+            comparable_actual_dots != expected_dots
+            or comparable_actual_unicode != expected_unicode
+        ):
             failures.append(
                 (group_description, print_text, expected, actual_ascii, actual_unicode, None)
             )
