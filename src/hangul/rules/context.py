@@ -1,7 +1,11 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from ..tokens import Token
+
+if TYPE_CHECKING:
+    from ..spans import TokenSpan
 
 SyllableParts = tuple[str, str, str]
 
@@ -10,6 +14,8 @@ SyllableParts = tuple[str, str, str]
 class RuleResult:
     dots: list[str]
     consumed: int = 1
+    rule_id: str | None = None
+    span: "TokenSpan | None" = None
 
 
 @dataclass(frozen=True)

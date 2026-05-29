@@ -1,5 +1,7 @@
 from hangul.tokenizer import tokenize_print
 from hangul.text import Text
+from hangul.spans import SpanRule, try_encode_span_rules
+from hangul.rules.context import RuleContext
 from hangul.rules.latin_phrase import latin_number_phrase_span, latin_phrase_span
 
 
@@ -72,3 +74,14 @@ def test_text_keeps_tokens_and_spans_separate():
     assert text.spans_containing(1) == (span,)
     assert text.previous_token(1) == text.tokens[0]
     assert text.next_token(1) == text.tokens[2]
+
+
+def test_span_rule_result_keeps_rule_metadata():
+    text = Text.from_print("MP3")
+    rule = SpanRule("rule-35", latin_number_phrase_span, lambda ctx, span: "0")
+
+    result = try_encode_span_rules(text.context_at(0), (rule,))
+
+    assert result is not None
+    assert result.rule_id == "rule-35"
+    assert result.span == latin_number_phrase_span(RuleContext(text.tokens, 0))

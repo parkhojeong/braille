@@ -60,7 +60,9 @@ def try_encode_span_rules(
             continue
 
         return RuleResult(
-            ascii_to_dots(rule.encode(ctx, span)),
-            span.consumed_from(ctx.index),
+            dots=ascii_to_dots(rule.encode(ctx, span)),
+            consumed=span.consumed_from(ctx.index),
+            rule_id=rule.id,
+            span=span,
         )
     return None
