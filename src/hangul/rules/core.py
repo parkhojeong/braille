@@ -7,7 +7,6 @@ from .tables import (
     RULE_10_ATTACHED_T_SIGN_DOT,
     T_DOTS,
     V_DOTS,
-    VOWEL_SEQUENCE_SEPARATOR_DOT,
 )
 
 
@@ -134,41 +133,6 @@ def rule_10_try_encode_attached_t(ch: str, role: str) -> list[str] | None:
         return None
 
     return [RULE_10_ATTACHED_T_SIGN_DOT, *encode_t(ch)]
-
-
-def rule_11_try_encode_예_구분표(
-    v: str,
-    t: str,
-    next_l: str,
-    next_v: str,
-    next_t: str,
-) -> list[str] | None:
-    """제11항 모음자에 ‘예’가 붙어 나올 때에는 그 사이에 구분표 -을 적어 나타낸다."""
-    del next_t
-
-    if t == "" and next_l == "ㅇ" and next_v == "ㅖ":
-        return [VOWEL_SEQUENCE_SEPARATOR_DOT]
-    return None
-
-
-def rule_12_try_encode_애_구분표(
-    v: str,
-    t: str,
-    next_l: str,
-    next_v: str,
-    next_t: str,
-) -> list[str] | None:
-    """제12항 ‘ㅑ, ㅘ, ㅜ, ㅝ’에 ‘애’가 붙어 나올 때에는 두 모음자 사이에 구분표 -을 적어 나타낸다."""
-    del next_t
-
-    if (
-        t == ""
-        and v in {"ㅑ", "ㅘ", "ㅜ", "ㅝ"}
-        and next_l == "ㅇ"
-        and next_v == "ㅐ"
-    ):
-        return [VOWEL_SEQUENCE_SEPARATOR_DOT]
-    return None
 
 
 def rule_14_try_encode_팠(
@@ -377,9 +341,8 @@ def encode_t(t: str) -> list[str]:
     return rule_3_encode_t(t)
 
 
-SyllableRule = Callable[[RuleContext], list[str] | None]
 JamoRoleRule = Callable[[str, str], list[str] | None]
-VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
+SyllableRule = Callable[[RuleContext], list[str] | None]
 
 L_RULES: list[Callable[[str], list[str] | None]] = [
     rule_1_try_encode_l_ㅇ,
@@ -393,11 +356,6 @@ V_RULES: list[Callable[[str], list[str] | None]] = [
 T_RULES: list[Callable[[str], list[str] | None]] = [
     rule_4_try_encode_t_ㄲㅆ,
     rule_5_try_encode_t_cluster,
-]
-
-VOWEL_SEQUENCE_RULES: list[VowelSequenceRule] = [
-    rule_11_try_encode_예_구분표,
-    rule_12_try_encode_애_구분표,
 ]
 
 SYLLABLE_RULES: list[SyllableRule] = [
@@ -426,26 +384,6 @@ def encode_syllable(ctx: RuleContext) -> list[str]:
         *encode_v(ctx.v),
         *encode_t(ctx.t),
     ]
-
-
-def encode_vowel_sequence_separator(
-    v: str,
-    t: str,
-    next_l: str,
-    next_v: str,
-    next_t: str,
-) -> list[str]:
-    result = try_encode_rules(
-        VOWEL_SEQUENCE_RULES,
-        v,
-        t,
-        next_l,
-        next_v,
-        next_t,
-    )
-    if result is not None:
-        return result
-    return []
 
 
 def encode_jamo(ch: str, role: str) -> list[str]:
