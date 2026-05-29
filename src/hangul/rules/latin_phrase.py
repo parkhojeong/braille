@@ -2,17 +2,40 @@ from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
 
 from ..spans import TokenSpan
 from .context import RuleContext
+from .symbol_tables import (
+    LATIN_HANGUL_BOUNDARY_PUNCTUATION_ASCII,
+    LATIN_HANGUL_BOUNDARY_SYMBOL_ASCII,
+)
 
-LATIN_PHRASE_TOKEN_KINDS = {"LATIN_RUN", "SPACE", "PUNCTUATION"}
+LATIN_PHRASE_TOKEN_KINDS = {"LATIN_RUN", "SPACE", "PUNCTUATION", "SYMBOL"}
 
 
 def is_latin_phrase_punctuation(text: str) -> bool:
     return text in UEB_LATIN_PUNCTUATION_ASCII
 
 
+def is_latin_hangul_boundary_mark(ctx: RuleContext, index: int) -> bool:
+    token = ctx.tokens[index]
+    if token.is_punctuation:
+        if token.text not in LATIN_HANGUL_BOUNDARY_PUNCTUATION_ASCII:
+            return False
+    elif token.is_symbol:
+        if token.text not in LATIN_HANGUL_BOUNDARY_SYMBOL_ASCII:
+            return False
+    else:
+        return False
+
+    next_index = index + 1
+    while next_index < len(ctx.tokens) and ctx.tokens[next_index].is_space:
+        next_index += 1
+    return next_index < len(ctx.tokens) and ctx.tokens[next_index].is_hangul
+
+
 def is_latin_phrase_content_token(ctx: RuleContext, index: int) -> bool:
     token = ctx.tokens[index]
     if token.is_latin:
+        return True
+    if is_latin_hangul_boundary_mark(ctx, index):
         return True
     return token.is_punctuation and is_latin_phrase_punctuation(token.text)
 
@@ -65,6 +88,8 @@ def latin_phrase_span(ctx: RuleContext) -> TokenSpan | None:
         end += 1
 
     if start != ctx.index or not has_latin_run_between(ctx, start, end):
+        return None
+    if end == start + 1:
         return None
     return TokenSpan("LATIN_PHRASE", start, end, "rule-32")
 

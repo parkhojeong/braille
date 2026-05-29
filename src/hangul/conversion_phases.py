@@ -12,6 +12,7 @@ from .rules import (
     encode_punctuation,
     encode_roman_numeral,
     encode_syllable,
+    encode_symbol,
     encode_vowel_sequence_separator,
     encode_word,
 )
@@ -98,6 +99,11 @@ def encode_punctuation_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | N
     return encode_punctuation(ctx)
 
 
+def encode_symbol_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    return encode_symbol(ctx)
+
+
 def encode_hangul_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
     if not ctx.token.is_hangul:
@@ -124,6 +130,7 @@ TOKEN_PHASES: list[TokenPhase] = [
     TokenPhase("number", encode_number_phase),
     TokenPhase("space", encode_space_phase),
     TokenPhase("punctuation", encode_punctuation_phase),
+    TokenPhase("symbol", encode_symbol_phase),
     TokenPhase("hangul", encode_hangul_phase),
     TokenPhase("jamo", encode_jamo_phase),
 ]

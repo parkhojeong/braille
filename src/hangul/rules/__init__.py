@@ -5,6 +5,7 @@ from .latin_rules import encode_latin
 from .number_rules import encode_number
 from .punctuation_rules import encode_punctuation
 from .roman_numeral_rules import encode_roman_numeral
+from .symbol_rules import encode_symbol
 from .vowel_sequence_rules import encode_vowel_sequence_separator
 from .word_rules import encode_word
 

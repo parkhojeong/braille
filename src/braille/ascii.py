@@ -115,7 +115,9 @@ DOTS_TO_ASCII = _build_dots_to_ascii()
 
 
 def ascii_to_cells(text: str) -> BrailleCells:
-    return BrailleCells.from_dot_strings(ASCII_TO_DOTS[ch] for ch in text)
+    return BrailleCells.from_dot_strings(
+        ASCII_TO_DOTS[ch] for ch in text if ch != "\n"
+    )
 
 
 def ascii_to_dots(text: str) -> list[str]:

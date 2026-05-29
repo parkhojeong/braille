@@ -24,6 +24,7 @@ SUPPORTED_RULES = [
     30,
     31,
     32,
+    33,
     35,
     36,
     37,
@@ -39,6 +40,17 @@ LAYOUT_DEPENDENT_CASES = {
     ("rule-29.json", "그녀는 Los Angeles의 한인 타운에 살고 있다."),
 }
 
+DEFERRED_CASES = {
+    ("rule-33.json", "우리나라 기차에는 KTX, 새마을호, 무궁화호 등이 있다."),
+    ("rule-33.json", "WHO: 세계보건기구"),
+    ("rule-33.json", "오동근, 1998a, 1998b; 이진영, 2001, p. 109"),
+    ("rule-33.json", "Ms.는 미혼·기혼의 구별이 없는 여성의 존칭이다."),
+    ("rule-33.json", "그 영화에서 가장 유명한 곡은 What Is A Youth?이다."),
+    ("rule-33.json", "연주가 끝나자 사람들은 Bravo!를 외쳤다."),
+    ("rule-33.json", "Summary~연습문제"),
+}
+
+
 def is_supported_case(
     path: Path,
     group_description: str,
@@ -47,6 +59,7 @@ def is_supported_case(
     return (
         (path.name, group_description) not in LAYOUT_DEPENDENT_GROUPS
         and (path.name, print_text) not in LAYOUT_DEPENDENT_CASES
+        and (path.name, print_text) not in DEFERRED_CASES
     )
 
 

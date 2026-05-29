@@ -8,9 +8,17 @@ from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
 
 from ..spans import SpanRule, TokenSpan, try_encode_span_rules
 from .context import RuleContext, RuleResult
-from .latin_phrase import latin_number_phrase_span, latin_phrase_span
+from .latin_phrase import (
+    is_latin_hangul_boundary_mark,
+    latin_number_phrase_span,
+    latin_phrase_span,
+)
 from .number_rules import encode_number_ascii
 from .roman_numeral_rules import is_roman_numeral_text
+from .symbol_tables import (
+    LATIN_HANGUL_BOUNDARY_PUNCTUATION_ASCII,
+    LATIN_HANGUL_BOUNDARY_SYMBOL_ASCII,
+)
 
 
 def latin_run_count(ctx: RuleContext) -> int:
@@ -87,9 +95,13 @@ def encode_latin_capital_passage(ctx: RuleContext) -> RuleResult | None:
 
 
 def should_close_latin_phrase(ctx: RuleContext, span: TokenSpan) -> bool:
+    end_token = ctx.tokens[span.end - 1]
+    if is_latin_hangul_boundary_mark(ctx, span.end - 1):
+        return False
+
     return not (
-        ctx.tokens[span.end - 1].is_punctuation
-        and ctx.tokens[span.end - 1].text in {".", "!", "?"}
+        end_token.is_punctuation
+        and end_token.text in {".", "!", "?"}
         and span.end < len(ctx.tokens)
         and ctx.tokens[span.end].is_hangul
     )
@@ -109,7 +121,17 @@ def encode_latin_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
         elif token.is_space:
             parts.append("`" * len(token.text))
         elif token.is_punctuation:
-            parts.append(UEB_LATIN_PUNCTUATION_ASCII[token.text])
+            boundary_ascii = None
+            if is_latin_hangul_boundary_mark(ctx, index):
+                boundary_ascii = LATIN_HANGUL_BOUNDARY_PUNCTUATION_ASCII.get(
+                    token.text
+                )
+            if boundary_ascii is not None:
+                parts.append(boundary_ascii)
+            else:
+                parts.append(UEB_LATIN_PUNCTUATION_ASCII[token.text])
+        elif token.is_symbol:
+            parts.append(LATIN_HANGUL_BOUNDARY_SYMBOL_ASCII[token.text])
     if should_close_latin_phrase(ctx, span):
         parts.append("4")
     return "".join(parts)
