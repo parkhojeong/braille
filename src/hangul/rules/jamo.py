@@ -119,6 +119,24 @@ def encode_t(t: str) -> list[str]:
     return rule_3_encode_t(t)
 
 
+def encode_plain_jamo(ch: str) -> list[str]:
+    result = rule_2_try_encode_l_ㄲㄸㅃㅆㅉ(ch)
+    if result is not None:
+        return result
+
+    if ch in L_DOTS:
+        return rule_1_encode_l(ch)
+
+    if ch in V_DOTS:
+        return rule_6_encode_v(ch)
+
+    result = try_encode_rules(V_RULES, ch)
+    if result is not None:
+        return result
+
+    raise NotImplementedError(f"unsupported jamo: {ch}")
+
+
 def rule_3_to_5_try_encode_t_role(ch: str, role: str) -> list[str] | None:
     """자모가 받침 역할이면 제3~5항의 받침 규칙으로 적는다."""
     if role == "t":
