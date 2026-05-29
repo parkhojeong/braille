@@ -6,8 +6,10 @@ TokenKind = Literal[
     "HANGUL_SYLLABLE",
     "JAMO",
     "LATIN_RUN",
+    "NUMBER",
     "SPACE",
     "PUNCTUATION",
+    "SYMBOL",
     "UNKNOWN",
 ]
 

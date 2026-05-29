@@ -1,5 +1,59 @@
 PUNCTUATION = {"(", ")", ",", ".", "!", "?", "[", "]"}
 
+SYMBOLS = {
+    "#",
+    "$",
+    "%",
+    "*",
+    "+",
+    "-",
+    "/",
+    ":",
+    ";",
+    "@",
+    "^",
+    "_",
+    "~",
+    "·",
+    "―",
+    "‘",
+    "’",
+    "“",
+    "”",
+    "…",
+    "※",
+    "○",
+    "△",
+    "□",
+    "×",
+    "←",
+    "→",
+    "↔",
+    "㎡",
+    "ː",
+    "￦",
+    "￡",
+    "€",
+    "°",
+    "′",
+    "″",
+    "⅔",
+    "①",
+    "ⓐ",
+    "㉮",
+    "Å",
+    "℃",
+    "℉",
+    "㎏",
+    "㎜",
+    "㎥",
+    "Ω",
+    "‰",
+    "æ",
+    "ə",
+    "ŋ",
+}
+
 STANDALONE_CONSONANTS = {
     "ㄱ",
     "ㄴ",
@@ -20,6 +74,10 @@ STANDALONE_CONSONANTS = {
 
 def is_ascii_letter(ch: str) -> bool:
     return ch.isascii() and ch.isalpha()
+
+
+def is_ascii_digit(ch: str) -> bool:
+    return ch.isascii() and ch.isdigit()
 
 
 def is_greek_letter(ch: str) -> bool:

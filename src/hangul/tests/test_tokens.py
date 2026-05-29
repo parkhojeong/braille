@@ -19,3 +19,16 @@ def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
     assert tokens[0].l == "ㄴ"
     assert tokens[0].v == "ㅏ"
     assert tokens[0].t == ""
+
+
+def test_tokenize_print_groups_numbers_and_symbols():
+    tokens = tokenize_print("A4 + ㎡")
+
+    assert [(token.kind, token.text, token.group_id) for token in tokens] == [
+        ("LATIN_RUN", "A", 0),
+        ("NUMBER", "4", 0),
+        ("SPACE", " ", None),
+        ("SYMBOL", "+", 1),
+        ("SPACE", " ", None),
+        ("SYMBOL", "㎡", 2),
+    ]

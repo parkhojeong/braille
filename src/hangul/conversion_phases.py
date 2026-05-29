@@ -7,21 +7,12 @@ from .rules import (
     encode_greek,
     encode_jamo,
     encode_latin,
+    encode_punctuation,
     encode_syllable,
     encode_vowel_sequence_separator,
     encode_word,
 )
 from .tokens import Token
-
-TEXT_PUNCTUATION_DOTS = {
-    " ": [""],
-    ",": ["5"],
-    ".": ["256"],
-    "!": ["2346"],
-    "?": ["236"],
-    "[": ["236", "23"],
-    "]": ["56", "356"],
-}
 
 TokenPhase = Callable[[RuleContext, str], RuleResult | None]
 
@@ -84,9 +75,7 @@ def encode_space_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 
 def encode_punctuation_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
-    if ctx.token.kind != "PUNCTUATION":
-        return None
-    return RuleResult(TEXT_PUNCTUATION_DOTS[ctx.token.text])
+    return encode_punctuation(ctx)
 
 
 def encode_hangul_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
@@ -102,6 +91,8 @@ def encode_hangul_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 
 
 def encode_jamo_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    if ctx.token.kind != "JAMO":
+        return None
     return RuleResult(encode_jamo(ctx.token.text, jamo_role))
 
 
