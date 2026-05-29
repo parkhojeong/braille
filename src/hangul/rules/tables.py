@@ -114,7 +114,7 @@ T_CLUSTER_DOTS = {
     "ㅄ": [T_DOTS["ㅂ"], T_DOTS["ㅅ"]],
 }
 
-NEXT_L_IEUNG_CANCELS_ABBREVIATED_A = {
+NEXT_L_ㅇ_CANCELS_ABBREVIATED_A = {
     "ㄴ",
     "ㄷ",
     "ㅁ",

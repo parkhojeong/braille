@@ -66,7 +66,7 @@ def should_skip_space(tokens: list[Token], index: int) -> bool:
     )
 
 
-def next_syllable_l_is_ieung(tokens: list[Token], index: int) -> bool:
+def next_syllable_l_is_ㅇ(tokens: list[Token], index: int) -> bool:
     if index + 1 >= len(tokens):
         return False
 
@@ -118,7 +118,7 @@ def print_to_braille_dots(text: str, *, jamo_role: str = "l") -> list[str]:
                     token.l or "",
                     token.v or "",
                     token.t or "",
-                    next_syllable_l_is_ieung=next_syllable_l_is_ieung(
+                    next_syllable_l_is_ㅇ=next_syllable_l_is_ㅇ(
                         tokens, index
                     ),
                 )

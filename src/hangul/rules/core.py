@@ -10,7 +10,7 @@ from .tables import (
     FULL_SIGN_DOT,
     T_DOTS,
     V_DOTS,
-    NEXT_L_IEUNG_CANCELS_ABBREVIATED_A,
+    NEXT_L_ㅇ_CANCELS_ABBREVIATED_A,
     RULE_12_PRECEDING_V,
     RULE_15_SYLLABLE_ABBREVIATIONS,
     RULE_15_V_T_ABBREVIATIONS,
@@ -43,7 +43,7 @@ def rule_1_encode_l(l: str) -> list[str]:
     return encode_dot(L_DOTS, l, "l")
 
 
-def rule_1_try_encode_silent_ieung_l(l: str) -> list[str] | None:
+def rule_1_try_encode_l_ㅇ(l: str) -> list[str] | None:
     if l == "ㅇ":
         return []
     return None
@@ -132,9 +132,9 @@ def rule_14_try_encode_팠(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ieung: bool,
+    next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
-    del next_syllable_l_is_ieung
+    del next_syllable_l_is_ㅇ
 
     if l == "ㅍ" and v == "ㅏ" and t == "ㅆ":
         return [*encode_l(l), *encode_v(v), *encode_t(t)]
@@ -145,14 +145,14 @@ def rule_13_try_encode_abbreviated_a_syllable(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ieung: bool,
+    next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
     if v != "ㅏ":
         return None
 
     if (
-        next_syllable_l_is_ieung
-        and l in NEXT_L_IEUNG_CANCELS_ABBREVIATED_A
+        next_syllable_l_is_ㅇ
+        and l in NEXT_L_ㅇ_CANCELS_ABBREVIATED_A
     ):
         return None
 
@@ -171,9 +171,9 @@ def rule_15_try_encode_abbreviated_syllable(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ieung: bool,
+    next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
-    del next_syllable_l_is_ieung
+    del next_syllable_l_is_ㅇ
 
     syllable_dots = RULE_15_SYLLABLE_ABBREVIATIONS.get(
         (l, v, t)
@@ -195,9 +195,9 @@ def rule_17_try_encode_성썽정쩡청(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ieung: bool,
+    next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
-    del next_syllable_l_is_ieung
+    del next_syllable_l_is_ㅇ
 
     abbreviation_dot = RULE_17_LVT_ABBREVIATIONS.get(
         (l, v, t)
@@ -243,7 +243,7 @@ JamoRoleRule = Callable[[str, str], list[str] | None]
 VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
 
 L_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_1_try_encode_silent_ieung_l,
+    rule_1_try_encode_l_ㅇ,
     rule_2_try_encode_tense_l,
 ]
 
@@ -280,14 +280,14 @@ def encode_syllable(
     v: str,
     t: str,
     *,
-    next_syllable_l_is_ieung: bool = False,
+    next_syllable_l_is_ㅇ: bool = False,
 ) -> list[str]:
     result = try_encode_rules(
         SYLLABLE_RULES,
         l,
         v,
         t,
-        next_syllable_l_is_ieung,
+        next_syllable_l_is_ㅇ,
     )
     if result is not None:
         return result
