@@ -73,13 +73,13 @@ def rule_7_try_encode_v_cluster(v: str) -> list[str] | None:
     return V_CLUSTER_DOTS.get(v)
 
 
-def rule_3_to_5_try_encode_t_jamo(ch: str, role: str) -> list[str] | None:
+def rule_3_to_5_try_encode_t_role(ch: str, role: str) -> list[str] | None:
     if role == "t":
         return encode_t(ch)
     return None
 
 
-def rule_8_or_9_try_encode_jamo_role(ch: str, role: str) -> list[str] | None:
+def rule_8_or_9_try_encode_standalone_jamo(ch: str, role: str) -> list[str] | None:
     if role != "standalone":
         return None
 
@@ -226,7 +226,7 @@ def encode_t(t: str) -> list[str]:
 
 
 SyllableRule = Callable[[str, str, str, bool], list[str] | None]
-JamoRule = Callable[[str, str], list[str] | None]
+JamoRoleRule = Callable[[str, str], list[str] | None]
 VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
 
 L_RULES: list[Callable[[str], list[str] | None]] = [
@@ -254,10 +254,10 @@ SYLLABLE_RULES: list[SyllableRule] = [
     rule_17_try_encode_yeong_abbreviation,
 ]
 
-JAMO_RULES: list[JamoRule] = [
-    rule_8_or_9_try_encode_jamo_role,
+JAMO_ROLE_RULES: list[JamoRoleRule] = [
+    rule_8_or_9_try_encode_standalone_jamo,
     rule_10_try_encode_attached_consonant,
-    rule_3_to_5_try_encode_t_jamo,
+    rule_3_to_5_try_encode_t_role,
 ]
 
 
@@ -306,7 +306,7 @@ def encode_vowel_sequence_separator(
 
 
 def encode_jamo(ch: str, role: str) -> list[str]:
-    result = try_encode_rules(JAMO_RULES, ch, role)
+    result = try_encode_rules(JAMO_ROLE_RULES, ch, role)
     if result is not None:
         return result
 
