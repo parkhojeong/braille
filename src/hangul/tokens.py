@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Literal, Optional
+from typing import Literal
 
 from .decomposition import decompose_precomposed_hangul_syllable, normalize_print
 
@@ -17,13 +18,53 @@ TokenKind = Literal[
 class Token:
     kind: TokenKind
     text: str
-    group_id: Optional[int] = None
-    choseong: Optional[str] = None
-    jungseong: Optional[str] = None
-    jongseong: Optional[str] = None
+    group_id: int | None = None
+    choseong: str | None = None
+    jungseong: str | None = None
+    jongseong: str | None = None
 
 
 PUNCTUATION = {",", ".", "!", "[", "]"}
+
+
+def is_ascii_letter(ch: str) -> bool:
+    return ch.isascii() and ch.isalpha()
+
+
+CharPredicate = Callable[[str], bool]
+
+
+def read_while(text: str, start: int, predicate: CharPredicate) -> int:
+    index = start
+    while index < len(text) and predicate(text[index]):
+        index += 1
+    return index
+
+
+def space_token(text: str, start: int) -> tuple[Token, int]:
+    end = read_while(text, start, str.isspace)
+    return Token("SPACE", text[start:end]), end
+
+
+def latin_run_token(text: str, start: int, group_id: int) -> tuple[Token, int]:
+    end = read_while(text, start, is_ascii_letter)
+    return Token("LATIN_RUN", text[start:end], group_id), end
+
+
+def hangul_syllable_token(ch: str, group_id: int) -> Token | None:
+    syllable = decompose_precomposed_hangul_syllable(ch)
+    if syllable is None:
+        return None
+
+    choseong, jungseong, jongseong = syllable
+    return Token(
+        "HANGUL_SYLLABLE",
+        ch,
+        group_id,
+        choseong=choseong,
+        jungseong=jungseong,
+        jongseong=jongseong,
+    )
 
 
 def tokenize_print(text: str) -> list[Token]:
@@ -36,22 +77,14 @@ def tokenize_print(text: str) -> list[Token]:
         ch = normalized_text[index]
 
         if ch.isspace():
-            start = index
-            while index < len(normalized_text) and normalized_text[index].isspace():
-                index += 1
-            tokens.append(Token("SPACE", normalized_text[start:index]))
+            token, index = space_token(normalized_text, index)
+            tokens.append(token)
             group_id += 1
             continue
 
-        if ch.isascii() and ch.isalpha():
-            start = index
-            while (
-                index < len(normalized_text)
-                and normalized_text[index].isascii()
-                and normalized_text[index].isalpha()
-            ):
-                index += 1
-            tokens.append(Token("LATIN_RUN", normalized_text[start:index], group_id))
+        if is_ascii_letter(ch):
+            token, index = latin_run_token(normalized_text, index, group_id)
+            tokens.append(token)
             continue
 
         if ch in PUNCTUATION:
@@ -59,19 +92,9 @@ def tokenize_print(text: str) -> list[Token]:
             index += 1
             continue
 
-        syllable = decompose_precomposed_hangul_syllable(ch)
-        if syllable is not None:
-            choseong, jungseong, jongseong = syllable
-            tokens.append(
-                Token(
-                    "HANGUL_SYLLABLE",
-                    ch,
-                    group_id,
-                    choseong=choseong,
-                    jungseong=jungseong,
-                    jongseong=jongseong,
-                )
-            )
+        syllable_token = hangul_syllable_token(ch, group_id)
+        if syllable_token is not None:
+            tokens.append(syllable_token)
             index += 1
             continue
 
