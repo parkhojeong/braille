@@ -1,4 +1,4 @@
-from .core import encode_jamo, encode_syllable
+from .encoder import encode_jamo, encode_syllable
 from .context import RuleContext, RuleResult
 from .sequence import encode_vowel_sequence_separator
 from .word import encode_word
