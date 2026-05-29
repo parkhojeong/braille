@@ -76,7 +76,7 @@ def main() -> int:
     parser.add_argument("--rule", type=int, default=1)
     args = parser.parse_args()
 
-    path = ROOT / "tests" / "ko" / f"rule-{args.rule}.json"
+    path = ROOT / "src" / "hangul" / "rules" / "cases" / f"rule-{args.rule}.json"
     return run(path)
 
 
