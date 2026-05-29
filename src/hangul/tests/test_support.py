@@ -24,6 +24,7 @@ SUPPORTED_RULES = [
     30,
     31,
     32,
+    40,
 ]
 
 LAYOUT_DEPENDENT_GROUPS = {

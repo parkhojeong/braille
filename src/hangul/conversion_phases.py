@@ -7,6 +7,7 @@ from .rules import (
     encode_greek,
     encode_jamo,
     encode_latin,
+    encode_number,
     encode_punctuation,
     encode_syllable,
     encode_vowel_sequence_separator,
@@ -63,6 +64,11 @@ def encode_greek_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     return encode_greek(ctx)
 
 
+def encode_number_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    return encode_number(ctx)
+
+
 def encode_space_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
     if ctx.token.kind != "SPACE":
@@ -100,6 +106,7 @@ TOKEN_PHASES: list[TokenPhase] = [
     encode_word_phase,
     encode_latin_phase,
     encode_greek_phase,
+    encode_number_phase,
     encode_space_phase,
     encode_punctuation_phase,
     encode_hangul_phase,
