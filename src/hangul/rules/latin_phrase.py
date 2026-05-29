@@ -1,5 +1,5 @@
 from .context import RuleContext
-from .latin_tables import UEB_LATIN_PUNCTUATION_ASCII
+from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
 
 LATIN_PHRASE_TOKEN_KINDS = {"LATIN_RUN", "SPACE", "PUNCTUATION"}
 

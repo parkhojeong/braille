@@ -1,12 +1,13 @@
 from braille.ascii import ascii_to_dots
+from ueb.latin_encoder import (
+    encode_capital_passage_ascii,
+    encode_latin_phrase_run_ascii,
+    encode_latin_run_ascii,
+)
+from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
 
 from .context import RuleContext, RuleResult
 from .latin_phrase import latin_phrase_bounds
-from .latin_tables import (
-    UEB_CONTRACTION_ASCII,
-    UEB_LATIN_PUNCTUATION_ASCII,
-    UEB_SINGLE_LETTER_WORD_INDICATOR_LETTERS,
-)
 
 
 def latin_run_count(ctx: RuleContext) -> int:
@@ -15,6 +16,16 @@ def latin_run_count(ctx: RuleContext) -> int:
 
 def is_latin_only_text(ctx: RuleContext) -> bool:
     return all(token.kind in {"LATIN_RUN", "SPACE"} for token in ctx.tokens)
+
+
+def is_latin_title_or_single_run_text(ctx: RuleContext) -> bool:
+    return is_latin_only_text(ctx) and (
+        latin_run_count(ctx) == 1
+        or all(
+            token.kind != "LATIN_RUN" or token.text[0].isupper()
+            for token in ctx.tokens
+        )
+    )
 
 
 def has_previous_latin_in_phrase(ctx: RuleContext) -> bool:
@@ -34,7 +45,7 @@ def has_next_latin_in_phrase(ctx: RuleContext) -> bool:
 def should_use_latin_indicators(ctx: RuleContext) -> bool:
     if any(token.kind == "GREEK" for token in ctx.tokens):
         return False
-    return not (is_latin_only_text(ctx) and latin_run_count(ctx) == 1)
+    return not is_latin_title_or_single_run_text(ctx)
 
 
 def should_open_latin_indicator(ctx: RuleContext) -> bool:
@@ -51,63 +62,35 @@ def encode_latin_run(
     opening_indicator: bool = True,
     closing_indicator: bool = True,
 ) -> list[str]:
-    cells: list[str] = ascii_to_dots("0") if opening_indicator else []
-    index = 0
-
-    if text and text[0].isupper():
-        cells.extend(ascii_to_dots(","))
-
-    lower_text = text.lower()
-    while index < len(lower_text):
-        for text_part, ascii_part in sorted(
-            UEB_CONTRACTION_ASCII.items(),
-            key=lambda item: len(item[0]),
-            reverse=True,
-        ):
-            if lower_text.startswith(text_part, index):
-                cells.extend(ascii_to_dots(ascii_part))
-                index += len(text_part)
-                break
-        else:
-            cells.extend(ascii_to_dots(lower_text[index]))
-            index += 1
-
-    if closing_indicator:
-        cells.extend(ascii_to_dots("4"))
-    return cells
+    prefix = "0" if opening_indicator else ""
+    suffix = "4" if closing_indicator else ""
+    return ascii_to_dots(f"{prefix}{encode_latin_run_ascii(text)}{suffix}")
 
 
-def encode_latin_run_ascii(text: str) -> str:
-    parts: list[str] = []
-    if text and text[0].isupper():
-        parts.append(",")
-    if len(text) == 1 and text.lower() in UEB_SINGLE_LETTER_WORD_INDICATOR_LETTERS:
-        parts.append(";")
+def is_latin_capital_passage(ctx: RuleContext) -> bool:
+    return (
+        is_latin_only_text(ctx)
+        and latin_run_count(ctx) >= 3
+        and all(
+            token.kind != "LATIN_RUN" or token.text.isupper()
+            for token in ctx.tokens
+        )
+    )
 
-    lower_text = text.lower()
-    index = 0
-    while index < len(lower_text):
-        for text_part, ascii_part in sorted(
-            UEB_CONTRACTION_ASCII.items(),
-            key=lambda item: len(item[0]),
-            reverse=True,
-        ):
-            if lower_text.startswith(text_part, index):
-                parts.append(ascii_part)
-                index += len(text_part)
-                break
-        else:
-            parts.append(lower_text[index])
-            index += 1
 
-    return "".join(parts)
+def encode_latin_capital_passage(ctx: RuleContext) -> RuleResult | None:
+    if ctx.index != 0 or not is_latin_capital_passage(ctx):
+        return None
+
+    words = [token.text for token in ctx.tokens if token.kind == "LATIN_RUN"]
+    return RuleResult(ascii_to_dots(encode_capital_passage_ascii(words)), len(ctx.tokens))
 
 
 def encode_latin_phrase_ascii(ctx: RuleContext, start: int, end: int) -> str:
     parts = ["0"]
     for token in ctx.tokens[start:end]:
         if token.kind == "LATIN_RUN":
-            parts.append(encode_latin_run_ascii(token.text))
+            parts.append(encode_latin_phrase_run_ascii(token.text))
         elif token.kind == "SPACE":
             parts.append("`" * len(token.text))
         elif token.kind == "PUNCTUATION":
@@ -117,6 +100,10 @@ def encode_latin_phrase_ascii(ctx: RuleContext, start: int, end: int) -> str:
 
 
 def encode_latin(ctx: RuleContext) -> RuleResult | None:
+    capital_passage = encode_latin_capital_passage(ctx)
+    if capital_passage is not None:
+        return capital_passage
+
     if should_use_latin_indicators(ctx):
         phrase = latin_phrase_bounds(ctx)
         if phrase is not None:

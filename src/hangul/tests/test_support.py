@@ -26,13 +26,12 @@ SUPPORTED_RULES = [
     32,
 ]
 
-UNSUPPORTED_LAYOUT_GROUPS = {
+LAYOUT_DEPENDENT_GROUPS = {
     ("rule-14.json", "[다만] 그 사이에서 줄이 바뀔 때에는 약자를 사용하여 적는다."),
     ("rule-18.json", "약어를 사용하는 예"),
-    ("rule-28.json", "[붙임] 대문자 표기 예"),
 }
 
-UNSUPPORTED_LAYOUT_CASES = {
+LAYOUT_DEPENDENT_CASES = {
     ("rule-29.json", "그녀는 Los Angeles의 한인 타운에 살고 있다."),
 }
 
@@ -42,8 +41,8 @@ def is_supported_case(
     print_text: str,
 ) -> bool:
     return (
-        (path.name, group_description) not in UNSUPPORTED_LAYOUT_GROUPS
-        and (path.name, print_text) not in UNSUPPORTED_LAYOUT_CASES
+        (path.name, group_description) not in LAYOUT_DEPENDENT_GROUPS
+        and (path.name, print_text) not in LAYOUT_DEPENDENT_CASES
     )
 
 
