@@ -47,6 +47,13 @@ def can_extend_latin_phrase_left(
 ) -> bool:
     if is_latin_phrase_content_token(ctx, index):
         return True
+    if (
+        ctx.tokens[index].is_space
+        and index > 1
+        and ctx.tokens[index - 1].is_punctuation
+        and not ctx.tokens[index - 2].is_latin
+    ):
+        return False
     return (
         ctx.tokens[index].is_space
         and index > 0
@@ -71,6 +78,12 @@ def has_latin_run_between(ctx: RuleContext, start: int, end: int) -> bool:
 
 def latin_phrase_span(ctx: RuleContext) -> TokenSpan | None:
     if ctx.token.is_space:
+        return None
+    if (
+        (ctx.token.is_punctuation or ctx.token.is_symbol)
+        and ctx.next_token is not None
+        and ctx.next_token.is_space
+    ):
         return None
     if ctx.token.is_punctuation and not is_latin_phrase_punctuation(
         ctx.token.text

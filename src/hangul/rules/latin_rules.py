@@ -99,6 +99,16 @@ def should_close_latin_phrase(ctx: RuleContext, span: TokenSpan) -> bool:
     if is_latin_hangul_boundary_mark(ctx, span.end - 1):
         return False
 
+    if end_token.is_punctuation and end_token.text in {".", "!", "?"}:
+        next_index = span.end
+        while next_index < len(ctx.tokens) and ctx.tokens[next_index].is_space:
+            next_index += 1
+        if next_index < len(ctx.tokens) and (
+            ctx.tokens[next_index].is_hangul
+            or ctx.tokens[next_index].is_number
+        ):
+            return False
+
     return not (
         end_token.is_punctuation
         and end_token.text in {".", "!", "?"}

@@ -17,7 +17,6 @@ WORD_ABBREVIATION_DOTS = {
     "그리하여": ascii_to_dots("a:"),
 }
 
-
 def rule_18_try_encode_약어(ctx: RuleContext) -> RuleResult | None:
     """제18항 다음 단어들은 약어를 사용하여 적는다.
 
