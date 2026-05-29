@@ -1,4 +1,4 @@
-from .character_sets import SYMBOLS
+from .symbol_tables import SYMBOLS
 from .tokens import Token
 
 TokenizationResult = tuple[Token, int]
