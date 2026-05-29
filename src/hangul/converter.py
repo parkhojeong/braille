@@ -1,7 +1,10 @@
+from collections.abc import Callable
+
 from braille.ascii import ascii_to_dots, dots_to_ascii
 
 from .rules import (
     RuleContext,
+    RuleResult,
     encode_jamo,
     encode_syllable,
     encode_vowel_sequence_separator,
@@ -36,6 +39,8 @@ STANDALONE_CONSONANTS = {
     "ㅎ",
 }
 
+TokenPhase = Callable[[RuleContext, str], RuleResult | None]
+
 
 def encode_latin_run(text: str) -> list[str]:
     cells: list[str] = ascii_to_dots("0")
@@ -58,18 +63,16 @@ def encode_latin_run(text: str) -> list[str]:
     return cells
 
 
-def should_skip_space(tokens: list[Token], index: int) -> bool:
-    if index == 0 or index + 1 >= len(tokens):
+def should_skip_space(ctx: RuleContext) -> bool:
+    if ctx.previous_token is None or ctx.next_token is None:
         return False
 
-    previous_token = tokens[index - 1]
-    next_token = tokens[index + 1]
     return (
-        tokens[index].text == " "
-        and previous_token.kind == "JAMO"
-        and previous_token.text in STANDALONE_CONSONANTS
-        and next_token.kind == "HANGUL_SYLLABLE"
-        and next_token.text == "자"
+        ctx.token.text == " "
+        and ctx.previous_token.kind == "JAMO"
+        and ctx.previous_token.text in STANDALONE_CONSONANTS
+        and ctx.next_token.kind == "HANGUL_SYLLABLE"
+        and ctx.next_token.text == "자"
     )
 
 
@@ -91,47 +94,79 @@ def encode_next_syllable_separator(tokens: list[Token], index: int) -> list[str]
     )
 
 
+def encode_word_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    return encode_word(ctx)
+
+
+def encode_latin_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    if ctx.token.kind != "LATIN_RUN":
+        return None
+    return RuleResult(encode_latin_run(ctx.token.text))
+
+
+def encode_space_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    if ctx.token.kind != "SPACE":
+        return None
+
+    if should_skip_space(ctx):
+        return RuleResult([])
+    return RuleResult([""] * len(ctx.token.text))
+
+
+def encode_punctuation_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    if ctx.token.kind != "PUNCTUATION":
+        return None
+    return RuleResult(TEXT_PUNCTUATION_DOTS[ctx.token.text])
+
+
+def encode_hangul_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    if ctx.token.kind != "HANGUL_SYLLABLE":
+        return None
+
+    dots = [
+        *encode_syllable(ctx),
+        *encode_next_syllable_separator(ctx.tokens, ctx.index),
+    ]
+    return RuleResult(dots)
+
+
+def encode_jamo_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    return RuleResult(encode_jamo(ctx.token.text, jamo_role))
+
+
+TOKEN_PHASES: list[TokenPhase] = [
+    encode_word_phase,
+    encode_latin_phase,
+    encode_space_phase,
+    encode_punctuation_phase,
+    encode_hangul_phase,
+    encode_jamo_phase,
+]
+
+
+def encode_token(ctx: RuleContext, jamo_role: str) -> RuleResult:
+    for phase in TOKEN_PHASES:
+        result = phase(ctx, jamo_role)
+        if result is not None:
+            return result
+
+    raise NotImplementedError(f"unsupported token: {ctx.token.text}")
+
+
 def print_to_braille_dots(text: str, *, jamo_role: str = "l") -> list[str]:
     result: list[str] = []
     tokens = tokenize_print(text)
     index = 0
 
     while index < len(tokens):
-        token = tokens[index]
-        if token.kind == "SPACE" and should_skip_space(tokens, index):
-            index += 1
-            continue
-
-        if token.kind == "LATIN_RUN":
-            result.extend(encode_latin_run(token.text))
-            index += 1
-            continue
-
-        if token.kind == "SPACE":
-            result.extend([""] * len(token.text))
-            index += 1
-            continue
-
-        if token.kind == "PUNCTUATION":
-            result.extend(TEXT_PUNCTUATION_DOTS[token.text])
-            index += 1
-            continue
-
-        if token.kind == "HANGUL_SYLLABLE":
-            ctx = RuleContext(tokens, index)
-            word = encode_word(ctx)
-            if word is not None:
-                result.extend(word.dots)
-                index += word.consumed
-                continue
-
-            result.extend(encode_syllable(ctx))
-            result.extend(encode_next_syllable_separator(tokens, index))
-            index += 1
-            continue
-
-        result.extend(encode_jamo(token.text, jamo_role))
-        index += 1
+        encoded = encode_token(RuleContext(tokens, index), jamo_role)
+        result.extend(encoded.dots)
+        index += encoded.consumed
 
     return result
 
