@@ -6,7 +6,7 @@ from ueb.latin_encoder import (
 )
 from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
 
-from ..spans import TokenSpan
+from ..spans import SpanRule, TokenSpan, try_encode_span_rules
 from .context import RuleContext, RuleResult
 from .latin_phrase import latin_number_phrase_span, latin_phrase_span
 from .number_rules import encode_number_ascii
@@ -154,25 +154,21 @@ def encode_latin_number_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
     return "".join(parts)
 
 
+LATIN_SPAN_RULES = [
+    SpanRule("rule-35", latin_number_phrase_span, encode_latin_number_phrase_ascii),
+    SpanRule("rule-32", latin_phrase_span, encode_latin_phrase_ascii),
+]
+
+
 def encode_latin(ctx: RuleContext) -> RuleResult | None:
     capital_passage = encode_latin_capital_passage(ctx)
     if capital_passage is not None:
         return capital_passage
 
     if should_use_latin_indicators(ctx):
-        number_span = latin_number_phrase_span(ctx)
-        if number_span is not None:
-            return RuleResult(
-                ascii_to_dots(encode_latin_number_phrase_ascii(ctx, number_span)),
-                number_span.consumed_from(ctx.index),
-            )
-
-        span = latin_phrase_span(ctx)
-        if span is not None:
-            return RuleResult(
-                ascii_to_dots(encode_latin_phrase_ascii(ctx, span)),
-                span.consumed_from(ctx.index),
-            )
+        span_result = try_encode_span_rules(ctx, LATIN_SPAN_RULES)
+        if span_result is not None:
+            return span_result
 
     if ctx.token.kind != "LATIN_RUN":
         return None

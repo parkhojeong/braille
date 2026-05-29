@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from ..tokens import Token
@@ -13,7 +14,7 @@ class RuleResult:
 
 @dataclass(frozen=True)
 class RuleContext:
-    tokens: list[Token]
+    tokens: Sequence[Token]
     index: int
 
     @property

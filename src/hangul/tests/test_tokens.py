@@ -1,4 +1,6 @@
 from hangul.tokenizer import tokenize_print
+from hangul.text import Text
+from hangul.rules.latin_phrase import latin_number_phrase_span, latin_phrase_span
 
 
 def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
@@ -32,3 +34,26 @@ def test_tokenize_print_groups_numbers_and_symbols():
         ("SPACE", " ", None),
         ("SYMBOL", "㎡", 2),
     ]
+
+
+def test_text_keeps_tokens_and_spans_separate():
+    text = Text.from_print(
+        "MP3 플레이어",
+        span_scanners=(latin_number_phrase_span, latin_phrase_span),
+    )
+
+    assert text.raw == "MP3 플레이어"
+    assert [(token.kind, token.text) for token in text.tokens[:3]] == [
+        ("LATIN_RUN", "MP"),
+        ("NUMBER", "3"),
+        ("SPACE", " "),
+    ]
+
+    span = text.spans[0]
+    assert (span.kind, span.start, span.end, span.rule_id) == (
+        "LATIN_NUMBER_PHRASE",
+        0,
+        2,
+        "rule-35",
+    )
+    assert [token.text for token in text.tokens_for(span)] == ["MP", "3"]

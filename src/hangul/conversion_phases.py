@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 
 from .character_sets import STANDALONE_CONSONANTS
 from .rules import (
@@ -32,7 +32,7 @@ def should_skip_space(ctx: RuleContext) -> bool:
     )
 
 
-def encode_next_syllable_separator(tokens: list[Token], index: int) -> list[str]:
+def encode_next_syllable_separator(tokens: Sequence[Token], index: int) -> list[str]:
     if index + 1 >= len(tokens):
         return []
 

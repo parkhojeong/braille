@@ -1,8 +1,14 @@
 from braille.ascii import dots_to_ascii
 
 from .conversion_phases import TOKEN_PHASES
+from .rules.latin_phrase import latin_number_phrase_span, latin_phrase_span
 from .rules import RuleContext, RuleResult
-from .tokenizer import tokenize_print
+from .text import Text
+
+TEXT_SPAN_SCANNERS = (
+    latin_number_phrase_span,
+    latin_phrase_span,
+)
 
 
 def encode_token(ctx: RuleContext, jamo_role: str) -> RuleResult:
@@ -16,11 +22,11 @@ def encode_token(ctx: RuleContext, jamo_role: str) -> RuleResult:
 
 def print_to_braille_dots(text: str, *, jamo_role: str = "l") -> list[str]:
     result: list[str] = []
-    tokens = tokenize_print(text)
+    braille_text = Text.from_print(text, span_scanners=TEXT_SPAN_SCANNERS)
     index = 0
 
-    while index < len(tokens):
-        encoded = encode_token(RuleContext(tokens, index), jamo_role)
+    while index < len(braille_text.tokens):
+        encoded = encode_token(braille_text.context_at(index), jamo_role)
         result.extend(encoded.dots)
         index += encoded.consumed
 
