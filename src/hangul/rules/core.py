@@ -30,6 +30,12 @@ def rule_1_encode_choseong(choseong: str) -> list[str]:
     return encode_dot(CHOSEONG_DOTS, choseong, "choseong")
 
 
+def rule_1_try_encode_silent_ieung_choseong(choseong: str) -> list[str] | None:
+    if choseong == "ㅇ":
+        return []
+    return None
+
+
 def rule_2_try_encode_tense_choseong(choseong: str) -> list[str] | None:
     return TENSE_CHOSEONG_DOTS.get(choseong)
 
@@ -132,8 +138,9 @@ def rule_17_try_encode_yeong_abbreviation(
 
 
 def encode_choseong(choseong: str) -> list[str]:
-    if choseong == "ㅇ":
-        return []
+    silent_ieung_dots = rule_1_try_encode_silent_ieung_choseong(choseong)
+    if silent_ieung_dots is not None:
+        return silent_ieung_dots
 
     tense_dots = rule_2_try_encode_tense_choseong(choseong)
     if tense_dots is not None:
@@ -221,7 +228,6 @@ def encode_standalone_jamo(ch: str, role: str) -> list[str]:
         return rule_7_dots
 
     raise NotImplementedError(f"unsupported standalone jamo: {ch}")
-
 
 
 
