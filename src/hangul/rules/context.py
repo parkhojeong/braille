@@ -41,6 +41,18 @@ class RuleContext:
         return token.l or "", token.v or "", token.t or ""
 
     @property
+    def l(self) -> str:
+        return self.token.l or ""
+
+    @property
+    def v(self) -> str:
+        return self.token.v or ""
+
+    @property
+    def t(self) -> str:
+        return self.token.t or ""
+
+    @property
     def is_group_start(self) -> bool:
         previous_token = self.previous_token
         if previous_token is None:

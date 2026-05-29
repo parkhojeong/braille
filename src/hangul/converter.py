@@ -125,14 +125,7 @@ def print_to_braille_dots(text: str, *, jamo_role: str = "l") -> list[str]:
                 index += word.consumed
                 continue
 
-            result.extend(
-                encode_syllable(
-                    token.l or "",
-                    token.v or "",
-                    token.t or "",
-                    next_syllable=ctx.next_syllable,
-                )
-            )
+            result.extend(encode_syllable(ctx))
             result.extend(encode_next_syllable_separator(tokens, index))
             index += 1
             continue

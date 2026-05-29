@@ -1,5 +1,6 @@
 from collections.abc import Callable, Sequence
 
+from .context import RuleContext
 from .tables import (
     FULL_SIGN_DOT,
     L_DOTS,
@@ -18,7 +19,6 @@ def encode_dot(mapping: dict[str, str], key: str, label: str) -> list[str]:
 
 
 Rule = Callable[..., list[str] | None]
-SyllableParts = tuple[str, str, str]
 
 
 def try_encode_rules(rules: Sequence[Rule], *args: object) -> list[str] | None:
@@ -172,38 +172,30 @@ def rule_12_try_encode_애_구분표(
 
 
 def rule_14_try_encode_팠(
-    l: str,
-    v: str,
-    t: str,
-    next_syllable: SyllableParts | None,
+    ctx: RuleContext,
 ) -> list[str] | None:
     """[붙임] ‘팠’을 적을 때에는 ‘ㅏ’를 생략하지 않고 적는다."""
-    del next_syllable
-
-    if l == "ㅍ" and v == "ㅏ" and t == "ㅆ":
-        return [*encode_l(l), *encode_v(v), *encode_t(t)]
+    if ctx.l == "ㅍ" and ctx.v == "ㅏ" and ctx.t == "ㅆ":
+        return [*encode_l(ctx.l), *encode_v(ctx.v), *encode_t(ctx.t)]
     return None
 
 
 def rule_13_try_encode_ㅏ_약자(
-    l: str,
-    v: str,
-    t: str,
-    next_syllable: SyllableParts | None,
+    ctx: RuleContext,
 ) -> list[str] | None:
     """제13항 다음 글자들은 약자를 사용하여 적는다.
 
     [붙임] 위의 글자들에 받침이 있거나 첫소리가 된소리일 때에도 약자를 사용하여 적는다.
     제14항 ‘나, 다, 마, 바, 자, 카, 타, 파, 하’에 모음이 붙어 나올 때에는 약자를 사용하지 않는다.
     """
-    if v != "ㅏ":
+    if ctx.v != "ㅏ":
         return None
 
     if (
-        t == ""
-        and next_syllable is not None
-        and next_syllable[0] == "ㅇ"
-        and l in {"ㄴ", "ㄷ", "ㅁ", "ㅂ", "ㅈ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"}
+        ctx.t == ""
+        and ctx.next_syllable is not None
+        and ctx.next_syllable[0] == "ㅇ"
+        and ctx.l in {"ㄴ", "ㄷ", "ㅁ", "ㅂ", "ㅈ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"}
     ):
         return None
 
@@ -228,33 +220,28 @@ def rule_13_try_encode_ㅏ_약자(
         "ㅉ": ["6", dots["ㅈ"]],
     }
 
-    tense_dots = ㄲㄸㅃㅆㅉ_dots.get(l)
+    tense_dots = ㄲㄸㅃㅆㅉ_dots.get(ctx.l)
     if tense_dots is not None:
-        return [*tense_dots, *encode_t(t)]
+        return [*tense_dots, *encode_t(ctx.t)]
 
-    dot = dots.get(l)
+    dot = dots.get(ctx.l)
     if dot is not None:
-        return [dot, *encode_t(t)]
+        return [dot, *encode_t(ctx.t)]
 
     return None
 
 
 def rule_15_try_encode_약자(
-    l: str,
-    v: str,
-    t: str,
-    next_syllable: SyllableParts | None,
+    ctx: RuleContext,
 ) -> list[str] | None:
     """제15항 다음 글자들은 약자를 사용하여 적는다.
 
     [붙임] ‘억, 언, 얼, 연, 열, 영, 옥, 온, 옹, 운, 울, 은, 을, 인, 것’이 포함되어 있는 글자에도 약자를 사용하여 적는다.
     """
-    del next_syllable
-
     lvt_dots = {
         ("ㄱ", "ㅓ", "ㅅ"): ["456", "234"],
     }
-    syllable_dots = lvt_dots.get((l, v, t))
+    syllable_dots = lvt_dots.get((ctx.l, ctx.v, ctx.t))
     if syllable_dots is not None:
         return syllable_dots
 
@@ -274,13 +261,13 @@ def rule_15_try_encode_약자(
         ("ㅡ", "ㄹ"): "2346",
         ("ㅣ", "ㄴ"): "12345",
     }
-    if (l, v, t) == ("ㅅ", "ㅕ", "ㅇ"):
+    if (ctx.l, ctx.v, ctx.t) == ("ㅅ", "ㅕ", "ㅇ"):
         return None
 
-    abbreviation_dot = vt_dots.get((v, t))
+    abbreviation_dot = vt_dots.get((ctx.v, ctx.t))
 
     if abbreviation_dot is not None:
-        return [*encode_l(l), abbreviation_dot]
+        return [*encode_l(ctx.l), abbreviation_dot]
 
     t_parts = {
         "ㄲ": ["ㄱ", "ㄱ"],
@@ -295,11 +282,11 @@ def rule_15_try_encode_약자(
         "ㄿ": ["ㄹ", "ㅍ"],
         "ㅀ": ["ㄹ", "ㅎ"],
     }
-    parts = t_parts.get(t)
+    parts = t_parts.get(ctx.t)
     if parts is None:
         return None
 
-    abbreviation_dot = vt_dots.get((v, parts[0]))
+    abbreviation_dot = vt_dots.get((ctx.v, parts[0]))
     if abbreviation_dot is None:
         return None
 
@@ -308,32 +295,32 @@ def rule_15_try_encode_약자(
         for remaining_t in parts[1:]
         for dot in encode_t(remaining_t)
     ]
-    return [*encode_l(l), abbreviation_dot, *remaining_t_dots]
+    return [*encode_l(ctx.l), abbreviation_dot, *remaining_t_dots]
 
 
 def rule_16_try_encode_껏(
-    l: str,
-    v: str,
-    t: str,
-    next_syllable: SyllableParts | None,
+    ctx: RuleContext,
 ) -> list[str] | None:
     """제16항 ‘까, 싸, 껏’을 적을 때에는 ‘가, 사, 것’의 약자 앞에 된소리표를 적어 나타낸다."""
-    del next_syllable
-
-    if l == "ㄲ" and v == "ㅓ" and t == "ㅅ":
-        return ["6", *rule_15_try_encode_약자("ㄱ", "ㅓ", "ㅅ", None)]
+    if ctx.l == "ㄲ" and ctx.v == "ㅓ" and ctx.t == "ㅅ":
+        return ["6", *rule_15_encode_것()]
     return None
 
 
+def rule_15_encode_것() -> list[str]:
+    return ["456", "234"]
+
+
 def rule_17_try_encode_성썽정쩡청(
-    l: str,
-    v: str,
-    t: str,
-    next_syllable: SyllableParts | None,
+    ctx: RuleContext,
 ) -> list[str] | None:
     """제17항 ‘성, 썽, 정, 쩡, 청’을 적을 때에는 ‘ㅅ, ㅆ, ㅈ, ㅉ, ㅊ’ 다음에 ‘영’의 약자 }을 적어 나타낸다."""
-    if (l, v, t) == ("ㅈ", "ㅓ", "ㅇ") and next_syllable == ("ㅅ", "ㅓ", "ㅇ"):
-        return encode_l(l)
+    if (ctx.l, ctx.v, ctx.t) == ("ㅈ", "ㅓ", "ㅇ") and ctx.next_syllable == (
+        "ㅅ",
+        "ㅓ",
+        "ㅇ",
+    ):
+        return encode_l(ctx.l)
 
     dots = {
         ("ㅅ", "ㅓ", "ㅇ"): "12456",
@@ -342,11 +329,11 @@ def rule_17_try_encode_성썽정쩡청(
         ("ㅉ", "ㅓ", "ㅇ"): "12456",
         ("ㅊ", "ㅓ", "ㅇ"): "12456",
     }
-    abbreviation_dot = dots.get((l, v, t))
+    abbreviation_dot = dots.get((ctx.l, ctx.v, ctx.t))
     if abbreviation_dot is None:
         return None
 
-    return [*encode_l(l), abbreviation_dot]
+    return [*encode_l(ctx.l), abbreviation_dot]
 
 
 def encode_l(l: str) -> list[str]:
@@ -379,7 +366,7 @@ def encode_t(t: str) -> list[str]:
     return rule_3_encode_t(t)
 
 
-SyllableRule = Callable[[str, str, str, SyllableParts | None], list[str] | None]
+SyllableRule = Callable[[RuleContext], list[str] | None]
 JamoRoleRule = Callable[[str, str], list[str] | None]
 VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
 
@@ -417,27 +404,15 @@ JAMO_ROLE_RULES: list[JamoRoleRule] = [
 ]
 
 
-def encode_syllable(
-    l: str,
-    v: str,
-    t: str,
-    *,
-    next_syllable: SyllableParts | None = None,
-) -> list[str]:
-    result = try_encode_rules(
-        SYLLABLE_RULES,
-        l,
-        v,
-        t,
-        next_syllable,
-    )
+def encode_syllable(ctx: RuleContext) -> list[str]:
+    result = try_encode_rules(SYLLABLE_RULES, ctx)
     if result is not None:
         return result
 
     return [
-        *encode_l(l),
-        *encode_v(v),
-        *encode_t(t),
+        *encode_l(ctx.l),
+        *encode_v(ctx.v),
+        *encode_t(ctx.t),
     ]
 
 
