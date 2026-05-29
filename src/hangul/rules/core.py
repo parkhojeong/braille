@@ -2,16 +2,20 @@ from collections.abc import Callable
 
 from .tables import (
     ABBREVIATED_A_DOTS,
+    ATTACHED_CONSONANT_SIGN_DOT,
     CHOSEONG_DOTS,
     COMPOSITE_JONGSEONG_DOTS,
     COMPOSITE_JUNGSEONG_DOTS,
     DOUBLE_JONGSEONG_DOTS,
+    FULL_SIGN_DOT,
     JONGSEONG_DOTS,
     JUNGSEONG_DOTS,
     NEXT_IEUNG_CANCELS_ABBREVIATED_A,
+    RULE_15_SYLLABLE_ABBREVIATIONS,
+    RULE_15_VOWEL_JONGSEONG_ABBREVIATIONS,
+    RULE_17_YEONG_AFTER_CONSONANT_ABBREVIATIONS,
     TENSE_ABBREVIATED_A_DOTS,
     TENSE_CHOSEONG_DOTS,
-    VOWEL_JONGSEONG_ABBREVIATIONS,
 )
 
 
@@ -76,7 +80,7 @@ def apply_rule_13_abbreviated_a_syllable(
     return None
 
 
-def apply_vowel_jongseong_abbreviation(
+def apply_rule_15_vowel_jongseong_abbreviation(
     choseong: str,
     jungseong: str,
     jongseong: str,
@@ -84,11 +88,33 @@ def apply_vowel_jongseong_abbreviation(
 ) -> list[str] | None:
     del next_syllable_starts_with_ieung
 
-    abbreviation_dot = VOWEL_JONGSEONG_ABBREVIATIONS.get((jungseong, jongseong))
+    syllable_dots = RULE_15_SYLLABLE_ABBREVIATIONS.get(
+        (choseong, jungseong, jongseong)
+    )
+    if syllable_dots is not None:
+        return syllable_dots
 
-    if jungseong == "ㅓ" and jongseong == "ㅇ" and choseong == "ㅊ":
-        abbreviation_dot = "12456"
+    abbreviation_dot = RULE_15_VOWEL_JONGSEONG_ABBREVIATIONS.get(
+        (jungseong, jongseong)
+    )
 
+    if abbreviation_dot is None:
+        return None
+
+    return [*encode_choseong(choseong), abbreviation_dot]
+
+
+def apply_rule_17_yeong_after_consonant_abbreviation(
+    choseong: str,
+    jungseong: str,
+    jongseong: str,
+    next_syllable_starts_with_ieung: bool,
+) -> list[str] | None:
+    del next_syllable_starts_with_ieung
+
+    abbreviation_dot = RULE_17_YEONG_AFTER_CONSONANT_ABBREVIATIONS.get(
+        (choseong, jungseong, jongseong)
+    )
     if abbreviation_dot is None:
         return None
 
@@ -136,7 +162,8 @@ SyllableRule = Callable[[str, str, str, bool], list[str] | None]
 
 SYLLABLE_RULES: list[SyllableRule] = [
     apply_rule_13_abbreviated_a_syllable,
-    apply_vowel_jongseong_abbreviation,
+    apply_rule_15_vowel_jongseong_abbreviation,
+    apply_rule_17_yeong_after_consonant_abbreviation,
 ]
 
 
@@ -161,12 +188,10 @@ def encode_syllable(
 
 def encode_standalone_jamo(ch: str, role: str) -> list[str]:
     if role == "standalone":
-        if ch in CHOSEONG_DOTS or ch in TENSE_CHOSEONG_DOTS:
-            return ["123456", *encode_jongseong(ch)]
-        return ["123456", *encode_jungseong(ch)]
+        return apply_rule_8_or_9_standalone_jamo(ch)
 
     if role == "attached_jongseong":
-        return ["456", *encode_jongseong(ch)]
+        return apply_rule_10_attached_consonant(ch)
 
     tense_dots = apply_rule_2_tense_choseong(ch)
     if tense_dots is not None:
@@ -186,3 +211,13 @@ def encode_standalone_jamo(ch: str, role: str) -> list[str]:
         return rule_7_dots
 
     raise NotImplementedError(f"unsupported standalone jamo: {ch}")
+
+
+def apply_rule_8_or_9_standalone_jamo(ch: str) -> list[str]:
+    if ch in CHOSEONG_DOTS or ch in TENSE_CHOSEONG_DOTS:
+        return [FULL_SIGN_DOT, *encode_jongseong(ch)]
+    return [FULL_SIGN_DOT, *encode_jungseong(ch)]
+
+
+def apply_rule_10_attached_consonant(ch: str) -> list[str]:
+    return [ATTACHED_CONSONANT_SIGN_DOT, *encode_jongseong(ch)]
