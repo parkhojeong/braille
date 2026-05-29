@@ -4,6 +4,7 @@ from .character_sets import STANDALONE_CONSONANTS
 from .rules import (
     RuleContext,
     RuleResult,
+    encode_greek,
     encode_jamo,
     encode_latin,
     encode_syllable,
@@ -66,6 +67,11 @@ def encode_latin_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     return encode_latin(ctx)
 
 
+def encode_greek_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    del jamo_role
+    return encode_greek(ctx)
+
+
 def encode_space_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
     if ctx.token.kind != "SPACE":
@@ -102,6 +108,7 @@ def encode_jamo_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 TOKEN_PHASES: list[TokenPhase] = [
     encode_word_phase,
     encode_latin_phase,
+    encode_greek_phase,
     encode_space_phase,
     encode_punctuation_phase,
     encode_hangul_phase,

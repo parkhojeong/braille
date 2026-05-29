@@ -4,6 +4,7 @@ from .character_sets import (
     PUNCTUATION,
     is_ascii_letter,
     is_compatibility_hangul_jamo,
+    is_greek_letter,
 )
 from .decomposition import decompose_precomposed_hangul_syllable
 from .tokens import Token
@@ -42,6 +43,17 @@ def try_latin_run_token(
 
     end = read_while(text, start, is_ascii_letter)
     return Token("LATIN_RUN", text[start:end], group_id), end
+
+
+def try_greek_token(
+    text: str,
+    start: int,
+    group_id: int,
+) -> TokenizationResult | None:
+    if not is_greek_letter(text[start]):
+        return None
+
+    return Token("GREEK", text[start], group_id), start + 1
 
 
 def try_punctuation_token(

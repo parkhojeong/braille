@@ -27,6 +27,8 @@ def has_next_latin_in_phrase(ctx: RuleContext) -> bool:
 
 
 def should_use_latin_indicators(ctx: RuleContext) -> bool:
+    if any(token.kind == "GREEK" for token in ctx.tokens):
+        return False
     return not (is_latin_only_text(ctx) and latin_run_count(ctx) == 1)
 
 

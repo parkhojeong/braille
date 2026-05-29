@@ -21,6 +21,7 @@ SUPPORTED_RULES = [
     18,
     28,
     29,
+    30,
 ]
 
 UNSUPPORTED_LAYOUT_GROUPS = {

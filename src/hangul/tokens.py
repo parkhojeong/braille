@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 TokenKind = Literal[
+    "GREEK",
     "HANGUL_SYLLABLE",
     "JAMO",
     "LATIN_RUN",

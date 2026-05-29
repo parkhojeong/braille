@@ -22,5 +22,9 @@ def is_ascii_letter(ch: str) -> bool:
     return ch.isascii() and ch.isalpha()
 
 
+def is_greek_letter(ch: str) -> bool:
+    return ("\u0370" <= ch <= "\u03ff") or ("\u1f00" <= ch <= "\u1fff")
+
+
 def is_compatibility_hangul_jamo(ch: str) -> bool:
     return "\u3130" <= ch <= "\u318f"
