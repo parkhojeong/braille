@@ -9,6 +9,7 @@ from .rules import (
     encode_latin,
     encode_number,
     encode_punctuation,
+    encode_roman_numeral,
     encode_syllable,
     encode_vowel_sequence_separator,
     encode_word,
@@ -59,6 +60,10 @@ def encode_latin_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     return encode_latin(ctx)
 
 
+def encode_roman_numeral_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
+    return encode_roman_numeral(ctx, force=jamo_role == "roman_numeral")
+
+
 def encode_greek_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
     return encode_greek(ctx)
@@ -104,6 +109,7 @@ def encode_jamo_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 
 TOKEN_PHASES: list[TokenPhase] = [
     encode_word_phase,
+    encode_roman_numeral_phase,
     encode_latin_phase,
     encode_greek_phase,
     encode_number_phase,

@@ -128,12 +128,13 @@
       "description": "로마자표 뒤에서 단어 약자를 쓰지 않는 예",
       "tests": {
         "그는 Can you help me?라고 도움을 요청했다.": {
-          "ascii": "``@[cz`0,can`y`help`me8\"<@u`ium5\n!`+;]jr/i4`````````````````````",
+          "ascii": "@[cz`0,can`y`help`me8\"<@u`ium5!`+;]jr/i4",
           "original_ascii": "``@{cz`0,can`y`help`me8\"<@u`ium5\n!`+;]jr/i4`````````````````````",
           "unicode": "⠀⠀⠈⠪⠉⠵⠀⠴⠠⠉⠁⠝⠀⠽⠀⠓⠑⠇⠏⠀⠍⠑⠦⠐⠣⠈⠥⠀⠊⠥⠍⠢\n⠮⠀⠬⠰⠻⠚⠗⠌⠊⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
         },
         "be는 am, are, is의 원형 동사이다.": {
-          "ascii": "``0be4cz`0am1`>e1`is4w`p3j}`i=lo\ni4```````````````````````````",
+          "ascii": "0be4cz`0am1`>e1`is4w`p3j}`i=loi4",
+          "original_ascii": "``0be4cz`0am1`>e1`is4w`p3j}`i=lo\ni4```````````````````````````",
           "unicode": "⠀⠀⠴⠃⠑⠲⠉⠵⠀⠴⠁⠍⠂⠀⠜⠑⠂⠀⠊⠎⠲⠺⠀⠏⠒⠚⠻⠀⠊⠿⠇⠕\n⠊⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
         }
       }
@@ -142,7 +143,7 @@
       "description": "[붙임] be, enough, his, in, was, were는 로마자 종료표 앞에서도 단어 약자를 쓰지 않는다.",
       "tests": {
         "be, his, was, were의 약자를 바르게 쓰시오.": {
-          "ascii": "``0be1`his1`was1`w]e4w`>a.\"!`^\"[\n@n`,,[,ou4`````````````````````",
+          "ascii": "0be1`his1`was1`w]e4w`>a.\"!`^\"[@n`,,[,ou4",
           "original_ascii": "``0be1`his1`was1`w]e4w`>a.\"!`^\"[\n@n`,,{,ou4`````````````````````",
           "unicode": "⠀⠀⠴⠃⠑⠂⠀⠓⠊⠎⠂⠀⠺⠁⠎⠂⠀⠺⠻⠑⠲⠺⠀⠜⠁⠨⠐⠮⠀⠘⠐⠪\n⠈⠝⠀⠠⠠⠪⠠⠕⠥⠲⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
         }

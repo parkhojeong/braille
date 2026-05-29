@@ -24,6 +24,9 @@ SUPPORTED_RULES = [
     30,
     31,
     32,
+    35,
+    36,
+    37,
     40,
 ]
 
@@ -48,6 +51,8 @@ def is_supported_case(
 
 
 def jamo_role_for_case(path: Path, group_description: str) -> str:
+    if path.name == "rule-36.json" and group_description == "로마 숫자":
+        return "roman_numeral"
     if path.name in {"rule-3.json", "rule-5.json"} and (
         "받침으로 쓰일 때" in group_description or group_description == "겹받침"
     ):

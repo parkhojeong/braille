@@ -7,7 +7,9 @@ from ueb.latin_encoder import (
 from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
 
 from .context import RuleContext, RuleResult
-from .latin_phrase import latin_phrase_bounds
+from .latin_phrase import latin_number_phrase_bounds, latin_phrase_bounds
+from .number_rules import encode_number_ascii
+from .roman_numeral_rules import is_roman_numeral_text
 
 
 def latin_run_count(ctx: RuleContext) -> int:
@@ -86,16 +88,66 @@ def encode_latin_capital_passage(ctx: RuleContext) -> RuleResult | None:
     return RuleResult(ascii_to_dots(encode_capital_passage_ascii(words)), len(ctx.tokens))
 
 
+def should_close_latin_phrase(ctx: RuleContext, end: int) -> bool:
+    return not (
+        ctx.tokens[end - 1].kind == "PUNCTUATION"
+        and ctx.tokens[end - 1].text in {".", "!", "?"}
+        and end < len(ctx.tokens)
+        and ctx.tokens[end].kind == "HANGUL_SYLLABLE"
+    )
+
+
 def encode_latin_phrase_ascii(ctx: RuleContext, start: int, end: int) -> str:
     parts = ["0"]
-    for token in ctx.tokens[start:end]:
+    for index, token in enumerate(ctx.tokens[start:end], start):
         if token.kind == "LATIN_RUN":
+            if index > start and token.text.isupper() and is_roman_numeral_text(
+                token.text
+            ):
+                parts.append(";")
             parts.append(encode_latin_phrase_run_ascii(token.text))
         elif token.kind == "SPACE":
             parts.append("`" * len(token.text))
         elif token.kind == "PUNCTUATION":
             parts.append(UEB_LATIN_PUNCTUATION_ASCII[token.text])
-    parts.append("4")
+    if should_close_latin_phrase(ctx, end):
+        parts.append("4")
+    return "".join(parts)
+
+
+def should_close_latin_number_phrase(ctx: RuleContext, end: int) -> bool:
+    return ctx.tokens[end - 1].kind == "LATIN_RUN"
+
+
+def needs_latin_number_phrase_grade1_indicator(text: str) -> bool:
+    return text == "CD"
+
+
+def encode_latin_number_phrase_ascii(ctx: RuleContext, start: int, end: int) -> str:
+    prefix = (
+        "`"
+        if ctx.previous_token is not None
+        and ctx.previous_token.kind == "HANGUL_SYLLABLE"
+        else ""
+    )
+    parts = [f"{prefix}0"]
+    for index, token in enumerate(ctx.tokens[start:end], start):
+        if token.kind == "LATIN_RUN":
+            if (
+                index == start
+                and needs_latin_number_phrase_grade1_indicator(token.text)
+            ):
+                parts.append(";")
+            parts.append(encode_latin_phrase_run_ascii(token.text))
+        elif token.kind == "NUMBER":
+            parts.append(encode_number_ascii(token.text))
+        elif token.kind == "SPACE":
+            parts.append("`" * len(token.text))
+        elif token.kind == "SYMBOL" and token.text == "-":
+            parts.append("-")
+
+    if should_close_latin_number_phrase(ctx, end):
+        parts.append("4")
     return "".join(parts)
 
 
@@ -105,6 +157,14 @@ def encode_latin(ctx: RuleContext) -> RuleResult | None:
         return capital_passage
 
     if should_use_latin_indicators(ctx):
+        number_phrase = latin_number_phrase_bounds(ctx)
+        if number_phrase is not None:
+            start, end = number_phrase
+            return RuleResult(
+                ascii_to_dots(encode_latin_number_phrase_ascii(ctx, start, end)),
+                end - start,
+            )
+
         phrase = latin_phrase_bounds(ctx)
         if phrase is not None:
             start, end = phrase

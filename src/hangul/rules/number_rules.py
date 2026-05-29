@@ -12,4 +12,11 @@ def encode_number(ctx: RuleContext) -> RuleResult | None:
     if ctx.token.kind != "NUMBER":
         return None
 
-    return RuleResult(ascii_to_dots(encode_number_ascii(ctx.token.text)))
+    suffix = (
+        "`"
+        if len(ctx.token.text) > 1
+        and ctx.next_token is not None
+        and ctx.next_token.kind == "HANGUL_SYLLABLE"
+        else ""
+    )
+    return RuleResult(ascii_to_dots(f"{encode_number_ascii(ctx.token.text)}{suffix}"))

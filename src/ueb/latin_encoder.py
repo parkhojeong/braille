@@ -1,6 +1,7 @@
 from .latin_tables import (
     UEB_CONTRACTION_ASCII,
     UEB_SINGLE_LETTER_WORD_INDICATOR_LETTERS,
+    UEB_SHORTFORM_WORD_ASCII,
 )
 
 
@@ -55,6 +56,14 @@ def encode_latin_run_ascii(text: str) -> str:
 
 def encode_latin_phrase_run_ascii(text: str) -> str:
     prefix = ""
+    shortform = UEB_SHORTFORM_WORD_ASCII.get(text.lower())
+    if shortform is not None:
+        if text.isupper() and len(text) > 1:
+            prefix = ",,"
+        elif text[0].isupper():
+            prefix = ","
+        return f"{prefix}{shortform}"
+
     if len(text) == 1 and text.lower() in UEB_SINGLE_LETTER_WORD_INDICATOR_LETTERS:
         prefix = ";"
     return f"{prefix}{encode_latin_run_ascii(text)}"

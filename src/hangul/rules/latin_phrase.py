@@ -65,3 +65,57 @@ def latin_phrase_bounds(ctx: RuleContext) -> tuple[int, int] | None:
     if start != ctx.index or not has_latin_run_between(ctx, start, end):
         return None
     return start, end
+
+
+def is_latin_number_phrase_hyphen(ctx: RuleContext, index: int) -> bool:
+    token = ctx.tokens[index]
+    if token.kind != "SYMBOL" or token.text != "-":
+        return False
+    return (
+        index > 0
+        and ctx.tokens[index - 1].kind == "LATIN_RUN"
+        and index + 1 < len(ctx.tokens)
+        and ctx.tokens[index + 1].kind == "NUMBER"
+    )
+
+
+def can_extend_latin_number_phrase_right(
+    ctx: RuleContext,
+    index: int,
+    saw_number: bool,
+) -> bool:
+    token = ctx.tokens[index]
+    if token.kind == "NUMBER":
+        return True
+    if token.kind == "LATIN_RUN":
+        return saw_number
+    if is_latin_number_phrase_hyphen(ctx, index):
+        return True
+    return (
+        token.kind == "SPACE"
+        and index + 1 < len(ctx.tokens)
+        and (
+            ctx.tokens[index + 1].kind == "NUMBER"
+            or (saw_number and ctx.tokens[index + 1].kind == "LATIN_RUN")
+        )
+    )
+
+
+def latin_number_phrase_bounds(ctx: RuleContext) -> tuple[int, int] | None:
+    if ctx.token.kind != "LATIN_RUN":
+        return None
+
+    end = ctx.index + 1
+    saw_number = False
+    while end < len(ctx.tokens) and can_extend_latin_number_phrase_right(
+        ctx,
+        end,
+        saw_number,
+    ):
+        if ctx.tokens[end].kind == "NUMBER":
+            saw_number = True
+        end += 1
+
+    if not saw_number:
+        return None
+    return ctx.index, end
