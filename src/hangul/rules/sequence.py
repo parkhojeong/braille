@@ -1,23 +1,9 @@
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 
+from .dispatch import try_encode_rules
 from .tables import VOWEL_SEQUENCE_SEPARATOR_DOT
 
 VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
-
-
-def try_encode_vowel_sequence_rules(
-    rules: Sequence[VowelSequenceRule],
-    v: str,
-    t: str,
-    next_l: str,
-    next_v: str,
-    next_t: str,
-) -> list[str] | None:
-    for rule in rules:
-        result = rule(v, t, next_l, next_v, next_t)
-        if result is not None:
-            return result
-    return None
 
 
 def rule_11_try_encode_예_구분표(
@@ -68,7 +54,7 @@ def encode_vowel_sequence_separator(
     next_v: str,
     next_t: str,
 ) -> list[str]:
-    result = try_encode_vowel_sequence_rules(
+    result = try_encode_rules(
         VOWEL_SEQUENCE_RULES,
         v,
         t,

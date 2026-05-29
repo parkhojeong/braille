@@ -1,8 +1,9 @@
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 
 from braille.ascii import ascii_to_dots
 
 from .context import RuleContext, RuleResult
+from .dispatch import try_encode_rules
 
 WordRule = Callable[[RuleContext], RuleResult | None]
 
@@ -15,17 +16,6 @@ WORD_ABBREVIATION_DOTS = {
     "그리고": ascii_to_dots("au"),
     "그리하여": ascii_to_dots("a:"),
 }
-
-
-def try_encode_word_rules(
-    rules: Sequence[WordRule],
-    ctx: RuleContext,
-) -> RuleResult | None:
-    for rule in rules:
-        result = rule(ctx)
-        if result is not None:
-            return result
-    return None
 
 
 def rule_18_try_encode_약어(ctx: RuleContext) -> RuleResult | None:
@@ -57,4 +47,4 @@ WORD_RULES: list[WordRule] = [
 
 
 def encode_word(ctx: RuleContext) -> RuleResult | None:
-    return try_encode_word_rules(WORD_RULES, ctx)
+    return try_encode_rules(WORD_RULES, ctx)

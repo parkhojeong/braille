@@ -1,6 +1,7 @@
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 
 from .context import RuleContext
+from .dispatch import encode_dot, try_encode_rules
 from .tables import (
     FULL_SIGN_DOT,
     L_DOTS,
@@ -8,24 +9,6 @@ from .tables import (
     T_DOTS,
     V_DOTS,
 )
-
-
-def encode_dot(mapping: dict[str, str], key: str, label: str) -> list[str]:
-    try:
-        return [mapping[key]]
-    except KeyError:
-        raise NotImplementedError(f"unsupported {label}: {key}") from None
-
-
-Rule = Callable[..., list[str] | None]
-
-
-def try_encode_rules(rules: Sequence[Rule], *args: object) -> list[str] | None:
-    for rule in rules:
-        result = rule(*args)
-        if result is not None:
-            return result
-    return None
 
 
 def rule_1_encode_l(l: str) -> list[str]:
