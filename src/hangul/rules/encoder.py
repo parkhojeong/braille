@@ -27,6 +27,7 @@ from .tables import L_DOTS, V_DOTS
 JamoRoleRule = Callable[[str, str], list[str] | None]
 SyllableRule = Callable[[RuleContext], list[str] | None]
 
+# Rule order is part of the encoding behavior: earlier rules win.
 SYLLABLE_RULES: list[SyllableRule] = [
     rule_14_try_encode_팠,
     rule_13_try_encode_ㅏ_약자,
