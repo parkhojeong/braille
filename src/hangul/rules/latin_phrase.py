@@ -1,5 +1,7 @@
-from .context import RuleContext
 from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
+
+from ..spans import TokenSpan
+from .context import RuleContext
 
 LATIN_PHRASE_TOKEN_KINDS = {"LATIN_RUN", "SPACE", "PUNCTUATION"}
 
@@ -44,7 +46,7 @@ def has_latin_run_between(ctx: RuleContext, start: int, end: int) -> bool:
     return any(token.kind == "LATIN_RUN" for token in ctx.tokens[start:end])
 
 
-def latin_phrase_bounds(ctx: RuleContext) -> tuple[int, int] | None:
+def latin_phrase_span(ctx: RuleContext) -> TokenSpan | None:
     if ctx.token.kind == "SPACE":
         return None
     if ctx.token.kind == "PUNCTUATION" and not is_latin_phrase_punctuation(
@@ -64,7 +66,7 @@ def latin_phrase_bounds(ctx: RuleContext) -> tuple[int, int] | None:
 
     if start != ctx.index or not has_latin_run_between(ctx, start, end):
         return None
-    return start, end
+    return TokenSpan("LATIN_PHRASE", start, end, "rule-32")
 
 
 def is_latin_number_phrase_hyphen(ctx: RuleContext, index: int) -> bool:
@@ -101,7 +103,7 @@ def can_extend_latin_number_phrase_right(
     )
 
 
-def latin_number_phrase_bounds(ctx: RuleContext) -> tuple[int, int] | None:
+def latin_number_phrase_span(ctx: RuleContext) -> TokenSpan | None:
     if ctx.token.kind != "LATIN_RUN":
         return None
 
@@ -118,4 +120,4 @@ def latin_number_phrase_bounds(ctx: RuleContext) -> tuple[int, int] | None:
 
     if not saw_number:
         return None
-    return ctx.index, end
+    return TokenSpan("LATIN_NUMBER_PHRASE", ctx.index, end, "rule-35")

@@ -6,8 +6,9 @@ from ueb.latin_encoder import (
 )
 from ueb.latin_tables import UEB_LATIN_PUNCTUATION_ASCII
 
+from ..spans import TokenSpan
 from .context import RuleContext, RuleResult
-from .latin_phrase import latin_number_phrase_bounds, latin_phrase_bounds
+from .latin_phrase import latin_number_phrase_span, latin_phrase_span
 from .number_rules import encode_number_ascii
 from .roman_numeral_rules import is_roman_numeral_text
 
@@ -88,21 +89,23 @@ def encode_latin_capital_passage(ctx: RuleContext) -> RuleResult | None:
     return RuleResult(ascii_to_dots(encode_capital_passage_ascii(words)), len(ctx.tokens))
 
 
-def should_close_latin_phrase(ctx: RuleContext, end: int) -> bool:
+def should_close_latin_phrase(ctx: RuleContext, span: TokenSpan) -> bool:
     return not (
-        ctx.tokens[end - 1].kind == "PUNCTUATION"
-        and ctx.tokens[end - 1].text in {".", "!", "?"}
-        and end < len(ctx.tokens)
-        and ctx.tokens[end].kind == "HANGUL_SYLLABLE"
+        ctx.tokens[span.end - 1].kind == "PUNCTUATION"
+        and ctx.tokens[span.end - 1].text in {".", "!", "?"}
+        and span.end < len(ctx.tokens)
+        and ctx.tokens[span.end].kind == "HANGUL_SYLLABLE"
     )
 
 
-def encode_latin_phrase_ascii(ctx: RuleContext, start: int, end: int) -> str:
+def encode_latin_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
     parts = ["0"]
-    for index, token in enumerate(ctx.tokens[start:end], start):
+    for index, token in enumerate(ctx.tokens[span.token_slice], span.start):
         if token.kind == "LATIN_RUN":
-            if index > start and token.text.isupper() and is_roman_numeral_text(
-                token.text
+            if (
+                index > span.start
+                and token.text.isupper()
+                and is_roman_numeral_text(token.text)
             ):
                 parts.append(";")
             parts.append(encode_latin_phrase_run_ascii(token.text))
@@ -110,20 +113,20 @@ def encode_latin_phrase_ascii(ctx: RuleContext, start: int, end: int) -> str:
             parts.append("`" * len(token.text))
         elif token.kind == "PUNCTUATION":
             parts.append(UEB_LATIN_PUNCTUATION_ASCII[token.text])
-    if should_close_latin_phrase(ctx, end):
+    if should_close_latin_phrase(ctx, span):
         parts.append("4")
     return "".join(parts)
 
 
-def should_close_latin_number_phrase(ctx: RuleContext, end: int) -> bool:
-    return ctx.tokens[end - 1].kind == "LATIN_RUN"
+def should_close_latin_number_phrase(ctx: RuleContext, span: TokenSpan) -> bool:
+    return ctx.tokens[span.end - 1].kind == "LATIN_RUN"
 
 
 def needs_latin_number_phrase_grade1_indicator(text: str) -> bool:
     return text == "CD"
 
 
-def encode_latin_number_phrase_ascii(ctx: RuleContext, start: int, end: int) -> str:
+def encode_latin_number_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
     prefix = (
         "`"
         if ctx.previous_token is not None
@@ -131,10 +134,10 @@ def encode_latin_number_phrase_ascii(ctx: RuleContext, start: int, end: int) -> 
         else ""
     )
     parts = [f"{prefix}0"]
-    for index, token in enumerate(ctx.tokens[start:end], start):
+    for index, token in enumerate(ctx.tokens[span.token_slice], span.start):
         if token.kind == "LATIN_RUN":
             if (
-                index == start
+                index == span.start
                 and needs_latin_number_phrase_grade1_indicator(token.text)
             ):
                 parts.append(";")
@@ -146,7 +149,7 @@ def encode_latin_number_phrase_ascii(ctx: RuleContext, start: int, end: int) -> 
         elif token.kind == "SYMBOL" and token.text == "-":
             parts.append("-")
 
-    if should_close_latin_number_phrase(ctx, end):
+    if should_close_latin_number_phrase(ctx, span):
         parts.append("4")
     return "".join(parts)
 
@@ -157,20 +160,18 @@ def encode_latin(ctx: RuleContext) -> RuleResult | None:
         return capital_passage
 
     if should_use_latin_indicators(ctx):
-        number_phrase = latin_number_phrase_bounds(ctx)
-        if number_phrase is not None:
-            start, end = number_phrase
+        number_span = latin_number_phrase_span(ctx)
+        if number_span is not None:
             return RuleResult(
-                ascii_to_dots(encode_latin_number_phrase_ascii(ctx, start, end)),
-                end - start,
+                ascii_to_dots(encode_latin_number_phrase_ascii(ctx, number_span)),
+                number_span.consumed_from(ctx.index),
             )
 
-        phrase = latin_phrase_bounds(ctx)
-        if phrase is not None:
-            start, end = phrase
+        span = latin_phrase_span(ctx)
+        if span is not None:
             return RuleResult(
-                ascii_to_dots(encode_latin_phrase_ascii(ctx, start, end)),
-                end - start,
+                ascii_to_dots(encode_latin_phrase_ascii(ctx, span)),
+                span.consumed_from(ctx.index),
             )
 
     if ctx.token.kind != "LATIN_RUN":
