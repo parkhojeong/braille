@@ -2,7 +2,7 @@ from braille.ascii import dots_to_ascii
 
 from .conversion_phases import TOKEN_PHASES
 from .rules import RuleContext, RuleResult
-from .tokens import tokenize_print
+from .tokenizer import tokenize_print
 
 
 def encode_token(ctx: RuleContext, jamo_role: str) -> RuleResult:

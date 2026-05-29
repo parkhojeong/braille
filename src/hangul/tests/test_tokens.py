@@ -1,4 +1,4 @@
-from hangul.tokens import tokenize_print
+from hangul.tokenizer import tokenize_print
 
 
 def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
