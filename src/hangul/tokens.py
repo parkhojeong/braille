@@ -2,6 +2,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Literal
 
+from .character_sets import (
+    PUNCTUATION,
+    is_ascii_letter,
+    is_compatibility_hangul_jamo,
+)
 from .decomposition import decompose_precomposed_hangul_syllable, normalize_print
 
 TokenKind = Literal[
@@ -22,13 +27,6 @@ class Token:
     l: str | None = None
     v: str | None = None
     t: str | None = None
-
-
-PUNCTUATION = {",", ".", "!", "?", "[", "]"}
-
-
-def is_ascii_letter(ch: str) -> bool:
-    return ch.isascii() and ch.isalpha()
 
 
 CharPredicate = Callable[[str], bool]
@@ -107,7 +105,3 @@ def tokenize_print(text: str) -> list[Token]:
         index += 1
 
     return tokens
-
-
-def is_compatibility_hangul_jamo(ch: str) -> bool:
-    return "\u3130" <= ch <= "\u318f"
