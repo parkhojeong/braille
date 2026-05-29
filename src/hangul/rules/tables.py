@@ -19,7 +19,7 @@ FULL_SIGN_DOT = "123456"
 ATTACHED_CONSONANT_SIGN_DOT = "456"
 VOWEL_SEQUENCE_SEPARATOR_DOT = "36"
 
-TENSE_L_DOTS = {
+RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS = {
     "ㄲ": ["6", L_DOTS["ㄱ"]],
     "ㄸ": ["6", L_DOTS["ㄷ"]],
     "ㅃ": ["6", L_DOTS["ㅂ"]],
@@ -95,7 +95,7 @@ T_DOTS = {
     "ㅆ": "34",
 }
 
-REPEATED_T_DOTS = {
+RULE_4_T_ㄲㅆ_DOTS = {
     "ㄲ": [T_DOTS["ㄱ"], T_DOTS["ㄱ"]],
     "ㅆ": [T_DOTS["ㅆ"]],
 }

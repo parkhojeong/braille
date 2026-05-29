@@ -6,7 +6,7 @@ from .tables import (
     L_DOTS,
     T_CLUSTER_DOTS,
     V_CLUSTER_DOTS,
-    REPEATED_T_DOTS,
+    RULE_4_T_ㄲㅆ_DOTS,
     FULL_SIGN_DOT,
     T_DOTS,
     V_DOTS,
@@ -16,7 +16,7 @@ from .tables import (
     RULE_15_V_T_ABBREVIATIONS,
     RULE_17_LVT_ABBREVIATIONS,
     TENSE_ABBREVIATED_A_DOTS,
-    TENSE_L_DOTS,
+    RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS,
     VOWEL_SEQUENCE_SEPARATOR_DOT,
 )
 
@@ -49,16 +49,16 @@ def rule_1_try_encode_l_ㅇ(l: str) -> list[str] | None:
     return None
 
 
-def rule_2_try_encode_tense_l(l: str) -> list[str] | None:
-    return TENSE_L_DOTS.get(l)
+def rule_2_try_encode_l_ㄲㄸㅃㅆㅉ(l: str) -> list[str] | None:
+    return RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS.get(l)
 
 
 def rule_3_encode_t(t: str) -> list[str]:
     return encode_dot(T_DOTS, t, "t")
 
 
-def rule_4_try_encode_repeated_t(t: str) -> list[str] | None:
-    return REPEATED_T_DOTS.get(t)
+def rule_4_try_encode_t_ㄲㅆ(t: str) -> list[str] | None:
+    return RULE_4_T_ㄲㅆ_DOTS.get(t)
 
 
 def rule_5_try_encode_t_cluster(t: str) -> list[str] | None:
@@ -83,7 +83,7 @@ def rule_8_or_9_try_encode_standalone_jamo(ch: str, role: str) -> list[str] | No
     if role != "standalone":
         return None
 
-    if ch in L_DOTS or ch in TENSE_L_DOTS:
+    if ch in L_DOTS or ch in RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS:
         return [FULL_SIGN_DOT, *encode_t(ch)]
     return [FULL_SIGN_DOT, *encode_v(ch)]
 
@@ -244,7 +244,7 @@ VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
 
 L_RULES: list[Callable[[str], list[str] | None]] = [
     rule_1_try_encode_l_ㅇ,
-    rule_2_try_encode_tense_l,
+    rule_2_try_encode_l_ㄲㄸㅃㅆㅉ,
 ]
 
 V_RULES: list[Callable[[str], list[str] | None]] = [
@@ -252,7 +252,7 @@ V_RULES: list[Callable[[str], list[str] | None]] = [
 ]
 
 T_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_4_try_encode_repeated_t,
+    rule_4_try_encode_t_ㄲㅆ,
     rule_5_try_encode_t_cluster,
 ]
 
@@ -324,7 +324,7 @@ def encode_jamo(ch: str, role: str) -> list[str]:
     if result is not None:
         return result
 
-    result = rule_2_try_encode_tense_l(ch)
+    result = rule_2_try_encode_l_ㄲㄸㅃㅆㅉ(ch)
     if result is not None:
         return result
 
