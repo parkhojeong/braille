@@ -46,13 +46,18 @@ def encode_latin_run(
     opening_indicator: bool = True,
     closing_indicator: bool = True,
 ) -> list[str]:
-    cells: list[str] = ascii_to_dots("0") if opening_indicator else []
-    index = 0
+    prefix = "0" if opening_indicator else ""
+    suffix = "4" if closing_indicator else ""
+    return ascii_to_dots(f"{prefix}{encode_latin_run_ascii(text)}{suffix}")
 
+
+def encode_latin_run_ascii(text: str) -> str:
+    parts: list[str] = []
     if text and text[0].isupper():
-        cells.extend(ascii_to_dots(","))
+        parts.append(",")
 
     lower_text = text.lower()
+    index = 0
     while index < len(lower_text):
         for text_part, ascii_part in sorted(
             UEB_CONTRACTION_ASCII.items(),
@@ -60,16 +65,14 @@ def encode_latin_run(
             reverse=True,
         ):
             if lower_text.startswith(text_part, index):
-                cells.extend(ascii_to_dots(ascii_part))
+                parts.append(ascii_part)
                 index += len(text_part)
                 break
         else:
-            cells.extend(ascii_to_dots(lower_text[index]))
+            parts.append(lower_text[index])
             index += 1
 
-    if closing_indicator:
-        cells.extend(ascii_to_dots("4"))
-    return cells
+    return "".join(parts)
 
 
 def encode_latin(ctx: RuleContext) -> RuleResult | None:
