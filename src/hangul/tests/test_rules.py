@@ -5,9 +5,9 @@ import pytest
 
 from braille import ascii_to_dots, dots_to_unicode
 from hangul import print_to_braille_dots
-from hangul.test_support import SUPPORTED_RULES, standalone_jamo_for_case
+from hangul.tests.test_support import SUPPORTED_RULES, standalone_jamo_for_case
 
-HANGUL_ROOT = Path(__file__).resolve().parent
+HANGUL_ROOT = Path(__file__).resolve().parent.parent
 RULE_CASES_ROOT = HANGUL_ROOT / "rules" / "cases"
 
 

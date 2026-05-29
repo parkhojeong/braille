@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from braille import ascii_to_dots, dots_to_ascii, dots_to_unicode
 from hangul import print_to_braille_dots
-from hangul.test_support import standalone_jamo_for_case
+from hangul.tests.test_support import standalone_jamo_for_case
 
 
 def iter_cases(path: Path):
