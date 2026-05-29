@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 
 from .tables import (
     ABBREVIATED_A_DOTS,
@@ -24,6 +24,17 @@ def encode_dot(mapping: dict[str, str], key: str, label: str) -> list[str]:
         return [mapping[key]]
     except KeyError:
         raise NotImplementedError(f"unsupported {label}: {key}") from None
+
+
+Rule = Callable[..., list[str] | None]
+
+
+def try_encode_rules(rules: Sequence[Rule], *args: object) -> list[str] | None:
+    for rule in rules:
+        result = rule(*args)
+        if result is not None:
+            return result
+    return None
 
 
 def rule_1_encode_choseong(choseong: str) -> list[str]:
@@ -150,13 +161,9 @@ def rule_17_try_encode_yeong_abbreviation(
 
 
 def encode_choseong(choseong: str) -> list[str]:
-    silent_ieung_dots = rule_1_try_encode_silent_ieung_choseong(choseong)
-    if silent_ieung_dots is not None:
-        return silent_ieung_dots
-
-    tense_dots = rule_2_try_encode_tense_choseong(choseong)
-    if tense_dots is not None:
-        return tense_dots
+    result = try_encode_rules(CHOSEONG_RULES, choseong)
+    if result is not None:
+        return result
 
     return rule_1_encode_choseong(choseong)
 
@@ -165,9 +172,9 @@ def encode_jungseong(jungseong: str) -> list[str]:
     if jungseong in JUNGSEONG_DOTS:
         return rule_6_encode_jungseong(jungseong)
 
-    rule_7_dots = rule_7_try_encode_composite_jungseong(jungseong)
-    if rule_7_dots is not None:
-        return rule_7_dots
+    result = try_encode_rules(JUNGSEONG_RULES, jungseong)
+    if result is not None:
+        return result
 
     raise NotImplementedError(f"unsupported jungseong: {jungseong}")
 
@@ -176,19 +183,29 @@ def encode_jongseong(jongseong: str) -> list[str]:
     if not jongseong:
         return []
 
-    double_dots = rule_4_try_encode_double_jongseong(jongseong)
-    if double_dots is not None:
-        return double_dots
-
-    composite_dots = rule_5_try_encode_composite_jongseong(jongseong)
-    if composite_dots is not None:
-        return composite_dots
+    result = try_encode_rules(JONGSEONG_RULES, jongseong)
+    if result is not None:
+        return result
 
     return rule_3_encode_jongseong(jongseong)
 
 
 SyllableRule = Callable[[str, str, str, bool], list[str] | None]
 JamoRule = Callable[[str, str], list[str] | None]
+
+CHOSEONG_RULES: list[Callable[[str], list[str] | None]] = [
+    rule_1_try_encode_silent_ieung_choseong,
+    rule_2_try_encode_tense_choseong,
+]
+
+JUNGSEONG_RULES: list[Callable[[str], list[str] | None]] = [
+    rule_7_try_encode_composite_jungseong,
+]
+
+JONGSEONG_RULES: list[Callable[[str], list[str] | None]] = [
+    rule_4_try_encode_double_jongseong,
+    rule_5_try_encode_composite_jongseong,
+]
 
 SYLLABLE_RULES: list[SyllableRule] = [
     rule_13_try_encode_abbreviated_a_syllable,
@@ -210,10 +227,15 @@ def encode_syllable(
     *,
     next_syllable_starts_with_ieung: bool = False,
 ) -> list[str]:
-    for rule in SYLLABLE_RULES:
-        result = rule(choseong, jungseong, jongseong, next_syllable_starts_with_ieung)
-        if result is not None:
-            return result
+    result = try_encode_rules(
+        SYLLABLE_RULES,
+        choseong,
+        jungseong,
+        jongseong,
+        next_syllable_starts_with_ieung,
+    )
+    if result is not None:
+        return result
 
     return [
         *encode_choseong(choseong),
@@ -222,15 +244,14 @@ def encode_syllable(
     ]
 
 
-def encode_standalone_jamo(ch: str, role: str) -> list[str]:
-    for rule in JAMO_RULES:
-        result = rule(ch, role)
-        if result is not None:
-            return result
+def encode_jamo(ch: str, role: str) -> list[str]:
+    result = try_encode_rules(JAMO_RULES, ch, role)
+    if result is not None:
+        return result
 
-    tense_dots = rule_2_try_encode_tense_choseong(ch)
-    if tense_dots is not None:
-        return tense_dots
+    result = rule_2_try_encode_tense_choseong(ch)
+    if result is not None:
+        return result
 
     if ch in CHOSEONG_DOTS:
         return rule_1_encode_choseong(ch)
@@ -238,10 +259,8 @@ def encode_standalone_jamo(ch: str, role: str) -> list[str]:
     if ch in JUNGSEONG_DOTS:
         return rule_6_encode_jungseong(ch)
 
-    rule_7_dots = rule_7_try_encode_composite_jungseong(ch)
-    if rule_7_dots is not None:
-        return rule_7_dots
+    result = try_encode_rules(JUNGSEONG_RULES, ch)
+    if result is not None:
+        return result
 
-    raise NotImplementedError(f"unsupported standalone jamo: {ch}")
-
-
+    raise NotImplementedError(f"unsupported jamo: {ch}")

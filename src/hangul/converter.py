@@ -1,6 +1,6 @@
 from braille.ascii import ascii_to_dots, dots_to_ascii
 
-from .rules import encode_standalone_jamo, encode_syllable
+from .rules import encode_jamo, encode_syllable
 from .tokens import Token, tokenize_print
 
 TEXT_PUNCTUATION_DOTS = {
@@ -107,7 +107,7 @@ def print_to_braille_dots(text: str, *, standalone_jamo: str = "choseong") -> li
             )
             continue
 
-        result.extend(encode_standalone_jamo(token.text, standalone_jamo))
+        result.extend(encode_jamo(token.text, standalone_jamo))
 
     return result
 
