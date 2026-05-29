@@ -20,6 +20,7 @@ SUPPORTED_RULES = [
     17,
     18,
     28,
+    29,
 ]
 
 UNSUPPORTED_LAYOUT_GROUPS = {
@@ -28,9 +29,19 @@ UNSUPPORTED_LAYOUT_GROUPS = {
     ("rule-28.json", "[붙임] 대문자 표기 예"),
 }
 
+UNSUPPORTED_LAYOUT_CASES = {
+    ("rule-29.json", "그녀는 Los Angeles의 한인 타운에 살고 있다."),
+}
 
-def is_supported_case(path: Path, group_description: str) -> bool:
-    return (path.name, group_description) not in UNSUPPORTED_LAYOUT_GROUPS
+def is_supported_case(
+    path: Path,
+    group_description: str,
+    print_text: str,
+) -> bool:
+    return (
+        (path.name, group_description) not in UNSUPPORTED_LAYOUT_GROUPS
+        and (path.name, print_text) not in UNSUPPORTED_LAYOUT_CASES
+    )
 
 
 def jamo_role_for_case(path: Path, group_description: str) -> str:

@@ -39,7 +39,7 @@ def trim_blank_edges(cells: list[str]) -> list[str]:
         case
         for rule in SUPPORTED_RULES
         for case in iter_rule_cases(rule)
-        if is_supported_case(case[0], case[1])
+        if is_supported_case(case[0], case[1], case[2])
     ],
 )
 def test_supported_ko_rules(path, group_description, print_text, expected):
