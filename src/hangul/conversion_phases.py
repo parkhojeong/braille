@@ -1,4 +1,5 @@
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 
 from .character_sets import STANDALONE_CONSONANTS
 from .rules import (
@@ -16,7 +17,13 @@ from .rules import (
 )
 from .tokens import Token
 
-TokenPhase = Callable[[RuleContext, str], RuleResult | None]
+TokenPhaseEncoder = Callable[[RuleContext, str], RuleResult | None]
+
+
+@dataclass(frozen=True)
+class TokenPhase:
+    name: str
+    encode: TokenPhaseEncoder
 
 
 def should_skip_space(ctx: RuleContext) -> bool:
@@ -108,13 +115,13 @@ def encode_jamo_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 
 
 TOKEN_PHASES: list[TokenPhase] = [
-    encode_word_phase,
-    encode_roman_numeral_phase,
-    encode_latin_phase,
-    encode_greek_phase,
-    encode_number_phase,
-    encode_space_phase,
-    encode_punctuation_phase,
-    encode_hangul_phase,
-    encode_jamo_phase,
+    TokenPhase("word", encode_word_phase),
+    TokenPhase("roman-numeral", encode_roman_numeral_phase),
+    TokenPhase("latin", encode_latin_phase),
+    TokenPhase("greek", encode_greek_phase),
+    TokenPhase("number", encode_number_phase),
+    TokenPhase("space", encode_space_phase),
+    TokenPhase("punctuation", encode_punctuation_phase),
+    TokenPhase("hangul", encode_hangul_phase),
+    TokenPhase("jamo", encode_jamo_phase),
 ]

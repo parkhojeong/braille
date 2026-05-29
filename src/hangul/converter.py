@@ -13,7 +13,7 @@ TEXT_SPAN_SCANNERS = (
 
 def encode_token(ctx: RuleContext, jamo_role: str) -> RuleResult:
     for phase in TOKEN_PHASES:
-        result = phase(ctx, jamo_role)
+        result = phase.encode(ctx, jamo_role)
         if result is not None:
             return result
 
