@@ -16,7 +16,7 @@ L_DOTS = {
 }
 
 FULL_SIGN_DOT = "123456"
-ATTACHED_CONSONANT_SIGN_DOT = "456"
+RULE_10_ATTACHED_T_SIGN_DOT = "456"
 VOWEL_SEQUENCE_SEPARATOR_DOT = "36"
 
 RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS = {
@@ -41,7 +41,7 @@ V_DOTS = {
     "ㅣ": "135",
 }
 
-V_CLUSTER_DOTS = {
+RULE_7_V_CLUSTER_DOTS = {
     "ㅐ": ["1235"],
     "ㅒ": [V_DOTS["ㅑ"], "1235"],
     "ㅔ": ["1345"],
@@ -55,7 +55,7 @@ V_CLUSTER_DOTS = {
     "ㅢ": ["2456"],
 }
 
-ABBREVIATED_A_DOTS = {
+RULE_13_L_ㅏ_약자_DOTS = {
     "ㄱ": "1246",
     "ㄴ": L_DOTS["ㄴ"],
     "ㄷ": L_DOTS["ㄷ"],
@@ -69,12 +69,12 @@ ABBREVIATED_A_DOTS = {
     "ㅎ": L_DOTS["ㅎ"],
 }
 
-TENSE_ABBREVIATED_A_DOTS = {
-    "ㄲ": ["6", ABBREVIATED_A_DOTS["ㄱ"]],
-    "ㄸ": ["6", ABBREVIATED_A_DOTS["ㄷ"]],
-    "ㅃ": ["6", ABBREVIATED_A_DOTS["ㅂ"]],
-    "ㅆ": ["6", ABBREVIATED_A_DOTS["ㅅ"]],
-    "ㅉ": ["6", ABBREVIATED_A_DOTS["ㅈ"]],
+RULE_13_L_ㄲㄸㅃㅆㅉ_ㅏ_약자_DOTS = {
+    "ㄲ": ["6", RULE_13_L_ㅏ_약자_DOTS["ㄱ"]],
+    "ㄸ": ["6", RULE_13_L_ㅏ_약자_DOTS["ㄷ"]],
+    "ㅃ": ["6", RULE_13_L_ㅏ_약자_DOTS["ㅂ"]],
+    "ㅆ": ["6", RULE_13_L_ㅏ_약자_DOTS["ㅅ"]],
+    "ㅉ": ["6", RULE_13_L_ㅏ_약자_DOTS["ㅈ"]],
 }
 
 T_DOTS = {
@@ -100,7 +100,7 @@ RULE_4_T_ㄲㅆ_DOTS = {
     "ㅆ": [T_DOTS["ㅆ"]],
 }
 
-T_CLUSTER_DOTS = {
+RULE_5_T_CLUSTER_DOTS = {
     "ㄳ": [T_DOTS["ㄱ"], T_DOTS["ㅅ"]],
     "ㄵ": [T_DOTS["ㄴ"], T_DOTS["ㅈ"]],
     "ㄶ": [T_DOTS["ㄴ"], T_DOTS["ㅎ"]],
@@ -114,7 +114,7 @@ T_CLUSTER_DOTS = {
     "ㅄ": [T_DOTS["ㅂ"], T_DOTS["ㅅ"]],
 }
 
-NEXT_L_ㅇ_CANCELS_ABBREVIATED_A = {
+RULE_14_NEXT_L_ㅇ_CANCELS_RULE_13 = {
     "ㄴ",
     "ㄷ",
     "ㅁ",
@@ -128,11 +128,11 @@ NEXT_L_ㅇ_CANCELS_ABBREVIATED_A = {
 
 RULE_12_PRECEDING_V = {"ㅑ", "ㅘ", "ㅜ", "ㅝ"}
 
-RULE_15_SYLLABLE_ABBREVIATIONS = {
+RULE_15_LVT_약자_DOTS = {
     ("ㄱ", "ㅓ", "ㅅ"): ["456", "234"],
 }
 
-RULE_15_V_T_ABBREVIATIONS = {
+RULE_15_VT_약자_DOTS = {
     ("ㅓ", "ㄱ"): "1456",
     ("ㅓ", "ㄴ"): "23456",
     ("ㅓ", "ㄹ"): "2345",
