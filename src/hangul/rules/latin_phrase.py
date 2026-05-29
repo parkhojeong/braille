@@ -12,9 +12,9 @@ def is_latin_phrase_punctuation(text: str) -> bool:
 
 def is_latin_phrase_content_token(ctx: RuleContext, index: int) -> bool:
     token = ctx.tokens[index]
-    if token.kind == "LATIN_RUN":
+    if token.is_latin:
         return True
-    return token.kind == "PUNCTUATION" and is_latin_phrase_punctuation(token.text)
+    return token.is_punctuation and is_latin_phrase_punctuation(token.text)
 
 
 def can_extend_latin_phrase_left(
@@ -25,7 +25,7 @@ def can_extend_latin_phrase_left(
     if is_latin_phrase_content_token(ctx, index):
         return True
     return (
-        ctx.tokens[index].kind == "SPACE"
+        ctx.tokens[index].is_space
         and index > 0
         and is_latin_phrase_content_token(ctx, index - 1)
         and is_latin_phrase_content_token(ctx, phrase_start)
@@ -36,20 +36,20 @@ def can_extend_latin_phrase_right(ctx: RuleContext, index: int) -> bool:
     if is_latin_phrase_content_token(ctx, index):
         return True
     return (
-        ctx.tokens[index].kind == "SPACE"
+        ctx.tokens[index].is_space
         and index + 1 < len(ctx.tokens)
         and is_latin_phrase_content_token(ctx, index + 1)
     )
 
 
 def has_latin_run_between(ctx: RuleContext, start: int, end: int) -> bool:
-    return any(token.kind == "LATIN_RUN" for token in ctx.tokens[start:end])
+    return any(token.is_latin for token in ctx.tokens[start:end])
 
 
 def latin_phrase_span(ctx: RuleContext) -> TokenSpan | None:
-    if ctx.token.kind == "SPACE":
+    if ctx.token.is_space:
         return None
-    if ctx.token.kind == "PUNCTUATION" and not is_latin_phrase_punctuation(
+    if ctx.token.is_punctuation and not is_latin_phrase_punctuation(
         ctx.token.text
     ):
         return None
@@ -71,13 +71,13 @@ def latin_phrase_span(ctx: RuleContext) -> TokenSpan | None:
 
 def is_latin_number_phrase_hyphen(ctx: RuleContext, index: int) -> bool:
     token = ctx.tokens[index]
-    if token.kind != "SYMBOL" or token.text != "-":
+    if not token.is_symbol or token.text != "-":
         return False
     return (
         index > 0
-        and ctx.tokens[index - 1].kind == "LATIN_RUN"
+        and ctx.tokens[index - 1].is_latin
         and index + 1 < len(ctx.tokens)
-        and ctx.tokens[index + 1].kind == "NUMBER"
+        and ctx.tokens[index + 1].is_number
     )
 
 
@@ -87,24 +87,24 @@ def can_extend_latin_number_phrase_right(
     saw_number: bool,
 ) -> bool:
     token = ctx.tokens[index]
-    if token.kind == "NUMBER":
+    if token.is_number:
         return True
-    if token.kind == "LATIN_RUN":
+    if token.is_latin:
         return saw_number
     if is_latin_number_phrase_hyphen(ctx, index):
         return True
     return (
-        token.kind == "SPACE"
+        token.is_space
         and index + 1 < len(ctx.tokens)
         and (
-            ctx.tokens[index + 1].kind == "NUMBER"
-            or (saw_number and ctx.tokens[index + 1].kind == "LATIN_RUN")
+            ctx.tokens[index + 1].is_number
+            or (saw_number and ctx.tokens[index + 1].is_latin)
         )
     )
 
 
 def latin_number_phrase_span(ctx: RuleContext) -> TokenSpan | None:
-    if ctx.token.kind != "LATIN_RUN":
+    if not ctx.token.is_latin:
         return None
 
     end = ctx.index + 1
@@ -114,7 +114,7 @@ def latin_number_phrase_span(ctx: RuleContext) -> TokenSpan | None:
         end,
         saw_number,
     ):
-        if ctx.tokens[end].kind == "NUMBER":
+        if ctx.tokens[end].is_number:
             saw_number = True
         end += 1
 

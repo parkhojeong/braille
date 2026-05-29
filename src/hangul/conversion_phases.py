@@ -25,9 +25,9 @@ def should_skip_space(ctx: RuleContext) -> bool:
 
     return (
         ctx.token.text == " "
-        and ctx.previous_token.kind == "JAMO"
+        and ctx.previous_token.is_jamo
         and ctx.previous_token.text in STANDALONE_CONSONANTS
-        and ctx.next_token.kind == "HANGUL_SYLLABLE"
+        and ctx.next_token.is_hangul
         and ctx.next_token.text == "자"
     )
 
@@ -38,7 +38,7 @@ def encode_next_syllable_separator(tokens: Sequence[Token], index: int) -> list[
 
     token = tokens[index]
     next_token = tokens[index + 1]
-    if token.kind != "HANGUL_SYLLABLE" or next_token.kind != "HANGUL_SYLLABLE":
+    if not token.is_hangul or not next_token.is_hangul:
         return []
 
     return encode_vowel_sequence_separator(
@@ -76,7 +76,7 @@ def encode_number_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 
 def encode_space_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
-    if ctx.token.kind != "SPACE":
+    if not ctx.token.is_space:
         return None
 
     if should_skip_space(ctx):
@@ -91,7 +91,7 @@ def encode_punctuation_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | N
 
 def encode_hangul_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
-    if ctx.token.kind != "HANGUL_SYLLABLE":
+    if not ctx.token.is_hangul:
         return None
 
     dots = [
@@ -102,7 +102,7 @@ def encode_hangul_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 
 
 def encode_jamo_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
-    if ctx.token.kind != "JAMO":
+    if not ctx.token.is_jamo:
         return None
     return RuleResult(encode_jamo(ctx.token.text, jamo_role))
 

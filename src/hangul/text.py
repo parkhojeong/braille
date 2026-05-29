@@ -20,7 +20,7 @@ def tokenize_normalized_text(normalized_text: str) -> tuple[Token, ...]:
 
             token, index = result
             tokens.append(token)
-            if token.kind == "SPACE":
+            if token.is_space:
                 group_id += 1
             break
 
@@ -78,3 +78,22 @@ class Text:
 
     def tokens_for(self, span: TokenSpan) -> tuple[Token, ...]:
         return self.tokens[span.token_slice]
+
+    def text_for(self, span: TokenSpan) -> str:
+        return "".join(token.text for token in self.tokens_for(span))
+
+    def span_starting_at(self, index: int) -> TokenSpan | None:
+        return next((span for span in self.spans if span.starts_at(index)), None)
+
+    def spans_containing(self, index: int) -> tuple[TokenSpan, ...]:
+        return tuple(span for span in self.spans if span.contains(index))
+
+    def previous_token(self, index: int) -> Token | None:
+        if index == 0:
+            return None
+        return self.tokens[index - 1]
+
+    def next_token(self, index: int) -> Token | None:
+        if index + 1 >= len(self.tokens):
+            return None
+        return self.tokens[index + 1]

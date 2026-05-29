@@ -23,9 +23,9 @@ def encode_roman_numeral_range_ascii(start: str, end: str) -> str:
 def is_roman_numeral_range_start(ctx: RuleContext) -> bool:
     return (
         ctx.index + 2 < len(ctx.tokens)
-        and ctx.tokens[ctx.index + 1].kind == "SYMBOL"
+        and ctx.tokens[ctx.index + 1].is_symbol
         and ctx.tokens[ctx.index + 1].text == "-"
-        and ctx.tokens[ctx.index + 2].kind == "LATIN_RUN"
+        and ctx.tokens[ctx.index + 2].is_latin
         and is_roman_numeral_text(ctx.tokens[ctx.index + 2].text)
     )
 
@@ -41,7 +41,7 @@ def encode_roman_numeral(
     *,
     force: bool = False,
 ) -> RuleResult | None:
-    if ctx.token.kind != "LATIN_RUN" or not is_roman_numeral_text(ctx.token.text):
+    if not ctx.token.is_latin or not is_roman_numeral_text(ctx.token.text):
         return None
     if not force and not should_auto_encode_roman_numeral(ctx):
         return None

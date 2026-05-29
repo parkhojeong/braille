@@ -7,7 +7,7 @@ PunctuationRule = Callable[[RuleContext], RuleResult | None]
 
 
 def rule_text_punctuation(ctx: RuleContext) -> RuleResult | None:
-    if ctx.token.kind != "PUNCTUATION":
+    if not ctx.token.is_punctuation:
         return None
 
     dots = TEXT_PUNCTUATION_DOTS.get(ctx.token.text)

@@ -21,6 +21,10 @@ def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
     assert tokens[0].l == "ㄴ"
     assert tokens[0].v == "ㅏ"
     assert tokens[0].t == ""
+    assert tokens[0].is_hangul
+    assert not tokens[0].is_latin
+    assert tokens[2].is_space
+    assert tokens[-1].is_punctuation
 
 
 def test_tokenize_print_groups_numbers_and_symbols():
@@ -34,6 +38,9 @@ def test_tokenize_print_groups_numbers_and_symbols():
         ("SPACE", " ", None),
         ("SYMBOL", "㎡", 2),
     ]
+    assert tokens[0].is_latin
+    assert tokens[1].is_number
+    assert tokens[3].is_symbol
 
 
 def test_text_keeps_tokens_and_spans_separate():
@@ -56,4 +63,12 @@ def test_text_keeps_tokens_and_spans_separate():
         2,
         "rule-35",
     )
+    assert span.starts_at(0)
+    assert span.contains(1)
+    assert not span.contains(2)
     assert [token.text for token in text.tokens_for(span)] == ["MP", "3"]
+    assert text.text_for(span) == "MP3"
+    assert text.span_starting_at(0) == span
+    assert text.spans_containing(1) == (span,)
+    assert text.previous_token(1) == text.tokens[0]
+    assert text.next_token(1) == text.tokens[2]

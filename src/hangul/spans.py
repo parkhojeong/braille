@@ -29,6 +29,12 @@ class TokenSpan:
     def consumed_from(self, index: int) -> int:
         return self.end - index
 
+    def starts_at(self, index: int) -> bool:
+        return self.start == index
+
+    def contains(self, index: int) -> bool:
+        return self.start <= index < self.end
+
 
 SpanScanner = Callable[["RuleContext"], TokenSpan | None]
 SpanEncoder = Callable[["RuleContext", TokenSpan], str]

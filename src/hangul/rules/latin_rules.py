@@ -14,18 +14,18 @@ from .roman_numeral_rules import is_roman_numeral_text
 
 
 def latin_run_count(ctx: RuleContext) -> int:
-    return sum(token.kind == "LATIN_RUN" for token in ctx.tokens)
+    return sum(token.is_latin for token in ctx.tokens)
 
 
 def is_latin_only_text(ctx: RuleContext) -> bool:
-    return all(token.kind in {"LATIN_RUN", "SPACE"} for token in ctx.tokens)
+    return all(token.is_latin or token.is_space for token in ctx.tokens)
 
 
 def is_latin_title_or_single_run_text(ctx: RuleContext) -> bool:
     return is_latin_only_text(ctx) and (
         latin_run_count(ctx) == 1
         or all(
-            token.kind != "LATIN_RUN" or token.text[0].isupper()
+            not token.is_latin or token.text[0].isupper()
             for token in ctx.tokens
         )
     )
@@ -33,20 +33,20 @@ def is_latin_title_or_single_run_text(ctx: RuleContext) -> bool:
 
 def has_previous_latin_in_phrase(ctx: RuleContext) -> bool:
     index = ctx.index - 1
-    while index >= 0 and ctx.tokens[index].kind == "SPACE":
+    while index >= 0 and ctx.tokens[index].is_space:
         index -= 1
-    return index >= 0 and ctx.tokens[index].kind == "LATIN_RUN"
+    return index >= 0 and ctx.tokens[index].is_latin
 
 
 def has_next_latin_in_phrase(ctx: RuleContext) -> bool:
     index = ctx.index + 1
-    while index < len(ctx.tokens) and ctx.tokens[index].kind == "SPACE":
+    while index < len(ctx.tokens) and ctx.tokens[index].is_space:
         index += 1
-    return index < len(ctx.tokens) and ctx.tokens[index].kind == "LATIN_RUN"
+    return index < len(ctx.tokens) and ctx.tokens[index].is_latin
 
 
 def should_use_latin_indicators(ctx: RuleContext) -> bool:
-    if any(token.kind == "GREEK" for token in ctx.tokens):
+    if any(token.is_greek for token in ctx.tokens):
         return False
     return not is_latin_title_or_single_run_text(ctx)
 
@@ -74,10 +74,7 @@ def is_latin_capital_passage(ctx: RuleContext) -> bool:
     return (
         is_latin_only_text(ctx)
         and latin_run_count(ctx) >= 3
-        and all(
-            token.kind != "LATIN_RUN" or token.text.isupper()
-            for token in ctx.tokens
-        )
+        and all(not token.is_latin or token.text.isupper() for token in ctx.tokens)
     )
 
 
@@ -85,23 +82,23 @@ def encode_latin_capital_passage(ctx: RuleContext) -> RuleResult | None:
     if ctx.index != 0 or not is_latin_capital_passage(ctx):
         return None
 
-    words = [token.text for token in ctx.tokens if token.kind == "LATIN_RUN"]
+    words = [token.text for token in ctx.tokens if token.is_latin]
     return RuleResult(ascii_to_dots(encode_capital_passage_ascii(words)), len(ctx.tokens))
 
 
 def should_close_latin_phrase(ctx: RuleContext, span: TokenSpan) -> bool:
     return not (
-        ctx.tokens[span.end - 1].kind == "PUNCTUATION"
+        ctx.tokens[span.end - 1].is_punctuation
         and ctx.tokens[span.end - 1].text in {".", "!", "?"}
         and span.end < len(ctx.tokens)
-        and ctx.tokens[span.end].kind == "HANGUL_SYLLABLE"
+        and ctx.tokens[span.end].is_hangul
     )
 
 
 def encode_latin_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
     parts = ["0"]
     for index, token in enumerate(ctx.tokens[span.token_slice], span.start):
-        if token.kind == "LATIN_RUN":
+        if token.is_latin:
             if (
                 index > span.start
                 and token.text.isupper()
@@ -109,9 +106,9 @@ def encode_latin_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
             ):
                 parts.append(";")
             parts.append(encode_latin_phrase_run_ascii(token.text))
-        elif token.kind == "SPACE":
+        elif token.is_space:
             parts.append("`" * len(token.text))
-        elif token.kind == "PUNCTUATION":
+        elif token.is_punctuation:
             parts.append(UEB_LATIN_PUNCTUATION_ASCII[token.text])
     if should_close_latin_phrase(ctx, span):
         parts.append("4")
@@ -119,7 +116,7 @@ def encode_latin_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
 
 
 def should_close_latin_number_phrase(ctx: RuleContext, span: TokenSpan) -> bool:
-    return ctx.tokens[span.end - 1].kind == "LATIN_RUN"
+    return ctx.tokens[span.end - 1].is_latin
 
 
 def needs_latin_number_phrase_grade1_indicator(text: str) -> bool:
@@ -130,23 +127,23 @@ def encode_latin_number_phrase_ascii(ctx: RuleContext, span: TokenSpan) -> str:
     prefix = (
         "`"
         if ctx.previous_token is not None
-        and ctx.previous_token.kind == "HANGUL_SYLLABLE"
+        and ctx.previous_token.is_hangul
         else ""
     )
     parts = [f"{prefix}0"]
     for index, token in enumerate(ctx.tokens[span.token_slice], span.start):
-        if token.kind == "LATIN_RUN":
+        if token.is_latin:
             if (
                 index == span.start
                 and needs_latin_number_phrase_grade1_indicator(token.text)
             ):
                 parts.append(";")
             parts.append(encode_latin_phrase_run_ascii(token.text))
-        elif token.kind == "NUMBER":
+        elif token.is_number:
             parts.append(encode_number_ascii(token.text))
-        elif token.kind == "SPACE":
+        elif token.is_space:
             parts.append("`" * len(token.text))
-        elif token.kind == "SYMBOL" and token.text == "-":
+        elif token.is_symbol and token.text == "-":
             parts.append("-")
 
     if should_close_latin_number_phrase(ctx, span):
@@ -170,7 +167,7 @@ def encode_latin(ctx: RuleContext) -> RuleResult | None:
         if span_result is not None:
             return span_result
 
-    if ctx.token.kind != "LATIN_RUN":
+    if not ctx.token.is_latin:
         return None
 
     return RuleResult(

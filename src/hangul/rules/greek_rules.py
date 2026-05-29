@@ -7,7 +7,7 @@ from .context import RuleContext, RuleResult
 def has_previous_uppercase_greek(ctx: RuleContext) -> bool:
     return (
         ctx.index > 0
-        and ctx.tokens[ctx.index - 1].kind == "GREEK"
+        and ctx.tokens[ctx.index - 1].is_greek
         and is_uppercase_greek(ctx.tokens[ctx.index - 1].text)
     )
 
@@ -15,25 +15,25 @@ def has_previous_uppercase_greek(ctx: RuleContext) -> bool:
 def has_next_uppercase_greek(ctx: RuleContext) -> bool:
     return (
         ctx.index + 1 < len(ctx.tokens)
-        and ctx.tokens[ctx.index + 1].kind == "GREEK"
+        and ctx.tokens[ctx.index + 1].is_greek
         and is_uppercase_greek(ctx.tokens[ctx.index + 1].text)
     )
 
 
 def is_in_korean_sentence(ctx: RuleContext) -> bool:
-    return any(token.kind == "HANGUL_SYLLABLE" for token in ctx.tokens)
+    return any(token.is_hangul for token in ctx.tokens)
 
 
 def is_greek_run_start(ctx: RuleContext) -> bool:
-    return ctx.previous_token is None or ctx.previous_token.kind != "GREEK"
+    return ctx.previous_token is None or not ctx.previous_token.is_greek
 
 
 def is_greek_run_end(ctx: RuleContext) -> bool:
-    return ctx.next_token is None or ctx.next_token.kind != "GREEK"
+    return ctx.next_token is None or not ctx.next_token.is_greek
 
 
 def encode_greek(ctx: RuleContext) -> RuleResult | None:
-    if ctx.token.kind != "GREEK":
+    if not ctx.token.is_greek:
         return None
 
     ascii_text = encode_greek_ascii(

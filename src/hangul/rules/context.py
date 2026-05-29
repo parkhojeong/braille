@@ -36,7 +36,7 @@ class RuleContext:
     @property
     def next_syllable(self) -> SyllableParts | None:
         token = self.next_token
-        if token is None or token.kind != "HANGUL_SYLLABLE":
+        if token is None or not token.is_hangul:
             return None
 
         return token.l or "", token.v or "", token.t or ""
@@ -60,7 +60,8 @@ class RuleContext:
             return True
 
         return (
-            previous_token.kind in {"SPACE", "PUNCTUATION"}
+            previous_token.is_space
+            or previous_token.is_punctuation
             or previous_token.group_id != self.token.group_id
         )
 
@@ -78,7 +79,7 @@ class RuleContext:
             return None
 
         tokens = self.tokens[self.index:end]
-        if any(token.kind != "HANGUL_SYLLABLE" for token in tokens):
+        if any(not token.is_hangul for token in tokens):
             return None
 
         return "".join(token.text for token in tokens)

@@ -9,14 +9,14 @@ def encode_number_ascii(text: str) -> str:
 
 
 def encode_number(ctx: RuleContext) -> RuleResult | None:
-    if ctx.token.kind != "NUMBER":
+    if not ctx.token.is_number:
         return None
 
     suffix = (
         "`"
         if len(ctx.token.text) > 1
         and ctx.next_token is not None
-        and ctx.next_token.kind == "HANGUL_SYLLABLE"
+        and ctx.next_token.is_hangul
         else ""
     )
     return RuleResult(ascii_to_dots(f"{encode_number_ascii(ctx.token.text)}{suffix}"))
