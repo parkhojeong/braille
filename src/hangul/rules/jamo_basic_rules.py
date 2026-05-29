@@ -1,5 +1,5 @@
 from .dispatch import encode_dot
-from .rule_tables import (
+from .jamo_tables import (
     RULE_4_T_DOTS,
     RULE_5_T_CLUSTER_DOTS,
     RULE_7_V_DOTS,

@@ -1,45 +1,4 @@
-from .tables import L_DOTS, T_DOTS, V_DOTS
-
-TENSE_L_BASE = {
-    "ㄲ": "ㄱ",
-    "ㄸ": "ㄷ",
-    "ㅃ": "ㅂ",
-    "ㅆ": "ㅅ",
-    "ㅉ": "ㅈ",
-}
-
-RULE_4_T_DOTS = {
-    "ㄲ": [T_DOTS["ㄱ"], T_DOTS["ㄱ"]],
-    "ㅆ": [T_DOTS["ㅆ"]],
-}
-
-RULE_5_T_CLUSTER_DOTS = {
-    "ㄳ": [T_DOTS["ㄱ"], T_DOTS["ㅅ"]],
-    "ㄵ": [T_DOTS["ㄴ"], T_DOTS["ㅈ"]],
-    "ㄶ": [T_DOTS["ㄴ"], T_DOTS["ㅎ"]],
-    "ㄺ": [T_DOTS["ㄹ"], T_DOTS["ㄱ"]],
-    "ㄻ": [T_DOTS["ㄹ"], T_DOTS["ㅁ"]],
-    "ㄼ": [T_DOTS["ㄹ"], T_DOTS["ㅂ"]],
-    "ㄽ": [T_DOTS["ㄹ"], T_DOTS["ㅅ"]],
-    "ㄾ": [T_DOTS["ㄹ"], T_DOTS["ㅌ"]],
-    "ㄿ": [T_DOTS["ㄹ"], T_DOTS["ㅍ"]],
-    "ㅀ": [T_DOTS["ㄹ"], T_DOTS["ㅎ"]],
-    "ㅄ": [T_DOTS["ㅂ"], T_DOTS["ㅅ"]],
-}
-
-RULE_7_V_DOTS = {
-    "ㅐ": ["1235"],
-    "ㅒ": [V_DOTS["ㅑ"], "1235"],
-    "ㅔ": ["1345"],
-    "ㅖ": ["34"],
-    "ㅘ": ["1236"],
-    "ㅙ": ["1236", "1235"],
-    "ㅚ": ["13456"],
-    "ㅝ": ["1234"],
-    "ㅞ": ["1234", "1235"],
-    "ㅟ": [V_DOTS["ㅜ"], "1235"],
-    "ㅢ": ["2456"],
-}
+from .tables import L_DOTS
 
 RULE_13_A_ABBREVIATION_DOTS = {
     "ㄱ": "1246",

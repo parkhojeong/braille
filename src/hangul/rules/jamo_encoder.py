@@ -1,31 +1,12 @@
-from collections.abc import Callable
-
 from .dispatch import try_encode_rules
 from .jamo_basic_rules import (
     rule_1_encode_l,
-    rule_1_try_encode_l_ㅇ,
     rule_2_try_encode_l_ㄲㄸㅃㅆㅉ,
     rule_3_encode_t,
-    rule_4_try_encode_t_ㄲㅆ,
-    rule_5_try_encode_t_cluster,
     rule_6_encode_v,
-    rule_7_try_encode_v_cluster,
 )
+from .jamo_registry import L_RULES, T_RULES, V_RULES
 from .tables import L_DOTS, V_DOTS
-
-L_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_1_try_encode_l_ㅇ,
-    rule_2_try_encode_l_ㄲㄸㅃㅆㅉ,
-]
-
-V_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_7_try_encode_v_cluster,
-]
-
-T_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_4_try_encode_t_ㄲㅆ,
-    rule_5_try_encode_t_cluster,
-]
 
 
 def encode_l(l: str) -> list[str]:
