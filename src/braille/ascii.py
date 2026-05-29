@@ -1,3 +1,7 @@
+from collections.abc import Sequence
+
+from .cells import BrailleCells
+
 ASCII_TO_DOTS = {
     " ": "",
     "!": "2346",
@@ -110,9 +114,15 @@ def _build_dots_to_ascii() -> dict[str, str]:
 DOTS_TO_ASCII = _build_dots_to_ascii()
 
 
+def ascii_to_cells(text: str) -> BrailleCells:
+    return BrailleCells.from_dot_strings(ASCII_TO_DOTS[ch] for ch in text)
+
+
 def ascii_to_dots(text: str) -> list[str]:
-    return [ASCII_TO_DOTS[ch] for ch in text]
+    return ascii_to_cells(text).dot_strings
 
 
-def dots_to_ascii(cells: list[str]) -> str:
+def dots_to_ascii(cells: Sequence[str] | BrailleCells) -> str:
+    if isinstance(cells, BrailleCells):
+        cells = cells.dot_strings
     return "".join(DOTS_TO_ASCII[cell] for cell in cells)
