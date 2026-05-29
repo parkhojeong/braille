@@ -16,6 +16,6 @@ def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
         ("PUNCTUATION", ".", 2),
     ]
 
-    assert tokens[0].choseong == "ㄴ"
-    assert tokens[0].jungseong == "ㅏ"
-    assert tokens[0].jongseong == ""
+    assert tokens[0].l == "ㄴ"
+    assert tokens[0].v == "ㅏ"
+    assert tokens[0].t == ""

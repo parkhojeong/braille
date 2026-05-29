@@ -1,6 +1,6 @@
 from braille.ascii import ascii_to_dots, dots_to_ascii
 
-from .rules import encode_jamo, encode_syllable
+from .rules import encode_jamo, encode_syllable, encode_vowel_sequence_separator
 from .tokens import Token, tokenize_print
 
 TEXT_PUNCTUATION_DOTS = {
@@ -66,15 +66,33 @@ def should_skip_space(tokens: list[Token], index: int) -> bool:
     )
 
 
-def next_syllable_starts_with_ieung(tokens: list[Token], index: int) -> bool:
+def next_syllable_l_is_ieung(tokens: list[Token], index: int) -> bool:
     if index + 1 >= len(tokens):
         return False
 
     next_token = tokens[index + 1]
-    return next_token.kind == "HANGUL_SYLLABLE" and next_token.choseong == "ㅇ"
+    return next_token.kind == "HANGUL_SYLLABLE" and next_token.l == "ㅇ"
 
 
-def print_to_braille_dots(text: str, *, standalone_jamo: str = "choseong") -> list[str]:
+def encode_next_syllable_separator(tokens: list[Token], index: int) -> list[str]:
+    if index + 1 >= len(tokens):
+        return []
+
+    token = tokens[index]
+    next_token = tokens[index + 1]
+    if token.kind != "HANGUL_SYLLABLE" or next_token.kind != "HANGUL_SYLLABLE":
+        return []
+
+    return encode_vowel_sequence_separator(
+        token.v or "",
+        token.t or "",
+        next_token.l or "",
+        next_token.v or "",
+        next_token.t or "",
+    )
+
+
+def print_to_braille_dots(text: str, *, jamo_role: str = "l") -> list[str]:
     result: list[str] = []
     tokens = tokenize_print(text)
 
@@ -97,17 +115,18 @@ def print_to_braille_dots(text: str, *, standalone_jamo: str = "choseong") -> li
         if token.kind == "HANGUL_SYLLABLE":
             result.extend(
                 encode_syllable(
-                    token.choseong or "",
-                    token.jungseong or "",
-                    token.jongseong or "",
-                    next_syllable_starts_with_ieung=next_syllable_starts_with_ieung(
+                    token.l or "",
+                    token.v or "",
+                    token.t or "",
+                    next_syllable_l_is_ieung=next_syllable_l_is_ieung(
                         tokens, index
                     ),
                 )
             )
+            result.extend(encode_next_syllable_separator(tokens, index))
             continue
 
-        result.extend(encode_jamo(token.text, standalone_jamo))
+        result.extend(encode_jamo(token.text, jamo_role))
 
     return result
 

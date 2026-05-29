@@ -19,9 +19,9 @@ class Token:
     kind: TokenKind
     text: str
     group_id: int | None = None
-    choseong: str | None = None
-    jungseong: str | None = None
-    jongseong: str | None = None
+    l: str | None = None
+    v: str | None = None
+    t: str | None = None
 
 
 PUNCTUATION = {",", ".", "!", "[", "]"}
@@ -56,14 +56,14 @@ def hangul_syllable_token(ch: str, group_id: int) -> Token | None:
     if syllable is None:
         return None
 
-    choseong, jungseong, jongseong = syllable
+    l, v, t = syllable
     return Token(
         "HANGUL_SYLLABLE",
         ch,
         group_id,
-        choseong=choseong,
-        jungseong=jungseong,
-        jongseong=jongseong,
+        l=l,
+        v=v,
+        t=t,
     )
 
 

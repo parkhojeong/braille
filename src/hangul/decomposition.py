@@ -3,11 +3,11 @@ from typing import Optional
 
 HANGUL_SYLLABLE_BASE = 0xAC00
 HANGUL_SYLLABLE_END = 0xD7A3
-JUNGSEONG_COUNT = 21
-JONGSEONG_COUNT = 28
-SYLLABLES_PER_CHOSEONG = JUNGSEONG_COUNT * JONGSEONG_COUNT
+V_COUNT = 21
+T_COUNT = 28
+N_COUNT = V_COUNT * T_COUNT
 
-CHOSEONG = [
+L_TABLE = [
     "ㄱ",
     "ㄲ",
     "ㄴ",
@@ -29,7 +29,7 @@ CHOSEONG = [
     "ㅎ",
 ]
 
-JUNGSEONG = [
+V_TABLE = [
     "ㅏ",
     "ㅐ",
     "ㅑ",
@@ -53,7 +53,7 @@ JUNGSEONG = [
     "ㅣ",
 ]
 
-JONGSEONG = [
+T_TABLE = [
     "",
     "ㄱ",
     "ㄲ",
@@ -95,11 +95,11 @@ def decompose_precomposed_hangul_syllable(ch: str) -> Optional[tuple[str, str, s
         return None
 
     syllable_index = code_point - HANGUL_SYLLABLE_BASE
-    choseong_index = syllable_index // SYLLABLES_PER_CHOSEONG
-    jungseong_index = (syllable_index % SYLLABLES_PER_CHOSEONG) // JONGSEONG_COUNT
-    jongseong_index = syllable_index % JONGSEONG_COUNT
+    l_index = syllable_index // N_COUNT
+    v_index = (syllable_index % N_COUNT) // T_COUNT
+    t_index = syllable_index % T_COUNT
     return (
-        CHOSEONG[choseong_index],
-        JUNGSEONG[jungseong_index],
-        JONGSEONG[jongseong_index],
+        L_TABLE[l_index],
+        V_TABLE[v_index],
+        T_TABLE[t_index],
     )

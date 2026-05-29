@@ -3,19 +3,21 @@ from collections.abc import Callable, Sequence
 from .tables import (
     ABBREVIATED_A_DOTS,
     ATTACHED_CONSONANT_SIGN_DOT,
-    CHOSEONG_DOTS,
-    COMPOSITE_JONGSEONG_DOTS,
-    COMPOSITE_JUNGSEONG_DOTS,
-    DOUBLE_JONGSEONG_DOTS,
+    L_DOTS,
+    T_CLUSTER_DOTS,
+    V_CLUSTER_DOTS,
+    REPEATED_T_DOTS,
     FULL_SIGN_DOT,
-    JONGSEONG_DOTS,
-    JUNGSEONG_DOTS,
-    NEXT_IEUNG_CANCELS_ABBREVIATED_A,
+    T_DOTS,
+    V_DOTS,
+    NEXT_L_IEUNG_CANCELS_ABBREVIATED_A,
+    RULE_12_PRECEDING_V,
     RULE_15_SYLLABLE_ABBREVIATIONS,
-    RULE_15_VOWEL_JONGSEONG_ABBREVIATIONS,
-    RULE_17_YEONG_AFTER_CONSONANT_ABBREVIATIONS,
+    RULE_15_V_T_ABBREVIATIONS,
+    RULE_17_LVT_ABBREVIATIONS,
     TENSE_ABBREVIATED_A_DOTS,
-    TENSE_CHOSEONG_DOTS,
+    TENSE_L_DOTS,
+    VOWEL_SEQUENCE_SEPARATOR_DOT,
 )
 
 
@@ -37,174 +39,213 @@ def try_encode_rules(rules: Sequence[Rule], *args: object) -> list[str] | None:
     return None
 
 
-def rule_1_encode_choseong(choseong: str) -> list[str]:
-    return encode_dot(CHOSEONG_DOTS, choseong, "choseong")
+def rule_1_encode_l(l: str) -> list[str]:
+    return encode_dot(L_DOTS, l, "l")
 
 
-def rule_1_try_encode_silent_ieung_choseong(choseong: str) -> list[str] | None:
-    if choseong == "ㅇ":
+def rule_1_try_encode_silent_ieung_l(l: str) -> list[str] | None:
+    if l == "ㅇ":
         return []
     return None
 
 
-def rule_2_try_encode_tense_choseong(choseong: str) -> list[str] | None:
-    return TENSE_CHOSEONG_DOTS.get(choseong)
+def rule_2_try_encode_tense_l(l: str) -> list[str] | None:
+    return TENSE_L_DOTS.get(l)
 
 
-def rule_3_encode_jongseong(jongseong: str) -> list[str]:
-    return encode_dot(JONGSEONG_DOTS, jongseong, "jongseong")
+def rule_3_encode_t(t: str) -> list[str]:
+    return encode_dot(T_DOTS, t, "t")
 
 
-def rule_4_try_encode_double_jongseong(jongseong: str) -> list[str] | None:
-    return DOUBLE_JONGSEONG_DOTS.get(jongseong)
+def rule_4_try_encode_repeated_t(t: str) -> list[str] | None:
+    return REPEATED_T_DOTS.get(t)
 
 
-def rule_5_try_encode_composite_jongseong(jongseong: str) -> list[str] | None:
-    return COMPOSITE_JONGSEONG_DOTS.get(jongseong)
+def rule_5_try_encode_t_cluster(t: str) -> list[str] | None:
+    return T_CLUSTER_DOTS.get(t)
 
 
-def rule_6_encode_jungseong(jungseong: str) -> list[str]:
-    return encode_dot(JUNGSEONG_DOTS, jungseong, "jungseong")
+def rule_6_encode_v(v: str) -> list[str]:
+    return encode_dot(V_DOTS, v, "v")
 
 
-def rule_7_try_encode_composite_jungseong(jungseong: str) -> list[str] | None:
-    return COMPOSITE_JUNGSEONG_DOTS.get(jungseong)
+def rule_7_try_encode_v_cluster(v: str) -> list[str] | None:
+    return V_CLUSTER_DOTS.get(v)
 
 
-def rule_3_to_5_try_encode_jongseong_jamo(ch: str, role: str) -> list[str] | None:
-    if role == "jongseong":
-        return encode_jongseong(ch)
+def rule_3_to_5_try_encode_t_jamo(ch: str, role: str) -> list[str] | None:
+    if role == "t":
+        return encode_t(ch)
     return None
 
 
-def rule_8_or_9_try_encode_standalone_jamo(ch: str, role: str) -> list[str] | None:
+def rule_8_or_9_try_encode_jamo_role(ch: str, role: str) -> list[str] | None:
     if role != "standalone":
         return None
 
-    if ch in CHOSEONG_DOTS or ch in TENSE_CHOSEONG_DOTS:
-        return [FULL_SIGN_DOT, *encode_jongseong(ch)]
-    return [FULL_SIGN_DOT, *encode_jungseong(ch)]
+    if ch in L_DOTS or ch in TENSE_L_DOTS:
+        return [FULL_SIGN_DOT, *encode_t(ch)]
+    return [FULL_SIGN_DOT, *encode_v(ch)]
 
 
 def rule_10_try_encode_attached_consonant(ch: str, role: str) -> list[str] | None:
-    if role != "attached_jongseong":
+    if role != "attached_t":
         return None
 
-    return [ATTACHED_CONSONANT_SIGN_DOT, *encode_jongseong(ch)]
+    return [ATTACHED_CONSONANT_SIGN_DOT, *encode_t(ch)]
+
+
+def rule_11_try_encode_ye_vowel_sequence_separator(
+    v: str,
+    t: str,
+    next_l: str,
+    next_v: str,
+    next_t: str,
+) -> list[str] | None:
+    del next_t
+
+    if t == "" and next_l == "ㅇ" and next_v == "ㅖ":
+        return [VOWEL_SEQUENCE_SEPARATOR_DOT]
+    return None
+
+
+def rule_12_try_encode_ae_vowel_sequence_separator(
+    v: str,
+    t: str,
+    next_l: str,
+    next_v: str,
+    next_t: str,
+) -> list[str] | None:
+    del next_t
+
+    if (
+        t == ""
+        and v in RULE_12_PRECEDING_V
+        and next_l == "ㅇ"
+        and next_v == "ㅐ"
+    ):
+        return [VOWEL_SEQUENCE_SEPARATOR_DOT]
+    return None
 
 
 def rule_13_try_encode_abbreviated_a_syllable(
-    choseong: str,
-    jungseong: str,
-    jongseong: str,
-    next_syllable_starts_with_ieung: bool,
+    l: str,
+    v: str,
+    t: str,
+    next_syllable_l_is_ieung: bool,
 ) -> list[str] | None:
-    if jungseong != "ㅏ":
+    if v != "ㅏ":
         return None
 
     if (
-        next_syllable_starts_with_ieung
-        and choseong in NEXT_IEUNG_CANCELS_ABBREVIATED_A
+        next_syllable_l_is_ieung
+        and l in NEXT_L_IEUNG_CANCELS_ABBREVIATED_A
     ):
         return None
 
-    tense_dots = TENSE_ABBREVIATED_A_DOTS.get(choseong)
+    tense_dots = TENSE_ABBREVIATED_A_DOTS.get(l)
     if tense_dots is not None:
-        return [*tense_dots, *encode_jongseong(jongseong)]
+        return [*tense_dots, *encode_t(t)]
 
-    dot = ABBREVIATED_A_DOTS.get(choseong)
+    dot = ABBREVIATED_A_DOTS.get(l)
     if dot is not None:
-        return [dot, *encode_jongseong(jongseong)]
+        return [dot, *encode_t(t)]
 
     return None
 
 
 def rule_15_try_encode_abbreviated_syllable(
-    choseong: str,
-    jungseong: str,
-    jongseong: str,
-    next_syllable_starts_with_ieung: bool,
+    l: str,
+    v: str,
+    t: str,
+    next_syllable_l_is_ieung: bool,
 ) -> list[str] | None:
-    del next_syllable_starts_with_ieung
+    del next_syllable_l_is_ieung
 
     syllable_dots = RULE_15_SYLLABLE_ABBREVIATIONS.get(
-        (choseong, jungseong, jongseong)
+        (l, v, t)
     )
     if syllable_dots is not None:
         return syllable_dots
 
-    abbreviation_dot = RULE_15_VOWEL_JONGSEONG_ABBREVIATIONS.get(
-        (jungseong, jongseong)
+    abbreviation_dot = RULE_15_V_T_ABBREVIATIONS.get(
+        (v, t)
     )
 
     if abbreviation_dot is None:
         return None
 
-    return [*encode_choseong(choseong), abbreviation_dot]
+    return [*encode_l(l), abbreviation_dot]
 
 
 def rule_17_try_encode_yeong_abbreviation(
-    choseong: str,
-    jungseong: str,
-    jongseong: str,
-    next_syllable_starts_with_ieung: bool,
+    l: str,
+    v: str,
+    t: str,
+    next_syllable_l_is_ieung: bool,
 ) -> list[str] | None:
-    del next_syllable_starts_with_ieung
+    del next_syllable_l_is_ieung
 
-    abbreviation_dot = RULE_17_YEONG_AFTER_CONSONANT_ABBREVIATIONS.get(
-        (choseong, jungseong, jongseong)
+    abbreviation_dot = RULE_17_LVT_ABBREVIATIONS.get(
+        (l, v, t)
     )
     if abbreviation_dot is None:
         return None
 
-    return [*encode_choseong(choseong), abbreviation_dot]
+    return [*encode_l(l), abbreviation_dot]
 
 
-def encode_choseong(choseong: str) -> list[str]:
-    result = try_encode_rules(CHOSEONG_RULES, choseong)
+def encode_l(l: str) -> list[str]:
+    result = try_encode_rules(L_RULES, l)
     if result is not None:
         return result
 
-    return rule_1_encode_choseong(choseong)
+    return rule_1_encode_l(l)
 
 
-def encode_jungseong(jungseong: str) -> list[str]:
-    if jungseong in JUNGSEONG_DOTS:
-        return rule_6_encode_jungseong(jungseong)
+def encode_v(v: str) -> list[str]:
+    if v in V_DOTS:
+        return rule_6_encode_v(v)
 
-    result = try_encode_rules(JUNGSEONG_RULES, jungseong)
+    result = try_encode_rules(V_RULES, v)
     if result is not None:
         return result
 
-    raise NotImplementedError(f"unsupported jungseong: {jungseong}")
+    raise NotImplementedError(f"unsupported v: {v}")
 
 
-def encode_jongseong(jongseong: str) -> list[str]:
-    if not jongseong:
+def encode_t(t: str) -> list[str]:
+    if not t:
         return []
 
-    result = try_encode_rules(JONGSEONG_RULES, jongseong)
+    result = try_encode_rules(T_RULES, t)
     if result is not None:
         return result
 
-    return rule_3_encode_jongseong(jongseong)
+    return rule_3_encode_t(t)
 
 
 SyllableRule = Callable[[str, str, str, bool], list[str] | None]
 JamoRule = Callable[[str, str], list[str] | None]
+VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
 
-CHOSEONG_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_1_try_encode_silent_ieung_choseong,
-    rule_2_try_encode_tense_choseong,
+L_RULES: list[Callable[[str], list[str] | None]] = [
+    rule_1_try_encode_silent_ieung_l,
+    rule_2_try_encode_tense_l,
 ]
 
-JUNGSEONG_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_7_try_encode_composite_jungseong,
+V_RULES: list[Callable[[str], list[str] | None]] = [
+    rule_7_try_encode_v_cluster,
 ]
 
-JONGSEONG_RULES: list[Callable[[str], list[str] | None]] = [
-    rule_4_try_encode_double_jongseong,
-    rule_5_try_encode_composite_jongseong,
+T_RULES: list[Callable[[str], list[str] | None]] = [
+    rule_4_try_encode_repeated_t,
+    rule_5_try_encode_t_cluster,
+]
+
+VOWEL_SEQUENCE_RULES: list[VowelSequenceRule] = [
+    rule_11_try_encode_ye_vowel_sequence_separator,
+    rule_12_try_encode_ae_vowel_sequence_separator,
 ]
 
 SYLLABLE_RULES: list[SyllableRule] = [
@@ -214,34 +255,54 @@ SYLLABLE_RULES: list[SyllableRule] = [
 ]
 
 JAMO_RULES: list[JamoRule] = [
-    rule_8_or_9_try_encode_standalone_jamo,
+    rule_8_or_9_try_encode_jamo_role,
     rule_10_try_encode_attached_consonant,
-    rule_3_to_5_try_encode_jongseong_jamo,
+    rule_3_to_5_try_encode_t_jamo,
 ]
 
 
 def encode_syllable(
-    choseong: str,
-    jungseong: str,
-    jongseong: str,
+    l: str,
+    v: str,
+    t: str,
     *,
-    next_syllable_starts_with_ieung: bool = False,
+    next_syllable_l_is_ieung: bool = False,
 ) -> list[str]:
     result = try_encode_rules(
         SYLLABLE_RULES,
-        choseong,
-        jungseong,
-        jongseong,
-        next_syllable_starts_with_ieung,
+        l,
+        v,
+        t,
+        next_syllable_l_is_ieung,
     )
     if result is not None:
         return result
 
     return [
-        *encode_choseong(choseong),
-        *encode_jungseong(jungseong),
-        *encode_jongseong(jongseong),
+        *encode_l(l),
+        *encode_v(v),
+        *encode_t(t),
     ]
+
+
+def encode_vowel_sequence_separator(
+    v: str,
+    t: str,
+    next_l: str,
+    next_v: str,
+    next_t: str,
+) -> list[str]:
+    result = try_encode_rules(
+        VOWEL_SEQUENCE_RULES,
+        v,
+        t,
+        next_l,
+        next_v,
+        next_t,
+    )
+    if result is not None:
+        return result
+    return []
 
 
 def encode_jamo(ch: str, role: str) -> list[str]:
@@ -249,17 +310,17 @@ def encode_jamo(ch: str, role: str) -> list[str]:
     if result is not None:
         return result
 
-    result = rule_2_try_encode_tense_choseong(ch)
+    result = rule_2_try_encode_tense_l(ch)
     if result is not None:
         return result
 
-    if ch in CHOSEONG_DOTS:
-        return rule_1_encode_choseong(ch)
+    if ch in L_DOTS:
+        return rule_1_encode_l(ch)
 
-    if ch in JUNGSEONG_DOTS:
-        return rule_6_encode_jungseong(ch)
+    if ch in V_DOTS:
+        return rule_6_encode_v(ch)
 
-    result = try_encode_rules(JUNGSEONG_RULES, ch)
+    result = try_encode_rules(V_RULES, ch)
     if result is not None:
         return result
 

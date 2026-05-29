@@ -5,7 +5,7 @@ import pytest
 
 from braille import ascii_to_dots, dots_to_unicode
 from hangul import print_to_braille_dots
-from hangul.tests.test_support import SUPPORTED_RULES, standalone_jamo_for_case
+from hangul.tests.test_support import SUPPORTED_RULES, jamo_role_for_case
 
 HANGUL_ROOT = Path(__file__).resolve().parent.parent
 RULE_CASES_ROOT = HANGUL_ROOT / "rules" / "cases"
@@ -40,7 +40,7 @@ def trim_blank_edges(cells: list[str]) -> list[str]:
 def test_supported_ko_rules(path, group_description, print_text, expected):
     actual_dots = print_to_braille_dots(
         print_text,
-        standalone_jamo=standalone_jamo_for_case(path, group_description),
+        jamo_role=jamo_role_for_case(path, group_description),
     )
 
     actual_dots = trim_blank_edges(actual_dots)

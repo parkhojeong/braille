@@ -1,4 +1,4 @@
-CHOSEONG_DOTS = {
+L_DOTS = {
     "ㄱ": "4",
     "ㄴ": "14",
     "ㄷ": "24",
@@ -17,16 +17,17 @@ CHOSEONG_DOTS = {
 
 FULL_SIGN_DOT = "123456"
 ATTACHED_CONSONANT_SIGN_DOT = "456"
+VOWEL_SEQUENCE_SEPARATOR_DOT = "36"
 
-TENSE_CHOSEONG_DOTS = {
-    "ㄲ": ["6", CHOSEONG_DOTS["ㄱ"]],
-    "ㄸ": ["6", CHOSEONG_DOTS["ㄷ"]],
-    "ㅃ": ["6", CHOSEONG_DOTS["ㅂ"]],
-    "ㅆ": ["6", CHOSEONG_DOTS["ㅅ"]],
-    "ㅉ": ["6", CHOSEONG_DOTS["ㅈ"]],
+TENSE_L_DOTS = {
+    "ㄲ": ["6", L_DOTS["ㄱ"]],
+    "ㄸ": ["6", L_DOTS["ㄷ"]],
+    "ㅃ": ["6", L_DOTS["ㅂ"]],
+    "ㅆ": ["6", L_DOTS["ㅅ"]],
+    "ㅉ": ["6", L_DOTS["ㅈ"]],
 }
 
-JUNGSEONG_DOTS = {
+V_DOTS = {
     "ㅏ": "126",
     "ㅑ": "345",
     "ㅓ": "234",
@@ -40,9 +41,9 @@ JUNGSEONG_DOTS = {
     "ㅣ": "135",
 }
 
-COMPOSITE_JUNGSEONG_DOTS = {
+V_CLUSTER_DOTS = {
     "ㅐ": ["1235"],
-    "ㅒ": [JUNGSEONG_DOTS["ㅑ"], "1235"],
+    "ㅒ": [V_DOTS["ㅑ"], "1235"],
     "ㅔ": ["1345"],
     "ㅖ": ["34"],
     "ㅘ": ["1236"],
@@ -50,22 +51,22 @@ COMPOSITE_JUNGSEONG_DOTS = {
     "ㅚ": ["13456"],
     "ㅝ": ["1234"],
     "ㅞ": ["1234", "1235"],
-    "ㅟ": [JUNGSEONG_DOTS["ㅜ"], "1235"],
+    "ㅟ": [V_DOTS["ㅜ"], "1235"],
     "ㅢ": ["2456"],
 }
 
 ABBREVIATED_A_DOTS = {
     "ㄱ": "1246",
-    "ㄴ": CHOSEONG_DOTS["ㄴ"],
-    "ㄷ": CHOSEONG_DOTS["ㄷ"],
-    "ㅁ": CHOSEONG_DOTS["ㅁ"],
-    "ㅂ": CHOSEONG_DOTS["ㅂ"],
+    "ㄴ": L_DOTS["ㄴ"],
+    "ㄷ": L_DOTS["ㄷ"],
+    "ㅁ": L_DOTS["ㅁ"],
+    "ㅂ": L_DOTS["ㅂ"],
     "ㅅ": "123",
-    "ㅈ": CHOSEONG_DOTS["ㅈ"],
-    "ㅋ": CHOSEONG_DOTS["ㅋ"],
-    "ㅌ": CHOSEONG_DOTS["ㅌ"],
-    "ㅍ": CHOSEONG_DOTS["ㅍ"],
-    "ㅎ": CHOSEONG_DOTS["ㅎ"],
+    "ㅈ": L_DOTS["ㅈ"],
+    "ㅋ": L_DOTS["ㅋ"],
+    "ㅌ": L_DOTS["ㅌ"],
+    "ㅍ": L_DOTS["ㅍ"],
+    "ㅎ": L_DOTS["ㅎ"],
 }
 
 TENSE_ABBREVIATED_A_DOTS = {
@@ -76,7 +77,7 @@ TENSE_ABBREVIATED_A_DOTS = {
     "ㅉ": ["6", ABBREVIATED_A_DOTS["ㅈ"]],
 }
 
-JONGSEONG_DOTS = {
+T_DOTS = {
     "ㄱ": "1",
     "ㄴ": "25",
     "ㄷ": "35",
@@ -94,26 +95,26 @@ JONGSEONG_DOTS = {
     "ㅆ": "34",
 }
 
-DOUBLE_JONGSEONG_DOTS = {
-    "ㄲ": [JONGSEONG_DOTS["ㄱ"], JONGSEONG_DOTS["ㄱ"]],
-    "ㅆ": [JONGSEONG_DOTS["ㅆ"]],
+REPEATED_T_DOTS = {
+    "ㄲ": [T_DOTS["ㄱ"], T_DOTS["ㄱ"]],
+    "ㅆ": [T_DOTS["ㅆ"]],
 }
 
-COMPOSITE_JONGSEONG_DOTS = {
-    "ㄳ": [JONGSEONG_DOTS["ㄱ"], JONGSEONG_DOTS["ㅅ"]],
-    "ㄵ": [JONGSEONG_DOTS["ㄴ"], JONGSEONG_DOTS["ㅈ"]],
-    "ㄶ": [JONGSEONG_DOTS["ㄴ"], JONGSEONG_DOTS["ㅎ"]],
-    "ㄺ": [JONGSEONG_DOTS["ㄹ"], JONGSEONG_DOTS["ㄱ"]],
-    "ㄻ": [JONGSEONG_DOTS["ㄹ"], JONGSEONG_DOTS["ㅁ"]],
-    "ㄼ": [JONGSEONG_DOTS["ㄹ"], JONGSEONG_DOTS["ㅂ"]],
-    "ㄽ": [JONGSEONG_DOTS["ㄹ"], JONGSEONG_DOTS["ㅅ"]],
-    "ㄾ": [JONGSEONG_DOTS["ㄹ"], JONGSEONG_DOTS["ㅌ"]],
-    "ㄿ": [JONGSEONG_DOTS["ㄹ"], JONGSEONG_DOTS["ㅍ"]],
-    "ㅀ": [JONGSEONG_DOTS["ㄹ"], JONGSEONG_DOTS["ㅎ"]],
-    "ㅄ": [JONGSEONG_DOTS["ㅂ"], JONGSEONG_DOTS["ㅅ"]],
+T_CLUSTER_DOTS = {
+    "ㄳ": [T_DOTS["ㄱ"], T_DOTS["ㅅ"]],
+    "ㄵ": [T_DOTS["ㄴ"], T_DOTS["ㅈ"]],
+    "ㄶ": [T_DOTS["ㄴ"], T_DOTS["ㅎ"]],
+    "ㄺ": [T_DOTS["ㄹ"], T_DOTS["ㄱ"]],
+    "ㄻ": [T_DOTS["ㄹ"], T_DOTS["ㅁ"]],
+    "ㄼ": [T_DOTS["ㄹ"], T_DOTS["ㅂ"]],
+    "ㄽ": [T_DOTS["ㄹ"], T_DOTS["ㅅ"]],
+    "ㄾ": [T_DOTS["ㄹ"], T_DOTS["ㅌ"]],
+    "ㄿ": [T_DOTS["ㄹ"], T_DOTS["ㅍ"]],
+    "ㅀ": [T_DOTS["ㄹ"], T_DOTS["ㅎ"]],
+    "ㅄ": [T_DOTS["ㅂ"], T_DOTS["ㅅ"]],
 }
 
-NEXT_IEUNG_CANCELS_ABBREVIATED_A = {
+NEXT_L_IEUNG_CANCELS_ABBREVIATED_A = {
     "ㄴ",
     "ㄷ",
     "ㅁ",
@@ -125,11 +126,13 @@ NEXT_IEUNG_CANCELS_ABBREVIATED_A = {
     "ㅎ",
 }
 
+RULE_12_PRECEDING_V = {"ㅑ", "ㅘ", "ㅜ", "ㅝ"}
+
 RULE_15_SYLLABLE_ABBREVIATIONS = {
     ("ㄱ", "ㅓ", "ㅅ"): ["456", "234"],
 }
 
-RULE_15_VOWEL_JONGSEONG_ABBREVIATIONS = {
+RULE_15_V_T_ABBREVIATIONS = {
     ("ㅓ", "ㄱ"): "1456",
     ("ㅓ", "ㄴ"): "23456",
     ("ㅓ", "ㄹ"): "2345",
@@ -146,7 +149,7 @@ RULE_15_VOWEL_JONGSEONG_ABBREVIATIONS = {
     ("ㅣ", "ㄴ"): "12345",
 }
 
-RULE_17_YEONG_AFTER_CONSONANT_ABBREVIATIONS = {
+RULE_17_LVT_ABBREVIATIONS = {
     ("ㅅ", "ㅓ", "ㅇ"): "12456",
     ("ㅆ", "ㅓ", "ㅇ"): "12456",
     ("ㅈ", "ㅓ", "ㅇ"): "12456",
