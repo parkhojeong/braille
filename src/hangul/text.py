@@ -14,7 +14,7 @@ def tokenize_normalized_text(normalized_text: str) -> tuple[Token, ...]:
 
     while index < len(normalized_text):
         for rule in TOKENIZATION_RULES:
-            result = rule(normalized_text, index, group_id)
+            result = rule.read(normalized_text, index, group_id)
             if result is None:
                 continue
 
