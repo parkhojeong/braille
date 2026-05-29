@@ -60,13 +60,25 @@ def rule_7_try_encode_composite_jungseong(jungseong: str) -> list[str] | None:
     return COMPOSITE_JUNGSEONG_DOTS.get(jungseong)
 
 
-def rule_8_or_9_encode_standalone_jamo(ch: str) -> list[str]:
+def rule_3_to_5_try_encode_jongseong_jamo(ch: str, role: str) -> list[str] | None:
+    if role == "jongseong":
+        return encode_jongseong(ch)
+    return None
+
+
+def rule_8_or_9_try_encode_standalone_jamo(ch: str, role: str) -> list[str] | None:
+    if role != "standalone":
+        return None
+
     if ch in CHOSEONG_DOTS or ch in TENSE_CHOSEONG_DOTS:
         return [FULL_SIGN_DOT, *encode_jongseong(ch)]
     return [FULL_SIGN_DOT, *encode_jungseong(ch)]
 
 
-def rule_10_encode_attached_consonant(ch: str) -> list[str]:
+def rule_10_try_encode_attached_consonant(ch: str, role: str) -> list[str] | None:
+    if role != "attached_jongseong":
+        return None
+
     return [ATTACHED_CONSONANT_SIGN_DOT, *encode_jongseong(ch)]
 
 
@@ -176,11 +188,18 @@ def encode_jongseong(jongseong: str) -> list[str]:
 
 
 SyllableRule = Callable[[str, str, str, bool], list[str] | None]
+JamoRule = Callable[[str, str], list[str] | None]
 
 SYLLABLE_RULES: list[SyllableRule] = [
     rule_13_try_encode_abbreviated_a_syllable,
     rule_15_try_encode_abbreviated_syllable,
     rule_17_try_encode_yeong_abbreviation,
+]
+
+JAMO_RULES: list[JamoRule] = [
+    rule_8_or_9_try_encode_standalone_jamo,
+    rule_10_try_encode_attached_consonant,
+    rule_3_to_5_try_encode_jongseong_jamo,
 ]
 
 
@@ -204,18 +223,14 @@ def encode_syllable(
 
 
 def encode_standalone_jamo(ch: str, role: str) -> list[str]:
-    if role == "standalone":
-        return rule_8_or_9_encode_standalone_jamo(ch)
-
-    if role == "attached_jongseong":
-        return rule_10_encode_attached_consonant(ch)
+    for rule in JAMO_RULES:
+        result = rule(ch, role)
+        if result is not None:
+            return result
 
     tense_dots = rule_2_try_encode_tense_choseong(ch)
     if tense_dots is not None:
         return tense_dots
-
-    if role == "jongseong":
-        return encode_jongseong(ch)
 
     if ch in CHOSEONG_DOTS:
         return rule_1_encode_choseong(ch)
@@ -228,6 +243,5 @@ def encode_standalone_jamo(ch: str, role: str) -> list[str]:
         return rule_7_dots
 
     raise NotImplementedError(f"unsupported standalone jamo: {ch}")
-
 
 
