@@ -29,18 +29,19 @@ def try_encode_rules(rules: Sequence[Rule], *args: object) -> list[str] | None:
 
 
 def rule_1_encode_l(l: str) -> list[str]:
+    """제1항 기본 자음자 14개가 첫소리로 쓰일 때에는 다음과 같이 적는다."""
     return encode_dot(L_DOTS, l, "l")
 
 
-# 제1항: 기본 자음자는 초성으로 적는다. 단, 초성 'ㅇ'은 적지 않는다.
 def rule_1_try_encode_l_ㅇ(l: str) -> list[str] | None:
+    """[다만1] ‘ㅇ’이 첫소리로 쓰일 때에는 점자로 이를 표기하지 않는다."""
     if l == "ㅇ":
         return []
     return None
 
 
-# 제2항: 된소리 글자 'ㄲ, ㄸ, ㅃ, ㅆ, ㅉ'은 된소리표 뒤에 기본 자음을 적는다.
 def rule_2_try_encode_l_ㄲㄸㅃㅆㅉ(l: str) -> list[str] | None:
+    """제2항 된소리 글자 ‘ㄲ, ㄸ, ㅃ, ㅆ, ㅉ’이 첫소리로 쓰일 때에는 ‘ㄱ, ㄷ, ㅂ, ㅅ, ㅈ’ 앞에 된소리표 ,을 적어 나타낸다."""
     dots = {
         "ㄲ": ["6", L_DOTS["ㄱ"]],
         "ㄸ": ["6", L_DOTS["ㄷ"]],
@@ -52,11 +53,12 @@ def rule_2_try_encode_l_ㄲㄸㅃㅆㅉ(l: str) -> list[str] | None:
 
 
 def rule_3_encode_t(t: str) -> list[str]:
+    """제3항 기본 자음자 14개가 받침으로 쓰일 때에는 다음과 같이 적는다."""
     return encode_dot(T_DOTS, t, "t")
 
 
-# 제4항: 받침 'ㄲ, ㅆ'은 정해진 받침 점형으로 적는다.
 def rule_4_try_encode_t_ㄲㅆ(t: str) -> list[str] | None:
+    """제4항 쌍받침 ‘ㄲ’은 aa으로 적고, 쌍받침 ‘ㅆ’은 약자인 /으로 적는다."""
     dots = {
         "ㄲ": [T_DOTS["ㄱ"], T_DOTS["ㄱ"]],
         "ㅆ": [T_DOTS["ㅆ"]],
@@ -64,8 +66,8 @@ def rule_4_try_encode_t_ㄲㅆ(t: str) -> list[str] | None:
     return dots.get(t)
 
 
-# 제5항: 겹받침은 각각의 받침을 차례로 적는다.
 def rule_5_try_encode_t_cluster(t: str) -> list[str] | None:
+    """제5항 겹받침은 각 받침 글자를 어울러 다음과 같이 적는다."""
     dots = {
         "ㄳ": [T_DOTS["ㄱ"], T_DOTS["ㅅ"]],
         "ㄵ": [T_DOTS["ㄴ"], T_DOTS["ㅈ"]],
@@ -83,11 +85,12 @@ def rule_5_try_encode_t_cluster(t: str) -> list[str] | None:
 
 
 def rule_6_encode_v(v: str) -> list[str]:
+    """제6항 기본 모음자 10개는 다음과 같이 적는다."""
     return encode_dot(V_DOTS, v, "v")
 
 
-# 제7항: 겹모음은 정해진 모음 점형으로 적는다.
 def rule_7_try_encode_v_cluster(v: str) -> list[str] | None:
+    """제7항 그 밖의 모음자 11개는 다음과 같이 적는다."""
     dots = {
         "ㅐ": ["1235"],
         "ㅒ": [V_DOTS["ㅑ"], "1235"],
@@ -104,15 +107,18 @@ def rule_7_try_encode_v_cluster(v: str) -> list[str] | None:
     return dots.get(v)
 
 
-# 제3~5항: 자모를 받침 역할로 검사할 때에는 받침 규칙을 적용한다.
 def rule_3_to_5_try_encode_t_role(ch: str, role: str) -> list[str] | None:
+    """자모가 받침 역할이면 제3~5항의 받침 규칙으로 적는다."""
     if role == "t":
         return encode_t(ch)
     return None
 
 
-# 제8~9항: 자모가 단독으로 쓰이면 온표를 앞세우고, 자음자는 받침으로 적는다.
 def rule_8_or_9_try_encode_standalone_jamo(ch: str, role: str) -> list[str] | None:
+    """제8항 자음자나 모음자가 단독으로 쓰일 때에는 해당 글자 앞에 온표 =을 적어 나타내며, 자음자는 받침으로 적는다.
+
+    제9항 한글의 자음자가 번호로 쓰일 때에는 온표를 앞세워 받침으로 적는다.
+    """
     if role != "standalone":
         return None
 
@@ -121,15 +127,14 @@ def rule_8_or_9_try_encode_standalone_jamo(ch: str, role: str) -> list[str] | No
     return [FULL_SIGN_DOT, *encode_v(ch)]
 
 
-# 제10항: 단독으로 쓰인 자음자가 단어에 붙어 나오면 붙임표를 앞세워 받침으로 적는다.
 def rule_10_try_encode_attached_t(ch: str, role: str) -> list[str] | None:
+    """제10항 단독으로 쓰인 자음자가 단어에 붙어 나올 때에는 _을 앞세워 받침으로 적는다."""
     if role != "attached_t":
         return None
 
     return [RULE_10_ATTACHED_T_SIGN_DOT, *encode_t(ch)]
 
 
-# 제11항: 모음자에 '예'가 붙어 나오면 그 사이에 구분표를 적어 나타낸다.
 def rule_11_try_encode_예_구분표(
     v: str,
     t: str,
@@ -137,6 +142,7 @@ def rule_11_try_encode_예_구분표(
     next_v: str,
     next_t: str,
 ) -> list[str] | None:
+    """제11항 모음자에 ‘예’가 붙어 나올 때에는 그 사이에 구분표 -을 적어 나타낸다."""
     del next_t
 
     if t == "" and next_l == "ㅇ" and next_v == "ㅖ":
@@ -144,7 +150,6 @@ def rule_11_try_encode_예_구분표(
     return None
 
 
-# 제12항: 'ㅑ, ㅘ, ㅜ, ㅝ'에 '애'가 붙어 나오면 두 모음자 사이에 구분표를 적어 나타낸다.
 def rule_12_try_encode_애_구분표(
     v: str,
     t: str,
@@ -152,6 +157,7 @@ def rule_12_try_encode_애_구분표(
     next_v: str,
     next_t: str,
 ) -> list[str] | None:
+    """제12항 ‘ㅑ, ㅘ, ㅜ, ㅝ’에 ‘애’가 붙어 나올 때에는 두 모음자 사이에 구분표 -을 적어 나타낸다."""
     del next_t
 
     if (
@@ -164,13 +170,13 @@ def rule_12_try_encode_애_구분표(
     return None
 
 
-# 제14항 붙임: '팠'을 적을 때에는 'ㅏ'를 생략하지 않고 적는다.
 def rule_14_try_encode_팠(
     l: str,
     v: str,
     t: str,
     next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
+    """[붙임] ‘팠’을 적을 때에는 ‘ㅏ’를 생략하지 않고 적는다."""
     del next_syllable_l_is_ㅇ
 
     if l == "ㅍ" and v == "ㅏ" and t == "ㅆ":
@@ -178,13 +184,17 @@ def rule_14_try_encode_팠(
     return None
 
 
-# 제13항: '가, 나, 다, 마, 바, 사, 자, 카, 타, 파, 하'는 약자를 사용하여 적는다.
 def rule_13_try_encode_ㅏ_약자(
     l: str,
     v: str,
     t: str,
     next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
+    """제13항 다음 글자들은 약자를 사용하여 적는다.
+
+    [붙임] 위의 글자들에 받침이 있거나 첫소리가 된소리일 때에도 약자를 사용하여 적는다.
+    제14항 ‘나, 다, 마, 바, 자, 카, 타, 파, 하’에 모음이 붙어 나올 때에는 약자를 사용하지 않는다.
+    """
     if v != "ㅏ":
         return None
 
@@ -226,13 +236,16 @@ def rule_13_try_encode_ㅏ_약자(
     return None
 
 
-# 제15항: '억, 언, 얼, 연, 열, 영, 옥, 온, 옹, 운, 울, 은, 을, 인, 것'은 약자로 적는다.
 def rule_15_try_encode_약자(
     l: str,
     v: str,
     t: str,
     next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
+    """제15항 다음 글자들은 약자를 사용하여 적는다.
+
+    [붙임] ‘억, 언, 얼, 연, 열, 영, 옥, 온, 옹, 운, 울, 은, 을, 인, 것’이 포함되어 있는 글자에도 약자를 사용하여 적는다.
+    """
     del next_syllable_l_is_ㅇ
 
     lvt_dots = {
@@ -266,13 +279,13 @@ def rule_15_try_encode_약자(
     return [*encode_l(l), abbreviation_dot]
 
 
-# 제17항: '성, 썽, 정, 쩡, 청'은 'ㅅ, ㅆ, ㅈ, ㅉ, ㅊ' 다음에 '영'의 약자를 적어 나타낸다.
 def rule_17_try_encode_성썽정쩡청(
     l: str,
     v: str,
     t: str,
     next_syllable_l_is_ㅇ: bool,
 ) -> list[str] | None:
+    """제17항 ‘성, 썽, 정, 쩡, 청’을 적을 때에는 ‘ㅅ, ㅆ, ㅈ, ㅉ, ㅊ’ 다음에 ‘영’의 약자 }을 적어 나타낸다."""
     del next_syllable_l_is_ㅇ
 
     dots = {
