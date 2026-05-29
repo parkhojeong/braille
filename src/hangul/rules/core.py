@@ -231,21 +231,8 @@ def rule_13_try_encode_ㅏ_약자(
     return None
 
 
-def rule_15_try_encode_약자(
-    ctx: RuleContext,
-) -> list[str] | None:
-    """제15항 다음 글자들은 약자를 사용하여 적는다.
-
-    [붙임] ‘억, 언, 얼, 연, 열, 영, 옥, 온, 옹, 운, 울, 은, 을, 인, 것’이 포함되어 있는 글자에도 약자를 사용하여 적는다.
-    """
-    lvt_dots = {
-        ("ㄱ", "ㅓ", "ㅅ"): ["456", "234"],
-    }
-    syllable_dots = lvt_dots.get((ctx.l, ctx.v, ctx.t))
-    if syllable_dots is not None:
-        return syllable_dots
-
-    vt_dots = {
+def rule_15_vt_dots() -> dict[tuple[str, str], str]:
+    return {
         ("ㅓ", "ㄱ"): "1456",
         ("ㅓ", "ㄴ"): "23456",
         ("ㅓ", "ㄹ"): "2345",
@@ -261,15 +248,10 @@ def rule_15_try_encode_약자(
         ("ㅡ", "ㄹ"): "2346",
         ("ㅣ", "ㄴ"): "12345",
     }
-    if (ctx.l, ctx.v, ctx.t) == ("ㅅ", "ㅕ", "ㅇ"):
-        return None
 
-    abbreviation_dot = vt_dots.get((ctx.v, ctx.t))
 
-    if abbreviation_dot is not None:
-        return [*encode_l(ctx.l), abbreviation_dot]
-
-    t_parts = {
+def rule_15_split_t(t: str) -> list[str] | None:
+    parts = {
         "ㄲ": ["ㄱ", "ㄱ"],
         "ㄳ": ["ㄱ", "ㅅ"],
         "ㄵ": ["ㄴ", "ㅈ"],
@@ -282,11 +264,40 @@ def rule_15_try_encode_약자(
         "ㄿ": ["ㄹ", "ㅍ"],
         "ㅀ": ["ㄹ", "ㅎ"],
     }
-    parts = t_parts.get(ctx.t)
+    return parts.get(t)
+
+
+def rule_15_try_encode_기본_약자(
+    ctx: RuleContext,
+) -> list[str] | None:
+    """제15항 다음 글자들은 약자를 사용하여 적는다."""
+    lvt_dots = {
+        ("ㄱ", "ㅓ", "ㅅ"): ["456", "234"],
+    }
+    syllable_dots = lvt_dots.get((ctx.l, ctx.v, ctx.t))
+    if syllable_dots is not None:
+        return syllable_dots
+
+    if (ctx.l, ctx.v, ctx.t) == ("ㅅ", "ㅕ", "ㅇ"):
+        return None
+
+    abbreviation_dot = rule_15_vt_dots().get((ctx.v, ctx.t))
+
+    if abbreviation_dot is not None:
+        return [*encode_l(ctx.l), abbreviation_dot]
+
+    return None
+
+
+def rule_15_try_encode_포함_약자(
+    ctx: RuleContext,
+) -> list[str] | None:
+    """[붙임] ‘억, 언, 얼, 연, 열, 영, 옥, 온, 옹, 운, 울, 은, 을, 인, 것’이 포함되어 있는 글자에도 약자를 사용하여 적는다."""
+    parts = rule_15_split_t(ctx.t)
     if parts is None:
         return None
 
-    abbreviation_dot = vt_dots.get((ctx.v, parts[0]))
+    abbreviation_dot = rule_15_vt_dots().get((ctx.v, parts[0]))
     if abbreviation_dot is None:
         return None
 
@@ -393,7 +404,8 @@ SYLLABLE_RULES: list[SyllableRule] = [
     rule_14_try_encode_팠,
     rule_13_try_encode_ㅏ_약자,
     rule_16_try_encode_껏,
-    rule_15_try_encode_약자,
+    rule_15_try_encode_기본_약자,
+    rule_15_try_encode_포함_약자,
     rule_17_try_encode_성썽정쩡청,
 ]
 
