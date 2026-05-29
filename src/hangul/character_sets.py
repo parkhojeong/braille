@@ -1,4 +1,4 @@
-PUNCTUATION = {",", ".", "!", "?", "[", "]"}
+PUNCTUATION = {"(", ")", ",", ".", "!", "?", "[", "]"}
 
 STANDALONE_CONSONANTS = {
     "ㄱ",
