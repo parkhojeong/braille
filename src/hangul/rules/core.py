@@ -95,7 +95,7 @@ def rule_10_try_encode_attached_consonant(ch: str, role: str) -> list[str] | Non
     return [ATTACHED_CONSONANT_SIGN_DOT, *encode_t(ch)]
 
 
-def rule_11_try_encode_ye_vowel_sequence_separator(
+def rule_11_try_encode_예_구분표(
     v: str,
     t: str,
     next_l: str,
@@ -109,7 +109,7 @@ def rule_11_try_encode_ye_vowel_sequence_separator(
     return None
 
 
-def rule_12_try_encode_ae_vowel_sequence_separator(
+def rule_12_try_encode_애_구분표(
     v: str,
     t: str,
     next_l: str,
@@ -191,7 +191,7 @@ def rule_15_try_encode_abbreviated_syllable(
     return [*encode_l(l), abbreviation_dot]
 
 
-def rule_17_try_encode_yeong_abbreviation(
+def rule_17_try_encode_성썽정쩡청(
     l: str,
     v: str,
     t: str,
@@ -257,15 +257,15 @@ T_RULES: list[Callable[[str], list[str] | None]] = [
 ]
 
 VOWEL_SEQUENCE_RULES: list[VowelSequenceRule] = [
-    rule_11_try_encode_ye_vowel_sequence_separator,
-    rule_12_try_encode_ae_vowel_sequence_separator,
+    rule_11_try_encode_예_구분표,
+    rule_12_try_encode_애_구분표,
 ]
 
 SYLLABLE_RULES: list[SyllableRule] = [
     rule_14_try_encode_팠,
     rule_13_try_encode_abbreviated_a_syllable,
     rule_15_try_encode_abbreviated_syllable,
-    rule_17_try_encode_yeong_abbreviation,
+    rule_17_try_encode_성썽정쩡청,
 ]
 
 JAMO_ROLE_RULES: list[JamoRoleRule] = [
