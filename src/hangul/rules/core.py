@@ -128,6 +128,19 @@ def rule_12_try_encode_ae_vowel_sequence_separator(
     return None
 
 
+def rule_14_try_encode_팠(
+    l: str,
+    v: str,
+    t: str,
+    next_syllable_l_is_ieung: bool,
+) -> list[str] | None:
+    del next_syllable_l_is_ieung
+
+    if l == "ㅍ" and v == "ㅏ" and t == "ㅆ":
+        return [*encode_l(l), *encode_v(v), *encode_t(t)]
+    return None
+
+
 def rule_13_try_encode_abbreviated_a_syllable(
     l: str,
     v: str,
@@ -249,6 +262,7 @@ VOWEL_SEQUENCE_RULES: list[VowelSequenceRule] = [
 ]
 
 SYLLABLE_RULES: list[SyllableRule] = [
+    rule_14_try_encode_팠,
     rule_13_try_encode_abbreviated_a_syllable,
     rule_15_try_encode_abbreviated_syllable,
     rule_17_try_encode_yeong_abbreviation,

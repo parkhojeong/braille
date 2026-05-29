@@ -5,7 +5,11 @@ import pytest
 
 from braille import ascii_to_dots, dots_to_unicode
 from hangul import print_to_braille_dots
-from hangul.tests.test_support import SUPPORTED_RULES, jamo_role_for_case
+from hangul.tests.test_support import (
+    SUPPORTED_RULES,
+    is_supported_case,
+    jamo_role_for_case,
+)
 
 HANGUL_ROOT = Path(__file__).resolve().parent.parent
 RULE_CASES_ROOT = HANGUL_ROOT / "rules" / "cases"
@@ -35,6 +39,7 @@ def trim_blank_edges(cells: list[str]) -> list[str]:
         case
         for rule in SUPPORTED_RULES
         for case in iter_rule_cases(rule)
+        if is_supported_case(case[0], case[1])
     ],
 )
 def test_supported_ko_rules(path, group_description, print_text, expected):

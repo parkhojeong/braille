@@ -1,6 +1,14 @@
 from pathlib import Path
 
-SUPPORTED_RULES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+SUPPORTED_RULES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+
+UNSUPPORTED_LAYOUT_GROUPS = {
+    ("rule-14.json", "[다만] 그 사이에서 줄이 바뀔 때에는 약자를 사용하여 적는다."),
+}
+
+
+def is_supported_case(path: Path, group_description: str) -> bool:
+    return (path.name, group_description) not in UNSUPPORTED_LAYOUT_GROUPS
 
 
 def jamo_role_for_case(path: Path, group_description: str) -> str:
