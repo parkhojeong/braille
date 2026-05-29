@@ -19,11 +19,13 @@ SUPPORTED_RULES = [
     16,
     17,
     18,
+    28,
 ]
 
 UNSUPPORTED_LAYOUT_GROUPS = {
     ("rule-14.json", "[다만] 그 사이에서 줄이 바뀔 때에는 약자를 사용하여 적는다."),
     ("rule-18.json", "약어를 사용하는 예"),
+    ("rule-28.json", "[붙임] 대문자 표기 예"),
 }
 
 

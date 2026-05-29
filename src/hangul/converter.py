@@ -1,11 +1,12 @@
 from collections.abc import Callable
 
-from braille.ascii import ascii_to_dots, dots_to_ascii
+from braille.ascii import dots_to_ascii
 
 from .rules import (
     RuleContext,
     RuleResult,
     encode_jamo,
+    encode_latin,
     encode_syllable,
     encode_vowel_sequence_separator,
     encode_word,
@@ -40,27 +41,6 @@ STANDALONE_CONSONANTS = {
 }
 
 TokenPhase = Callable[[RuleContext, str], RuleResult | None]
-
-
-def encode_latin_run(text: str) -> list[str]:
-    cells: list[str] = ascii_to_dots("0")
-    index = 0
-
-    if text and text[0].isupper():
-        cells.extend(ascii_to_dots(","))
-
-    lower_text = text.lower()
-    while index < len(lower_text):
-        if lower_text[index : index + 2] == "ar":
-            cells.extend(ascii_to_dots(">"))
-            index += 2
-            continue
-
-        cells.extend(ascii_to_dots(lower_text[index]))
-        index += 1
-
-    cells.extend(TEXT_PUNCTUATION_DOTS["."])
-    return cells
 
 
 def should_skip_space(ctx: RuleContext) -> bool:
@@ -101,9 +81,7 @@ def encode_word_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
 
 def encode_latin_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
     del jamo_role
-    if ctx.token.kind != "LATIN_RUN":
-        return None
-    return RuleResult(encode_latin_run(ctx.token.text))
+    return encode_latin(ctx)
 
 
 def encode_space_phase(ctx: RuleContext, jamo_role: str) -> RuleResult | None:
