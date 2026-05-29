@@ -14,10 +14,11 @@ def encode_syllable(ctx: RuleContext) -> list[str]:
     if result is not None:
         return result
 
+    syllable = ctx.syllable
     return [
-        *encode_l(ctx.l),
-        *encode_v(ctx.v),
-        *encode_t(ctx.t),
+        *encode_l(syllable.l),
+        *encode_v(syllable.v),
+        *encode_t(syllable.t),
     ]
 
 

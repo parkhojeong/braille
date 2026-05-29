@@ -15,16 +15,16 @@ def rule_14_try_encode_팠(
     ctx: RuleContext,
 ) -> list[str] | None:
     """[붙임] ‘팠’을 적을 때에는 ‘ㅏ’를 생략하지 않고 적는다."""
-    if ctx.l == "ㅍ" and ctx.v == "ㅏ" and ctx.t == "ㅆ":
+    if ctx.syllable.matches("ㅍ", "ㅏ", "ㅆ"):
         return [*encode_l(ctx.l), *encode_v(ctx.v), *encode_t(ctx.t)]
     return None
 
 
 def should_skip_rule_13_for_following_vowel(ctx: RuleContext) -> bool:
     return (
-        ctx.t == ""
+        not ctx.syllable.has_final
         and ctx.next_syllable is not None
-        and ctx.next_syllable[0] == "ㅇ"
+        and ctx.next_syllable.l == "ㅇ"
         and ctx.l in RULE_13_VOWEL_FOLLOWING_EXCEPTION_L
     )
 
@@ -74,11 +74,11 @@ def rule_15_try_encode_기본_약자(
     ctx: RuleContext,
 ) -> list[str] | None:
     """제15항 다음 글자들은 약자를 사용하여 적는다."""
-    syllable_dots = RULE_15_LVT_ABBREVIATION_DOTS.get((ctx.l, ctx.v, ctx.t))
+    syllable_dots = RULE_15_LVT_ABBREVIATION_DOTS.get(ctx.syllable.parts())
     if syllable_dots is not None:
         return [*syllable_dots]
 
-    if (ctx.l, ctx.v, ctx.t) == ("ㅅ", "ㅕ", "ㅇ"):
+    if ctx.syllable.matches("ㅅ", "ㅕ", "ㅇ"):
         return None
 
     abbreviation_dot = RULE_15_VT_ABBREVIATION_DOTS.get((ctx.v, ctx.t))
@@ -112,7 +112,7 @@ def rule_16_try_encode_껏(
     ctx: RuleContext,
 ) -> list[str] | None:
     """제16항 ‘까, 싸, 껏’을 적을 때에는 ‘가, 사, 것’의 약자 앞에 된소리표를 적어 나타낸다."""
-    if ctx.l == "ㄲ" and ctx.v == "ㅓ" and ctx.t == "ㅅ":
+    if ctx.syllable.matches("ㄲ", "ㅓ", "ㅅ"):
         return ["6", *rule_15_encode_것()]
     return None
 
@@ -125,14 +125,13 @@ def rule_17_try_encode_성썽정쩡청(
     ctx: RuleContext,
 ) -> list[str] | None:
     """제17항 ‘성, 썽, 정, 쩡, 청’을 적을 때에는 ‘ㅅ, ㅆ, ㅈ, ㅉ, ㅊ’ 다음에 ‘영’의 약자 }을 적어 나타낸다."""
-    if (ctx.l, ctx.v, ctx.t) == ("ㅈ", "ㅓ", "ㅇ") and ctx.next_syllable == (
-        "ㅅ",
-        "ㅓ",
-        "ㅇ",
+    if ctx.syllable.matches("ㅈ", "ㅓ", "ㅇ") and (
+        ctx.next_syllable is not None
+        and ctx.next_syllable.matches("ㅅ", "ㅓ", "ㅇ")
     ):
         return encode_l(ctx.l)
 
-    abbreviation_dot = RULE_17_ABBREVIATION_DOTS.get((ctx.l, ctx.v, ctx.t))
+    abbreviation_dot = RULE_17_ABBREVIATION_DOTS.get(ctx.syllable.parts())
     if abbreviation_dot is None:
         return None
 

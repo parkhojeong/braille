@@ -29,6 +29,9 @@ def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
         "ㅏ",
         "",
     )
+    assert tokens[0].syllable.parts() == ("ㄴ", "ㅏ", "")
+    assert tokens[0].syllable.matches("ㄴ", "ㅏ", "")
+    assert not tokens[0].syllable.has_final
     assert tokens[0].is_hangul
     assert not tokens[0].is_latin
     assert tokens[2].is_space

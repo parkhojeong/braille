@@ -3,12 +3,10 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from ..tokens import Token
+from ..syllables import Syllable
 
 if TYPE_CHECKING:
     from ..spans import TokenSpan
-
-SyllableParts = tuple[str, str, str]
-
 
 @dataclass(frozen=True)
 class RuleResult:
@@ -40,24 +38,28 @@ class RuleContext:
         return self.tokens[self.index + 1]
 
     @property
-    def next_syllable(self) -> SyllableParts | None:
+    def syllable(self) -> Syllable:
+        return self.token.syllable_or_empty
+
+    @property
+    def next_syllable(self) -> Syllable | None:
         token = self.next_token
         if token is None or not token.is_hangul:
             return None
 
-        return token.l or "", token.v or "", token.t or ""
+        return token.syllable
 
     @property
     def l(self) -> str:
-        return self.token.l or ""
+        return self.syllable.l
 
     @property
     def v(self) -> str:
-        return self.token.v or ""
+        return self.syllable.v
 
     @property
     def t(self) -> str:
-        return self.token.t or ""
+        return self.syllable.t
 
     @property
     def is_group_start(self) -> bool:

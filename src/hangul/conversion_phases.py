@@ -48,12 +48,14 @@ def encode_next_syllable_separator(tokens: Sequence[Token], index: int) -> list[
     if not token.is_hangul or not next_token.is_hangul:
         return []
 
+    syllable = token.syllable_or_empty
+    next_syllable = next_token.syllable_or_empty
     return encode_vowel_sequence_separator(
-        token.v or "",
-        token.t or "",
-        next_token.l or "",
-        next_token.v or "",
-        next_token.t or "",
+        syllable.v,
+        syllable.t,
+        next_syllable.l,
+        next_syllable.v,
+        next_syllable.t,
     )
 
 

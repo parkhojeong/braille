@@ -42,6 +42,12 @@ class Token:
         return self.syllable.t
 
     @property
+    def syllable_or_empty(self) -> Syllable:
+        if self.syllable is None:
+            return Syllable("", "", "")
+        return self.syllable
+
+    @property
     def is_hangul(self) -> bool:
         return self.kind == "HANGUL_SYLLABLE"
 
