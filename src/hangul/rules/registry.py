@@ -1,12 +1,12 @@
 from collections.abc import Callable
 
 from .context import RuleContext
-from .jamo import (
+from .jamo_context_rules import (
     rule_3_to_5_try_encode_t_role,
     rule_8_or_9_try_encode_standalone_jamo,
     rule_10_try_encode_attached_t,
 )
-from .syllable import (
+from .syllable_rules import (
     rule_13_try_encode_ㅏ_약자,
     rule_14_try_encode_팠,
     rule_15_try_encode_기본_약자,

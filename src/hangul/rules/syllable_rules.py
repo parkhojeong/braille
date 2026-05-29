@@ -1,5 +1,6 @@
 from .context import RuleContext
-from .jamo import encode_l, encode_t, encode_tense_l, encode_v
+from .jamo_encoder import encode_l, encode_t, encode_v
+from .jamo_basic_rules import encode_tense_l
 from .rule_tables import (
     RULE_13_A_ABBREVIATION_DOTS,
     RULE_13_VOWEL_FOLLOWING_EXCEPTION_L,

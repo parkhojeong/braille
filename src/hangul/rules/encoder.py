@@ -1,6 +1,6 @@
 from .context import RuleContext
 from .dispatch import try_encode_rules
-from .jamo import (
+from .jamo_encoder import (
     encode_l,
     encode_plain_jamo,
     encode_t,
