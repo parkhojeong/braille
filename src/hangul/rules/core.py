@@ -18,6 +18,7 @@ def encode_dot(mapping: dict[str, str], key: str, label: str) -> list[str]:
 
 
 Rule = Callable[..., list[str] | None]
+SyllableParts = tuple[str, str, str]
 
 
 def try_encode_rules(rules: Sequence[Rule], *args: object) -> list[str] | None:
@@ -174,10 +175,10 @@ def rule_14_try_encode_팠(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ㅇ: bool,
+    next_syllable: SyllableParts | None,
 ) -> list[str] | None:
     """[붙임] ‘팠’을 적을 때에는 ‘ㅏ’를 생략하지 않고 적는다."""
-    del next_syllable_l_is_ㅇ
+    del next_syllable
 
     if l == "ㅍ" and v == "ㅏ" and t == "ㅆ":
         return [*encode_l(l), *encode_v(v), *encode_t(t)]
@@ -188,7 +189,7 @@ def rule_13_try_encode_ㅏ_약자(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ㅇ: bool,
+    next_syllable: SyllableParts | None,
 ) -> list[str] | None:
     """제13항 다음 글자들은 약자를 사용하여 적는다.
 
@@ -199,7 +200,9 @@ def rule_13_try_encode_ㅏ_약자(
         return None
 
     if (
-        next_syllable_l_is_ㅇ
+        t == ""
+        and next_syllable is not None
+        and next_syllable[0] == "ㅇ"
         and l in {"ㄴ", "ㄷ", "ㅁ", "ㅂ", "ㅈ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"}
     ):
         return None
@@ -240,13 +243,13 @@ def rule_15_try_encode_약자(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ㅇ: bool,
+    next_syllable: SyllableParts | None,
 ) -> list[str] | None:
     """제15항 다음 글자들은 약자를 사용하여 적는다.
 
     [붙임] ‘억, 언, 얼, 연, 열, 영, 옥, 온, 옹, 운, 울, 은, 을, 인, 것’이 포함되어 있는 글자에도 약자를 사용하여 적는다.
     """
-    del next_syllable_l_is_ㅇ
+    del next_syllable
 
     lvt_dots = {
         ("ㄱ", "ㅓ", "ㅅ"): ["456", "234"],
@@ -271,22 +274,66 @@ def rule_15_try_encode_약자(
         ("ㅡ", "ㄹ"): "2346",
         ("ㅣ", "ㄴ"): "12345",
     }
+    if (l, v, t) == ("ㅅ", "ㅕ", "ㅇ"):
+        return None
+
     abbreviation_dot = vt_dots.get((v, t))
 
+    if abbreviation_dot is not None:
+        return [*encode_l(l), abbreviation_dot]
+
+    t_parts = {
+        "ㄲ": ["ㄱ", "ㄱ"],
+        "ㄳ": ["ㄱ", "ㅅ"],
+        "ㄵ": ["ㄴ", "ㅈ"],
+        "ㄶ": ["ㄴ", "ㅎ"],
+        "ㄺ": ["ㄹ", "ㄱ"],
+        "ㄻ": ["ㄹ", "ㅁ"],
+        "ㄼ": ["ㄹ", "ㅂ"],
+        "ㄽ": ["ㄹ", "ㅅ"],
+        "ㄾ": ["ㄹ", "ㅌ"],
+        "ㄿ": ["ㄹ", "ㅍ"],
+        "ㅀ": ["ㄹ", "ㅎ"],
+    }
+    parts = t_parts.get(t)
+    if parts is None:
+        return None
+
+    abbreviation_dot = vt_dots.get((v, parts[0]))
     if abbreviation_dot is None:
         return None
 
-    return [*encode_l(l), abbreviation_dot]
+    remaining_t_dots = [
+        dot
+        for remaining_t in parts[1:]
+        for dot in encode_t(remaining_t)
+    ]
+    return [*encode_l(l), abbreviation_dot, *remaining_t_dots]
+
+
+def rule_16_try_encode_껏(
+    l: str,
+    v: str,
+    t: str,
+    next_syllable: SyllableParts | None,
+) -> list[str] | None:
+    """제16항 ‘까, 싸, 껏’을 적을 때에는 ‘가, 사, 것’의 약자 앞에 된소리표를 적어 나타낸다."""
+    del next_syllable
+
+    if l == "ㄲ" and v == "ㅓ" and t == "ㅅ":
+        return ["6", *rule_15_try_encode_약자("ㄱ", "ㅓ", "ㅅ", None)]
+    return None
 
 
 def rule_17_try_encode_성썽정쩡청(
     l: str,
     v: str,
     t: str,
-    next_syllable_l_is_ㅇ: bool,
+    next_syllable: SyllableParts | None,
 ) -> list[str] | None:
     """제17항 ‘성, 썽, 정, 쩡, 청’을 적을 때에는 ‘ㅅ, ㅆ, ㅈ, ㅉ, ㅊ’ 다음에 ‘영’의 약자 }을 적어 나타낸다."""
-    del next_syllable_l_is_ㅇ
+    if (l, v, t) == ("ㅈ", "ㅓ", "ㅇ") and next_syllable == ("ㅅ", "ㅓ", "ㅇ"):
+        return encode_l(l)
 
     dots = {
         ("ㅅ", "ㅓ", "ㅇ"): "12456",
@@ -332,7 +379,7 @@ def encode_t(t: str) -> list[str]:
     return rule_3_encode_t(t)
 
 
-SyllableRule = Callable[[str, str, str, bool], list[str] | None]
+SyllableRule = Callable[[str, str, str, SyllableParts | None], list[str] | None]
 JamoRoleRule = Callable[[str, str], list[str] | None]
 VowelSequenceRule = Callable[[str, str, str, str, str], list[str] | None]
 
@@ -358,6 +405,7 @@ VOWEL_SEQUENCE_RULES: list[VowelSequenceRule] = [
 SYLLABLE_RULES: list[SyllableRule] = [
     rule_14_try_encode_팠,
     rule_13_try_encode_ㅏ_약자,
+    rule_16_try_encode_껏,
     rule_15_try_encode_약자,
     rule_17_try_encode_성썽정쩡청,
 ]
@@ -374,14 +422,14 @@ def encode_syllable(
     v: str,
     t: str,
     *,
-    next_syllable_l_is_ㅇ: bool = False,
+    next_syllable: SyllableParts | None = None,
 ) -> list[str]:
     result = try_encode_rules(
         SYLLABLE_RULES,
         l,
         v,
         t,
-        next_syllable_l_is_ㅇ,
+        next_syllable,
     )
     if result is not None:
         return result

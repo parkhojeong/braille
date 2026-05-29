@@ -24,7 +24,7 @@ class Token:
     t: str | None = None
 
 
-PUNCTUATION = {",", ".", "!", "[", "]"}
+PUNCTUATION = {",", ".", "!", "?", "[", "]"}
 
 
 def is_ascii_letter(ch: str) -> bool:
