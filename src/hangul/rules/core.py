@@ -1,22 +1,11 @@
 from collections.abc import Callable, Sequence
 
 from .tables import (
-    RULE_13_L_ㅏ_약자_DOTS,
-    RULE_10_ATTACHED_T_SIGN_DOT,
-    L_DOTS,
-    RULE_5_T_CLUSTER_DOTS,
-    RULE_7_V_CLUSTER_DOTS,
-    RULE_4_T_ㄲㅆ_DOTS,
     FULL_SIGN_DOT,
+    L_DOTS,
+    RULE_10_ATTACHED_T_SIGN_DOT,
     T_DOTS,
     V_DOTS,
-    RULE_14_NEXT_L_ㅇ_CANCELS_RULE_13,
-    RULE_12_PRECEDING_V,
-    RULE_15_LVT_약자_DOTS,
-    RULE_15_VT_약자_DOTS,
-    RULE_17_LVT_ABBREVIATIONS,
-    RULE_13_L_ㄲㄸㅃㅆㅉ_ㅏ_약자_DOTS,
-    RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS,
     VOWEL_SEQUENCE_SEPARATOR_DOT,
 )
 
@@ -52,7 +41,14 @@ def rule_1_try_encode_l_ㅇ(l: str) -> list[str] | None:
 
 # 제2항: 된소리 글자 'ㄲ, ㄸ, ㅃ, ㅆ, ㅉ'은 된소리표 뒤에 기본 자음을 적는다.
 def rule_2_try_encode_l_ㄲㄸㅃㅆㅉ(l: str) -> list[str] | None:
-    return RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS.get(l)
+    dots = {
+        "ㄲ": ["6", L_DOTS["ㄱ"]],
+        "ㄸ": ["6", L_DOTS["ㄷ"]],
+        "ㅃ": ["6", L_DOTS["ㅂ"]],
+        "ㅆ": ["6", L_DOTS["ㅅ"]],
+        "ㅉ": ["6", L_DOTS["ㅈ"]],
+    }
+    return dots.get(l)
 
 
 def rule_3_encode_t(t: str) -> list[str]:
@@ -61,12 +57,29 @@ def rule_3_encode_t(t: str) -> list[str]:
 
 # 제4항: 받침 'ㄲ, ㅆ'은 정해진 받침 점형으로 적는다.
 def rule_4_try_encode_t_ㄲㅆ(t: str) -> list[str] | None:
-    return RULE_4_T_ㄲㅆ_DOTS.get(t)
+    dots = {
+        "ㄲ": [T_DOTS["ㄱ"], T_DOTS["ㄱ"]],
+        "ㅆ": [T_DOTS["ㅆ"]],
+    }
+    return dots.get(t)
 
 
 # 제5항: 겹받침은 각각의 받침을 차례로 적는다.
 def rule_5_try_encode_t_cluster(t: str) -> list[str] | None:
-    return RULE_5_T_CLUSTER_DOTS.get(t)
+    dots = {
+        "ㄳ": [T_DOTS["ㄱ"], T_DOTS["ㅅ"]],
+        "ㄵ": [T_DOTS["ㄴ"], T_DOTS["ㅈ"]],
+        "ㄶ": [T_DOTS["ㄴ"], T_DOTS["ㅎ"]],
+        "ㄺ": [T_DOTS["ㄹ"], T_DOTS["ㄱ"]],
+        "ㄻ": [T_DOTS["ㄹ"], T_DOTS["ㅁ"]],
+        "ㄼ": [T_DOTS["ㄹ"], T_DOTS["ㅂ"]],
+        "ㄽ": [T_DOTS["ㄹ"], T_DOTS["ㅅ"]],
+        "ㄾ": [T_DOTS["ㄹ"], T_DOTS["ㅌ"]],
+        "ㄿ": [T_DOTS["ㄹ"], T_DOTS["ㅍ"]],
+        "ㅀ": [T_DOTS["ㄹ"], T_DOTS["ㅎ"]],
+        "ㅄ": [T_DOTS["ㅂ"], T_DOTS["ㅅ"]],
+    }
+    return dots.get(t)
 
 
 def rule_6_encode_v(v: str) -> list[str]:
@@ -75,7 +88,20 @@ def rule_6_encode_v(v: str) -> list[str]:
 
 # 제7항: 겹모음은 정해진 모음 점형으로 적는다.
 def rule_7_try_encode_v_cluster(v: str) -> list[str] | None:
-    return RULE_7_V_CLUSTER_DOTS.get(v)
+    dots = {
+        "ㅐ": ["1235"],
+        "ㅒ": [V_DOTS["ㅑ"], "1235"],
+        "ㅔ": ["1345"],
+        "ㅖ": ["34"],
+        "ㅘ": ["1236"],
+        "ㅙ": ["1236", "1235"],
+        "ㅚ": ["13456"],
+        "ㅝ": ["1234"],
+        "ㅞ": ["1234", "1235"],
+        "ㅟ": [V_DOTS["ㅜ"], "1235"],
+        "ㅢ": ["2456"],
+    }
+    return dots.get(v)
 
 
 # 제3~5항: 자모를 받침 역할로 검사할 때에는 받침 규칙을 적용한다.
@@ -90,7 +116,7 @@ def rule_8_or_9_try_encode_standalone_jamo(ch: str, role: str) -> list[str] | No
     if role != "standalone":
         return None
 
-    if ch in L_DOTS or ch in RULE_2_L_ㄲㄸㅃㅆㅉ_DOTS:
+    if ch in L_DOTS or rule_2_try_encode_l_ㄲㄸㅃㅆㅉ(ch) is not None:
         return [FULL_SIGN_DOT, *encode_t(ch)]
     return [FULL_SIGN_DOT, *encode_v(ch)]
 
@@ -130,7 +156,7 @@ def rule_12_try_encode_애_구분표(
 
     if (
         t == ""
-        and v in RULE_12_PRECEDING_V
+        and v in {"ㅑ", "ㅘ", "ㅜ", "ㅝ"}
         and next_l == "ㅇ"
         and next_v == "ㅐ"
     ):
@@ -164,15 +190,36 @@ def rule_13_try_encode_ㅏ_약자(
 
     if (
         next_syllable_l_is_ㅇ
-        and l in RULE_14_NEXT_L_ㅇ_CANCELS_RULE_13
+        and l in {"ㄴ", "ㄷ", "ㅁ", "ㅂ", "ㅈ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"}
     ):
         return None
 
-    tense_dots = RULE_13_L_ㄲㄸㅃㅆㅉ_ㅏ_약자_DOTS.get(l)
+    dots = {
+        "ㄱ": "1246",
+        "ㄴ": L_DOTS["ㄴ"],
+        "ㄷ": L_DOTS["ㄷ"],
+        "ㅁ": L_DOTS["ㅁ"],
+        "ㅂ": L_DOTS["ㅂ"],
+        "ㅅ": "123",
+        "ㅈ": L_DOTS["ㅈ"],
+        "ㅋ": L_DOTS["ㅋ"],
+        "ㅌ": L_DOTS["ㅌ"],
+        "ㅍ": L_DOTS["ㅍ"],
+        "ㅎ": L_DOTS["ㅎ"],
+    }
+    ㄲㄸㅃㅆㅉ_dots = {
+        "ㄲ": ["6", dots["ㄱ"]],
+        "ㄸ": ["6", dots["ㄷ"]],
+        "ㅃ": ["6", dots["ㅂ"]],
+        "ㅆ": ["6", dots["ㅅ"]],
+        "ㅉ": ["6", dots["ㅈ"]],
+    }
+
+    tense_dots = ㄲㄸㅃㅆㅉ_dots.get(l)
     if tense_dots is not None:
         return [*tense_dots, *encode_t(t)]
 
-    dot = RULE_13_L_ㅏ_약자_DOTS.get(l)
+    dot = dots.get(l)
     if dot is not None:
         return [dot, *encode_t(t)]
 
@@ -188,15 +235,30 @@ def rule_15_try_encode_약자(
 ) -> list[str] | None:
     del next_syllable_l_is_ㅇ
 
-    syllable_dots = RULE_15_LVT_약자_DOTS.get(
-        (l, v, t)
-    )
+    lvt_dots = {
+        ("ㄱ", "ㅓ", "ㅅ"): ["456", "234"],
+    }
+    syllable_dots = lvt_dots.get((l, v, t))
     if syllable_dots is not None:
         return syllable_dots
 
-    abbreviation_dot = RULE_15_VT_약자_DOTS.get(
-        (v, t)
-    )
+    vt_dots = {
+        ("ㅓ", "ㄱ"): "1456",
+        ("ㅓ", "ㄴ"): "23456",
+        ("ㅓ", "ㄹ"): "2345",
+        ("ㅕ", "ㄴ"): "16",
+        ("ㅕ", "ㄹ"): "1256",
+        ("ㅕ", "ㅇ"): "12456",
+        ("ㅗ", "ㄱ"): "1346",
+        ("ㅗ", "ㄴ"): "12356",
+        ("ㅗ", "ㅇ"): "123456",
+        ("ㅜ", "ㄴ"): "1245",
+        ("ㅜ", "ㄹ"): "12346",
+        ("ㅡ", "ㄴ"): "1356",
+        ("ㅡ", "ㄹ"): "2346",
+        ("ㅣ", "ㄴ"): "12345",
+    }
+    abbreviation_dot = vt_dots.get((v, t))
 
     if abbreviation_dot is None:
         return None
@@ -213,9 +275,14 @@ def rule_17_try_encode_성썽정쩡청(
 ) -> list[str] | None:
     del next_syllable_l_is_ㅇ
 
-    abbreviation_dot = RULE_17_LVT_ABBREVIATIONS.get(
-        (l, v, t)
-    )
+    dots = {
+        ("ㅅ", "ㅓ", "ㅇ"): "12456",
+        ("ㅆ", "ㅓ", "ㅇ"): "12456",
+        ("ㅈ", "ㅓ", "ㅇ"): "12456",
+        ("ㅉ", "ㅓ", "ㅇ"): "12456",
+        ("ㅊ", "ㅓ", "ㅇ"): "12456",
+    }
+    abbreviation_dot = dots.get((l, v, t))
     if abbreviation_dot is None:
         return None
 
