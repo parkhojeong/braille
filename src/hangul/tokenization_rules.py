@@ -7,6 +7,7 @@ from .character_sets import (
     is_greek_letter,
 )
 from .decomposition import decompose_precomposed_hangul_syllable
+from .syllables import Syllable
 from .tokens import Token
 
 CharPredicate = Callable[[str], bool]
@@ -82,9 +83,7 @@ def try_hangul_syllable_token(
             "HANGUL_SYLLABLE",
             text[start],
             group_id,
-            l=l,
-            v=v,
-            t=t,
+            Syllable(l, v, t),
         ),
         start + 1,
     )

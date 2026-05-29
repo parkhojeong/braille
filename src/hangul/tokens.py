@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Literal
 
+from .syllables import Syllable
+
 TokenKind = Literal[
     "GREEK",
     "HANGUL_SYLLABLE",
@@ -19,9 +21,25 @@ class Token:
     kind: TokenKind
     text: str
     group_id: int | None = None
-    l: str | None = None
-    v: str | None = None
-    t: str | None = None
+    syllable: Syllable | None = None
+
+    @property
+    def l(self) -> str | None:
+        if self.syllable is None:
+            return None
+        return self.syllable.l
+
+    @property
+    def v(self) -> str | None:
+        if self.syllable is None:
+            return None
+        return self.syllable.v
+
+    @property
+    def t(self) -> str | None:
+        if self.syllable is None:
+            return None
+        return self.syllable.t
 
     @property
     def is_hangul(self) -> bool:
