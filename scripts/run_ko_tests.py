@@ -8,15 +8,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from braille import ascii_to_dots, dots_to_ascii, dots_to_unicode
-from hangul import print_to_braille_dots
-from hangul.tests.test_support import standalone_jamo_for_case
+from hangul import inkprint_to_braille_dots
+from hangul.tests.test_support import jamo_role_for_case
 
 
 def iter_cases(path: Path):
     data = json.loads(path.read_text(encoding="utf-8"))
     for group in data["groups"]:
-        for print_text, expected in group["tests"].items():
-            yield group["description"], print_text, expected
+        for inkprint_text, expected in group["tests"].items():
+            yield group["description"], inkprint_text, expected
 
 
 def trim_blank_edges(cells: list[str]) -> list[str]:
@@ -33,17 +33,19 @@ def run(path: Path) -> int:
     failures = []
     total = 0
 
-    for group_description, print_text, expected in iter_cases(path):
+    for group_description, inkprint_text, expected in iter_cases(path):
         total += 1
         try:
-            actual_dots = print_to_braille_dots(
-                print_text,
-                standalone_jamo=standalone_jamo_for_case(path, group_description),
+            actual_dots = inkprint_to_braille_dots(
+                inkprint_text,
+                jamo_role=jamo_role_for_case(path, group_description),
             )
             actual_ascii = dots_to_ascii(actual_dots)
             actual_unicode = dots_to_unicode(actual_dots)
         except Exception as exc:
-            failures.append((group_description, print_text, expected, None, None, str(exc)))
+            failures.append(
+                (group_description, inkprint_text, expected, None, None, str(exc))
+            )
             continue
 
         expected_dots = trim_blank_edges(ascii_to_dots(expected["ascii"]))
@@ -55,11 +57,25 @@ def run(path: Path) -> int:
             or comparable_actual_unicode != expected_unicode
         ):
             failures.append(
-                (group_description, print_text, expected, actual_ascii, actual_unicode, None)
+                (
+                    group_description,
+                    inkprint_text,
+                    expected,
+                    actual_ascii,
+                    actual_unicode,
+                    None,
+                )
             )
 
-    for group_description, print_text, expected, actual_ascii, actual_unicode, error in failures:
-        print(f"FAIL {path.name} / {group_description} / {print_text}")
+    for (
+        group_description,
+        inkprint_text,
+        expected,
+        actual_ascii,
+        actual_unicode,
+        error,
+    ) in failures:
+        print(f"FAIL {path.name} / {group_description} / {inkprint_text}")
         if error:
             print(f"  error:    {error}")
         print(f"  expected: {expected['ascii']} / {expected['unicode']}")

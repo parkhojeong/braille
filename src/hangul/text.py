@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .decomposition import normalize_print
+from .decomposition import normalize_inkprint
 from .rules.context import RuleContext
 from .spans import SpanScanner, TokenSpan
 from .tokenization_registry import TOKENIZATION_RULES
@@ -58,13 +58,13 @@ class Text:
     spans: tuple[TokenSpan, ...]
 
     @classmethod
-    def from_print(
+    def from_inkprint(
         cls,
         raw: str,
         *,
         span_scanners: tuple[SpanScanner, ...] = (),
     ) -> "Text":
-        normalized = normalize_print(raw)
+        normalized = normalize_inkprint(raw)
         tokens = tokenize_normalized_text(normalized)
         return cls(
             raw=raw,

@@ -53,14 +53,14 @@ def encode_text_to_dots(
     return result
 
 
-def encode_print_text_to_dots(
-    print_text: str,
+def encode_inkprint_text_to_dots(
+    inkprint_text: str,
     *,
     jamo_role: str = "l",
     line_width: int | None = None,
     initial_line_position: int = 0,
 ) -> list[str]:
-    text = Text.from_print(print_text, span_scanners=TEXT_SPAN_SCANNERS)
+    text = Text.from_inkprint(inkprint_text, span_scanners=TEXT_SPAN_SCANNERS)
     return encode_text_to_dots(
         text,
         jamo_role=jamo_role,

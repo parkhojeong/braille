@@ -1,17 +1,17 @@
 from braille.ascii import dots_to_ascii
 from braille.line_layout import BrailleLines, layout_braille_lines
 
-from .token_encoder import encode_print_text_to_dots
+from .token_encoder import encode_inkprint_text_to_dots
 
 
-def print_to_braille_dots(
+def inkprint_to_braille_dots(
     text: str,
     *,
     jamo_role: str = "l",
     line_width: int | None = None,
     initial_line_position: int = 0,
 ) -> list[str]:
-    return encode_print_text_to_dots(
+    return encode_inkprint_text_to_dots(
         text,
         jamo_role=jamo_role,
         line_width=line_width,
@@ -19,11 +19,11 @@ def print_to_braille_dots(
     )
 
 
-def print_to_braille_ascii(text: str) -> str:
-    return dots_to_ascii(print_to_braille_dots(text))
+def inkprint_to_braille_ascii(text: str) -> str:
+    return dots_to_ascii(inkprint_to_braille_dots(text))
 
 
-def print_to_braille_lines(
+def inkprint_to_braille_lines(
     text: str,
     *,
     width: int,
@@ -31,7 +31,7 @@ def print_to_braille_lines(
     pad: bool = False,
 ) -> BrailleLines:
     return layout_braille_lines(
-        print_to_braille_dots(text, jamo_role=jamo_role, line_width=width),
+        inkprint_to_braille_dots(text, jamo_role=jamo_role, line_width=width),
         width=width,
         pad=pad,
     )

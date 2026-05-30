@@ -85,7 +85,7 @@ T_TABLE = [
 ]
 
 
-def normalize_print(text: str) -> str:
+def normalize_inkprint(text: str) -> str:
     return unicodedata.normalize("NFC", text)
 
 

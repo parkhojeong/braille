@@ -1,12 +1,12 @@
-from hangul.tokenizer import tokenize_print
+from hangul.tokenizer import tokenize_inkprint
 from hangul.text import Text
 from hangul.spans import SpanRule, try_encode_span_rules
 from hangul.rules.context import RuleContext
 from hangul.rules.latin_phrase import latin_number_phrase_span, latin_phrase_span
 
 
-def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
-    tokens = tokenize_print("나는 Apple을 본다.")
+def test_tokenize_inkprint_groups_hangul_latin_space_and_punctuation():
+    tokens = tokenize_inkprint("나는 Apple을 본다.")
 
     assert [(token.kind, token.text, token.group_id) for token in tokens] == [
         ("HANGUL_SYLLABLE", "나", 0),
@@ -38,8 +38,8 @@ def test_tokenize_print_groups_hangul_latin_space_and_punctuation():
     assert tokens[-1].is_punctuation
 
 
-def test_tokenize_print_groups_numbers_and_symbols():
-    tokens = tokenize_print("A4 + ㎡")
+def test_tokenize_inkprint_groups_numbers_and_symbols():
+    tokens = tokenize_inkprint("A4 + ㎡")
 
     assert [(token.kind, token.text, token.group_id) for token in tokens] == [
         ("LATIN_RUN", "A", 0),
@@ -55,7 +55,7 @@ def test_tokenize_print_groups_numbers_and_symbols():
 
 
 def test_text_keeps_tokens_and_spans_separate():
-    text = Text.from_print(
+    text = Text.from_inkprint(
         "MP3 플레이어",
         span_scanners=(latin_number_phrase_span, latin_phrase_span),
     )
@@ -86,7 +86,7 @@ def test_text_keeps_tokens_and_spans_separate():
 
 
 def test_span_rule_result_keeps_rule_metadata():
-    text = Text.from_print("MP3")
+    text = Text.from_inkprint("MP3")
     rule = SpanRule("rule-35", latin_number_phrase_span, lambda ctx, span: "0")
 
     result = try_encode_span_rules(text.context_at(0), (rule,))

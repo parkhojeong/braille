@@ -40,20 +40,20 @@ LINE_AWARE_CASES = {
 def is_supported_case(
     path: Path,
     group_description: str,
-    print_text: str,
+    inkprint_text: str,
 ) -> bool:
     return True
 
 
-def line_width_for_case(path: Path, print_text: str) -> int | None:
-    layout = LINE_AWARE_CASES.get((path.name, print_text))
+def line_width_for_case(path: Path, inkprint_text: str) -> int | None:
+    layout = LINE_AWARE_CASES.get((path.name, inkprint_text))
     if layout is None:
         return None
     return layout[0]
 
 
-def initial_line_position_for_case(path: Path, print_text: str) -> int:
-    layout = LINE_AWARE_CASES.get((path.name, print_text))
+def initial_line_position_for_case(path: Path, inkprint_text: str) -> int:
+    layout = LINE_AWARE_CASES.get((path.name, inkprint_text))
     if layout is None:
         return 0
     return layout[1]
