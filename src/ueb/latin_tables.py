@@ -14,6 +14,7 @@ UEB_CONTRACTION_ASCII = {
     "ou": "\\",
     "st": "/",
     "th": "?",
+    "wh": ":",
 }
 
 UEB_SHORTFORM_WORD_ASCII = {

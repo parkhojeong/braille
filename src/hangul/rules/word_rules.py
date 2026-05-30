@@ -4,6 +4,8 @@ from braille.ascii import ascii_to_dots
 
 from .context import RuleContext, RuleResult
 from .dispatch import try_encode_rules
+from .encoder import encode_syllable
+from .word_spacing_tables import BRAILLE_SPACING_TERMS
 
 WordRule = Callable[[RuleContext], RuleResult | None]
 
@@ -16,6 +18,41 @@ WORD_ABBREVIATION_DOTS = {
     "그리고": ascii_to_dots("au"),
     "그리하여": ascii_to_dots("a:"),
 }
+
+def encode_hangul_segment(ctx: RuleContext, start: int, end: int) -> list[str]:
+    dots: list[str] = []
+    for index in range(start, end):
+        segment_ctx = RuleContext(ctx.tokens, index)
+        dots.extend(encode_syllable(segment_ctx))
+    return dots
+
+
+def rule_braille_spacing_term(ctx: RuleContext) -> RuleResult | None:
+    for term, segments in sorted(
+        BRAILLE_SPACING_TERMS.items(),
+        key=lambda item: len(item[0]),
+        reverse=True,
+    ):
+        if ctx.text_from_current(len(term)) != term:
+            continue
+
+        dots: list[str] = []
+        offset = 0
+        for segment_index, segment in enumerate(segments):
+            if segment_index > 0:
+                dots.append("")
+            dots.extend(
+                encode_hangul_segment(
+                    ctx,
+                    ctx.index + offset,
+                    ctx.index + offset + len(segment),
+                )
+            )
+            offset += len(segment)
+        return RuleResult(dots, len(term))
+
+    return None
+
 
 def rule_18_try_encode_약어(ctx: RuleContext) -> RuleResult | None:
     """제18항 다음 단어들은 약어를 사용하여 적는다.
@@ -41,6 +78,7 @@ def rule_18_try_encode_약어(ctx: RuleContext) -> RuleResult | None:
 
 
 WORD_RULES: list[WordRule] = [
+    rule_braille_spacing_term,
     rule_18_try_encode_약어,
 ]
 

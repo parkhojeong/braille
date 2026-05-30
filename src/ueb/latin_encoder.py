@@ -5,20 +5,24 @@ from .latin_tables import (
 )
 
 
-def encode_latin_lower_ascii(text: str) -> str:
+def encode_latin_lower_ascii(text: str, *, contractions: bool = True) -> str:
     parts: list[str] = []
     lower_text = text.lower()
     index = 0
     while index < len(lower_text):
-        for text_part, ascii_part in sorted(
-            UEB_CONTRACTION_ASCII.items(),
-            key=lambda item: len(item[0]),
-            reverse=True,
-        ):
-            if lower_text.startswith(text_part, index):
-                parts.append(ascii_part)
-                index += len(text_part)
-                break
+        if contractions:
+            for text_part, ascii_part in sorted(
+                UEB_CONTRACTION_ASCII.items(),
+                key=lambda item: len(item[0]),
+                reverse=True,
+            ):
+                if lower_text.startswith(text_part, index):
+                    parts.append(ascii_part)
+                    index += len(text_part)
+                    break
+            else:
+                parts.append(lower_text[index])
+                index += 1
         else:
             parts.append(lower_text[index])
             index += 1
@@ -41,7 +45,12 @@ def encode_latin_run_ascii(text: str) -> str:
                     end += 1
 
             indicator = ",," if text[index:end].isupper() and end - index > 1 else ","
-            parts.append(f"{indicator}{encode_latin_lower_ascii(text[index:end])}")
+            run = text[index:end]
+            encoded = encode_latin_lower_ascii(
+                run,
+                contractions=not (run.isupper() and len(run) > 1),
+            )
+            parts.append(f"{indicator}{encoded}")
             index = end
         else:
             end = index + 1

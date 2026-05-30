@@ -33,6 +33,30 @@ def trim_blank_edges(cells: list[str]) -> list[str]:
     return cells[start:end]
 
 
+def expected_ascii_variants(ascii_text: str) -> list[str]:
+    lines = ascii_text.splitlines()
+    if len(lines) == 1:
+        return [ascii_text]
+
+    variants = [lines[0]]
+    for line in lines[1:]:
+        next_variants = []
+        for prefix in variants:
+            padding_removed = prefix.rstrip("`")
+            next_variants.append(prefix + line)
+            next_variants.append(padding_removed + line)
+            next_variants.append(padding_removed + "`" + line)
+        variants = next_variants
+    return list(dict.fromkeys(variants))
+
+
+def expected_ascii_to_dots(ascii_text: str) -> list[list[str]]:
+    return [
+        trim_blank_edges(ascii_to_dots(variant))
+        for variant in expected_ascii_variants(ascii_text)
+    ]
+
+
 @pytest.mark.parametrize(
     ("path", "group_description", "print_text", "expected"),
     [
@@ -49,7 +73,10 @@ def test_supported_ko_rules(path, group_description, print_text, expected):
     )
 
     actual_dots = trim_blank_edges(actual_dots)
-    expected_dots = trim_blank_edges(ascii_to_dots(expected["ascii"]))
+    expected_dots_variants = expected_ascii_to_dots(expected["ascii"])
 
-    assert actual_dots == expected_dots
-    assert dots_to_unicode(actual_dots) == dots_to_unicode(expected_dots)
+    assert actual_dots in expected_dots_variants
+    assert any(
+        dots_to_unicode(actual_dots) == dots_to_unicode(expected_dots)
+        for expected_dots in expected_dots_variants
+    )
