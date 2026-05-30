@@ -5,6 +5,7 @@ from braille import (
     ascii_to_dots,
     dots_to_ascii,
     dots_to_unicode,
+    layout_braille_lines,
     unicode_to_cells,
     unicode_to_dots,
 )
@@ -50,3 +51,17 @@ def test_unicode_conversions_accept_braille_cells():
     assert cells.dot_strings == ["1", "12"]
     assert unicode_to_dots("⠁⠃") == ["1", "12"]
     assert dots_to_unicode(cells) == "⠁⠃"
+
+
+def test_layout_braille_lines_keeps_line_boundaries_out_of_cells():
+    lines = layout_braille_lines(ascii_to_dots("abcdef"), width=3)
+
+    assert lines.dot_lines == [["1", "12", "14"], ["145", "15", "124"]]
+    assert lines.ascii_lines == ["abc", "def"]
+    assert lines.ascii == "abc\ndef"
+
+
+def test_layout_braille_lines_can_pad_lines():
+    lines = layout_braille_lines(ascii_to_dots("abcd"), width=3, pad=True)
+
+    assert lines.ascii_lines == ["abc", "d``"]

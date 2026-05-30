@@ -31,24 +31,32 @@ SUPPORTED_RULES = [
     40,
 ]
 
-LAYOUT_DEPENDENT_GROUPS = {
-    ("rule-14.json", "[다만] 그 사이에서 줄이 바뀔 때에는 약자를 사용하여 적는다."),
-    ("rule-18.json", "약어를 사용하는 예"),
+LINE_AWARE_CASES = {
+    ("rule-14.json", "철수는 여름 방학을 맞아 바위섬으로 놀러 갔다."): (32, 2),
+    ("rule-29.json", "그녀는 Los Angeles의 한인 타운에 살고 있다."): (32, 2),
 }
 
-LAYOUT_DEPENDENT_CASES = {
-    ("rule-29.json", "그녀는 Los Angeles의 한인 타운에 살고 있다."),
-}
 
 def is_supported_case(
     path: Path,
     group_description: str,
     print_text: str,
 ) -> bool:
-    return (
-        (path.name, group_description) not in LAYOUT_DEPENDENT_GROUPS
-        and (path.name, print_text) not in LAYOUT_DEPENDENT_CASES
-    )
+    return True
+
+
+def line_width_for_case(path: Path, print_text: str) -> int | None:
+    layout = LINE_AWARE_CASES.get((path.name, print_text))
+    if layout is None:
+        return None
+    return layout[0]
+
+
+def initial_line_position_for_case(path: Path, print_text: str) -> int:
+    layout = LINE_AWARE_CASES.get((path.name, print_text))
+    if layout is None:
+        return 0
+    return layout[1]
 
 
 def jamo_role_for_case(path: Path, group_description: str) -> str:

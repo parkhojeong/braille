@@ -7,8 +7,10 @@ from braille import ascii_to_dots, dots_to_unicode
 from hangul import print_to_braille_dots
 from hangul.tests.test_support import (
     SUPPORTED_RULES,
+    initial_line_position_for_case,
     is_supported_case,
     jamo_role_for_case,
+    line_width_for_case,
 )
 
 HANGUL_ROOT = Path(__file__).resolve().parent.parent
@@ -70,6 +72,8 @@ def test_supported_ko_rules(path, group_description, print_text, expected):
     actual_dots = print_to_braille_dots(
         print_text,
         jamo_role=jamo_role_for_case(path, group_description),
+        line_width=line_width_for_case(path, print_text),
+        initial_line_position=initial_line_position_for_case(path, print_text),
     )
 
     actual_dots = trim_blank_edges(actual_dots)
